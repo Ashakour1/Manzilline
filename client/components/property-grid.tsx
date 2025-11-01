@@ -1,7 +1,8 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import PropertyCard from "./property-card"
-
+import { fetchProperties } from "@/services/properties.service"
 const MOCK_PROPERTIES = [
   {
     id: 1,
@@ -149,12 +150,35 @@ const MOCK_PROPERTIES = [
   },
 ]
 
+
+
+
 interface PropertyGridProps {
   filters: Record<string, any>
   onSelectProperty: (property: any) => void
 }
 
+interface Property {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  frequency: string;
+  location: string;
+}
+
 export default function PropertyGrid({ filters, onSelectProperty }: PropertyGridProps) {
+
+  const [properties, setProperties] = useState<Property[]>([]);
+
+  useEffect(() => {
+   fetchProperties().then((data) => {
+    setProperties(data);
+   }).catch((error) => {
+    console.error(error);
+   });
+  }, []);
+
   let filtered = MOCK_PROPERTIES
 
   if (filters.type !== "all") {
@@ -176,13 +200,16 @@ export default function PropertyGrid({ filters, onSelectProperty }: PropertyGrid
     filtered.sort((a, b) => b.price - a.price)
   }
 
+
+
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-foreground">{filtered.length} Properties Found</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map((property) => (
+        {properties.map((property) => (
           <PropertyCard key={property.id} property={property} onClick={() => onSelectProperty(property)} />
         ))}
       </div>
