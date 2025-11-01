@@ -25,7 +25,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   properties Property[]
-
+  property_applications PropertyApplication[]
 }
 
 
@@ -57,8 +57,8 @@ model Property {
   floor Int?
   total_floors Int?
   balcony Boolean? @default(false)
-  amenities String[]
-
+  amenities String[]  
+  property_applications PropertyApplication[]
 
   //  media
 
@@ -79,6 +79,24 @@ model Property {
 
 
 
+}
+
+// request to rent a property by a tenant to a landlord (landlord will approve or reject the request)
+model PropertyApplication {
+  id         String   @id @default(cuid())
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id])
+  tenantId   String
+  tenant     User     @relation(fields: [tenantId], references: [id])
+  message    String?
+  status     ApplicationStatus    @default(PENDING)
+  createdAt  DateTime  @default(now())
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 enum Role {

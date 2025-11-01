@@ -1,0 +1,67 @@
+"use client"
+
+import { Home, UserCheck, Shield, MapPin, Heart, Zap } from "lucide-react"
+
+const services = [
+  {
+    icon: Home,
+    title: "Wide Property Selection",
+    description: "Browse thousands of properties across different cities and neighborhoods.",
+  },
+  {
+    icon: UserCheck,
+    title: "Verified Landlords",
+    description: "All landlords are verified for authenticity and credibility.",
+  },
+  {
+    icon: Shield,
+    title: "Secure Transactions",
+    description: "Protected messaging and secure payment options for peace of mind.",
+  },
+  {
+    icon: MapPin,
+    title: "Location Insights",
+    description: "Get detailed neighborhood information and commute times.",
+  },
+  {
+    icon: Heart,
+    title: "Save Favorites",
+    description: "Bookmark properties and compare your top choices.",
+  },
+  {
+    icon: Zap,
+    title: "Quick Applications",
+    description: "Apply to properties with a single click using your profile.",
+  },
+]
+
+export default function ServicesSection() {
+  return (
+    <section className="py-20 md:py-28 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Why Choose PropertyHub?</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            We're committed to making property hunting simple, secure, and successful.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {services.map((service, index) => {
+            const Icon = service.icon
+            return (
+              <div
+                key={index}
+                className="p-8 rounded-lg border border-border bg-card hover:border-primary transition-colors"
+              >
+                <Icon className="w-10 h-10 text-primary mb-4" />
+                <h3 className="text-xl font-semibold text-foreground mb-2">{service.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{service.description}</p>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+}
