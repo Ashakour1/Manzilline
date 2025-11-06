@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import PropertyCard from "./property-card"
 import { fetchProperties } from "@/services/properties.service"
+import { ArrowBigLeft, ArrowUpRight } from "lucide-react"
 const MOCK_PROPERTIES = [
   {
     id: 1,
@@ -204,9 +205,21 @@ export default function PropertyGrid({ filters, onSelectProperty }: PropertyGrid
 
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-foreground">{properties.length} Properties Found</h2>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="my-10 flex justify-between">
+        <div className="space-y-2">
+        <h2 className="text-2xl font-bold text-foreground">Discover Our Featured Listings </h2>
+        <p className="text-sm text-gray-400">
+        Discover Our Featured ListingsDiscover Our Featured ListingsDiscover Our Featured Listings
+        </p>
+        </div>
+        <div className="flex space-x-1">
+       <p>
+       See All Properties
+       </p>
+       <ArrowUpRight />
+        </div>
+        
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {properties.map((property) => (

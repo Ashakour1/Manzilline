@@ -1,23 +1,38 @@
 "use client"
 
+import type { Dispatch, SetStateAction } from "react"
+
+interface Filters {
+  type: string
+  priceMin: number
+  priceMax: number
+  bedrooms: string
+  bathrooms: string
+  furnished: string
+  city: string
+  sortBy: string
+}
+
 interface SearchFiltersProps {
-  filters: Record<string, any>
-  setFilters: (filters: Record<string, any>) => void
+  filters: Filters
+  setFilters: Dispatch<SetStateAction<Filters>>
 }
 
 export default function SearchFilters({ filters, setFilters }: SearchFiltersProps) {
-  const updateFilter = (key: string, value: any) => {
-    setFilters({ ...filters, [key]: value })
+  const updateFilter = <K extends keyof Filters>(key: K, value: Filters[K]) => {
+    setFilters((prev) => ({ ...prev, [key]: value }))
   }
 
-  const propertyTypes = ["All", "Apartment", "House", "Office", "Condo"]
-  const cities = ["All", "New York", "Los Angeles", "Chicago", "Houston"]
-  const bedrooms = ["All", "1", "2", "3", "4+"]
-  const bathrooms = ["All", "1", "1.5", "2", "3+"]
+  const unique = (arr: string[]) => Array.from(new Set(arr))
+
+  const propertyTypes = unique(["All", "Apartment", "House", "Office", "Condo"])
+  const cities = unique(["All", "New York", "Los Angeles", "Chicago", "Houston"])
+  const bedrooms = unique(["All", "1", "2", "3", "4+"])
+  const bathrooms = unique(["All", "1", "1.5", "2", "3+"])
 
   return (
-    <div className="bg-card border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="bg-card  border-0">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           {/* Property Type */}
           <div>
