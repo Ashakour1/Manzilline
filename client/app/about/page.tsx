@@ -27,7 +27,7 @@ export default function About() {
       <Header />
       <main className="flex-1 w-full">
         <section className="py-20 md:py-28 bg-card border-b border-border">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">About PropertyHub</h1>
             <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
               We're revolutionizing how people find and rent properties. Our mission is to make property hunting
@@ -37,7 +37,7 @@ export default function About() {
         </section>
 
         <section className="py-20 md:py-28 bg-background">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
               <div>
                 <h2 className="text-3xl font-bold text-foreground mb-6">Our Story</h2>

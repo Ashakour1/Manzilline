@@ -24,7 +24,7 @@ export default function PropertiesPage() {
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
       <main className="flex-1 w-full">
-        <div className="bg-card border-b border-border py-12">
+        <div className="bg-card  border-border py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl font-bold text-foreground mb-2">All Properties</h1>
             <p className="text-muted-foreground">Browse our complete collection of available properties</p>

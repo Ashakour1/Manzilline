@@ -61,7 +61,7 @@ export default function TestimonialsPage() {
       <Header />
       <main className="flex-1 w-full">
         <div className="bg-card border-b border-border py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl font-bold text-foreground mb-2">What Our Users Say</h1>
             <p className="text-muted-foreground">
               Real stories from satisfied renters, landlords, and property managers
@@ -70,7 +70,7 @@ export default function TestimonialsPage() {
         </div>
 
         <section className="py-16 bg-background">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {testimonials.map((testimonial) => (
                 <div key={testimonial.id} className="bg-card border border-border rounded-lg p-6">

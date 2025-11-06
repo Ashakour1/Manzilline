@@ -12,3 +12,16 @@ export const fetchProperties = async () => {
 
     return response.json();
 }
+
+export const fetchPropertyById = async (id: string | number) => {
+    const response = await fetch(`${API_URL}/properties/${id}`);
+
+    if (!response.ok) {
+        if (response.status === 404) {
+            return null;
+        }
+        throw new Error('Failed to fetch property');
+    }
+
+    return response.json();
+}

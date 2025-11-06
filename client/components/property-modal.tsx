@@ -37,7 +37,7 @@ export default function PropertyModal({ property, onClose }: PropertyModalProps)
           {/* Image Carousel */}
           <div className="relative h-96 bg-muted rounded-lg overflow-hidden">
             <img
-              src={property.images[currentImageIndex] || "/placeholder.svg"}
+              src={ "/placeholder.svg"}
               alt={`${property.title} image ${currentImageIndex + 1}`}
               className="w-full h-full object-cover"
             />

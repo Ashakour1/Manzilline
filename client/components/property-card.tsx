@@ -1,6 +1,7 @@
 "use client"
 import { MapPin, Bed, Bath, Maximize2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 interface PropertyCardProps {
   property: any
@@ -8,9 +9,17 @@ interface PropertyCardProps {
 }
 
 export default function PropertyCard({ property, onClick }: PropertyCardProps) {
+
+
+
+  const router = useRouter();
+
+
+
+
   return (
     <div
-      onClick={onClick}
+    
       className="bg-card border border-border rounded-lg overflow-hidden hover:shadow-lg transition cursor-pointer"
     >
       <div className="relative h-48 bg-muted overflow-hidden">
@@ -60,8 +69,7 @@ export default function PropertyCard({ property, onClick }: PropertyCardProps) {
 
         <Button
           onClick={(e) => {
-            e.stopPropagation()
-            onClick()
+            router.push(`/properties/${property.id}`)
           }}
           className="w-full mt-4 bg-primary hover:bg-primary/90"
         >
