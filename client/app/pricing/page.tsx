@@ -62,14 +62,14 @@ export default function PricingPage() {
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
       <main className="flex-1 w-full">
-        <div className="bg-card border-b border-border py-12">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="bg-card pt-16">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-start">
             <h1 className="text-4xl font-bold text-foreground mb-2">Simple, Transparent Pricing</h1>
             <p className="text-muted-foreground">Choose the perfect plan for your needs</p>
           </div>
         </div>
 
-        <section className="py-16 bg-background">
+        <section className="py-10 bg-background">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {plans.map((plan) => (

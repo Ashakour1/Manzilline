@@ -40,7 +40,7 @@ export default function About() {
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
       <main className="flex-1 w-full">
-        <section className="py-20 md:py-28 bg-card border-b border-border">
+        <section className="py-16">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
               <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">About Manzilline</h1>
@@ -53,7 +53,7 @@ export default function About() {
         </section>
 
         {/* Stats Section */}
-        <section className="py-16 bg-primary/5 border-b border-border">
+        <section className="py-10">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {stats.map((stat, index) => {

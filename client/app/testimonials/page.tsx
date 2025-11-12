@@ -85,13 +85,11 @@ export default function TestimonialsPage() {
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
       <main className="flex-1 w-full">
-        <div className="bg-card border-b border-border py-16">
+        <div className="bg-card  pt-16">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
-                <Quote className="w-8 h-8 text-primary" />
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">What Our Users Say</h1>
+            <div className="text-start">
+              
+              <h1 className="text-4xl md:text-4xl font-bold text-foreground mb-3">What Our Users Say</h1>
               <p className="text-lg text-muted-foreground">
                 Real stories from satisfied renters, landlords, and property managers across Kenya
               </p>
@@ -99,13 +97,13 @@ export default function TestimonialsPage() {
           </div>
         </div>
 
-        <section className="py-20 bg-background">
+        <section className="py-10 bg-background">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {testimonials.map((testimonial) => (
                 <div
                   key={testimonial.id}
-                  className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-all duration-300"
+                  className="bg-card border border-border rounded-xl px-5 py-4  transition-all duration-300"
                 >
                   <h3 className="text-lg font-bold text-foreground mb-3">{testimonial.title}</h3>
                   <div className="flex gap-1 mb-4">
@@ -120,7 +118,7 @@ export default function TestimonialsPage() {
                       />
                     ))}
                   </div>
-                  <p className="text-foreground mb-6 leading-relaxed">&ldquo;{testimonial.text}&rdquo;</p>
+                  <p className="text-foreground mb-4 leading-relaxed">&ldquo;{testimonial.text}&rdquo;</p>
                   <div className="flex items-center gap-3 pt-4 border-t border-border">
                     <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
                       <Image

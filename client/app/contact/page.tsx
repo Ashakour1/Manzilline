@@ -76,14 +76,11 @@ export default function Contact() {
       <Header />
       <main className="flex-1 w-full">
         {/* Hero Section */}
-        <section className="py-20 md:py-28 bg-gradient-to-br from-primary/10 via-background to-background border-b border-border">
+        <section className="pt-16 ">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
-                <MessageSquare className="w-8 h-8 text-primary" />
-              </div>
+            <div className="text-start">
               <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Get in Touch</h1>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-lg text-muted-foreground max-w-2xl">
                 Have a question or need help? We're here to assist you. Reach out to us through any of the channels below
                 or fill out the form and we'll get back to you as soon as possible.
               </p>
@@ -91,7 +88,7 @@ export default function Contact() {
           </div>
         </section>
 
-        <section className="py-20 md:py-28 bg-background">
+        <section className="py-10  bg-background">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             {/* Contact Info Cards */}
             <div className="grid md:grid-cols-3 gap-6 mb-16">

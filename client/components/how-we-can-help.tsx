@@ -1,13 +1,13 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, House, HousePlus, ShieldCheck } from "lucide-react"
 
 function HouseIllustration({ accented = false }: { accented?: boolean }) {
   return (
     <svg
-      width="140"
-      height="140"
+      width="100"
+      height="100"
       viewBox="0 0 140 140"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -38,6 +38,7 @@ const items = [
       "Nullam sollicitudin blandit eros eu pretium. Nullam maximus ultricies auctor.",
     cta: "Find a home",
     variant: "outline" as const,
+    icon : <House width={40} height={40}/>
   },
   {
     title: "Sell a property",
@@ -46,6 +47,7 @@ const items = [
     cta: "Place an ad",
     variant: "default" as const,
     featured: true,
+    icon : <HousePlus width={40} height={40} />
   },
   {
     title: "Rent a property",
@@ -53,6 +55,7 @@ const items = [
       "Nullam sollicitudin blandit eros eu pretium. Nullam maximus ultricies auctor.",
     cta: "Find a rental",
     variant: "outline" as const,
+    icon : <ShieldCheck width={40} height={40} />
   },
 ]
 
@@ -60,23 +63,21 @@ export default function HelpSection() {
   return (
     <section className="py-20 md:py-28">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground">See How Manzilline Can Help</h2>
+        <div className="text-start mb-14">
+          <h2 className="text-3xl md:text-3xl font-bold text-foreground">See How Manzilline Can Help</h2>
           <p className="mt-3 text-muted-foreground">Aliquam lacinia diam quis lacus euismod</p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-2 md:grid-cols-3">
           {items.map((it, idx) => (
             <div
               key={idx}
-              className={`rounded-2xl bg-card p-8 text-center transition-all duration-300 hover:shadow-lg ${
-                it.featured ? "ring-2 ring-primary shadow-md" : ""
-              }`}
+              className={`rounded-2xl bg-card p-8 text-start transition-all duration-300`}
             >
-              <HouseIllustration accented={!!it.featured} />
+              <h1 className="text-5xl flex justify-start text-primary">{it.icon}</h1>
               <h3 className="mt-6 text-xl font-semibold text-foreground">{it.title}</h3>
               <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{it.description}</p>
-              <div className="mt-8 flex justify-center">
+              <div className="mt-8 flex justify-start">
                 <Button variant={it.variant} className="gap-2">
                   {it.cta}
                   <ArrowUpRight className="w-4 h-4" />

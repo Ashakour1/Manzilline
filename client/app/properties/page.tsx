@@ -167,7 +167,7 @@ export default function PropertiesPage() {
       <Header />
       <main className="flex-1 w-full">
         {/* Header */}
-        <div className="bg-card border-b border-border py-12">
+        <div className="bg-card pt-16">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
@@ -196,7 +196,7 @@ export default function PropertiesPage() {
           </div>
         </div>
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="flex gap-8">
             {/* Sidebar Filters */}
             <aside

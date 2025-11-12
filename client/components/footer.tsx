@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* About */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">About PropertyHub</h4>
+            <h4 className="font-semibold text-foreground mb-4">Manzilini</h4>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Your trusted platform for finding the perfect property. Browse, filter, and connect with landlords easily.
             </p>
@@ -47,22 +47,22 @@ export default function Footer() {
             <h4 className="font-semibold text-foreground mb-4">Support</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition">
+                <a href="/contact" className="text-sm text-muted-foreground hover:text-primary transition">
                   Help Center
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition">
+                <a href="/contact" className="text-sm text-muted-foreground hover:text-primary transition">
                   Contact Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition">
+                <a href="/policy" className="text-sm text-muted-foreground hover:text-primary transition">
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition">
+                <a href="terms-of-service" className="text-sm text-muted-foreground hover:text-primary transition">
                   Terms of Service
                 </a>
               </li>
@@ -75,7 +75,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Mail className="w-4 h-4" />
-                support@propertyhub.com
+                support@manzilini.com
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="w-4 h-4" />
