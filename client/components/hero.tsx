@@ -1,90 +1,250 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Play, CheckCircle2, Star } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { ArrowRight, Filter, Search } from "lucide-react"
 import Image from "next/image"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+const heroTabs = [
+  { label: "All", value: "all" },
+  { label: "Sale", value: "sale" },
+  { label: "Rent", value: "rent" },
+]
+
+const propertyTypes = [
+  { value: "all", label: "All Type" },
+  { value: "apartment", label: "Apartment" },
+  { value: "villa", label: "Villa" },
+  { value: "townhouse", label: "Townhouse" },
+  { value: "office", label: "Office" },
+]
+
+const heroStats = [
+  { value: "680", label: "Award Winning" },
+  { value: "8K+", label: "Happy Customers" },
+  { value: "500+", label: "Property Ready" },
+]
+
+const nairobiVillages = [
+  {
+    name: "Kilimani",
+    properties: 18,
+    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=400&q=60"
+  },
+  {
+    name: "Lavington",
+    properties: 12,
+    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=400&q=60"
+  },
+  {
+    name: "Karen",
+    properties: 9,
+    image: "https://images.unsplash.com/photo-1486304873000-235643847519?auto=format&fit=crop&w=400&q=60"
+  },
+  {
+    name: "Westlands",
+    properties: 21,
+    image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=400&q=60"
+  },
+  {
+    name: "Runda",
+    properties: 7,
+    image: "https://images.unsplash.com/photo-1459535653751-d571815e906b?auto=format&fit=crop&w=400&q=60"
+  },
+]
+
+const locationOptions = nairobiVillages.map((village) => ({
+  value: village.name.toLowerCase().replace(/\s+/g, "-"),
+  label: village.name,
+}))
 
 export default function Hero() {
+  const [activeTab, setActiveTab] = useState<string>("sale")
+
   return (
-    <section className="relative overflow-hidden bg-background py-20 md:py-28">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
-          <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-sm text-muted-foreground">
-              <CheckCircle2 className="h-4 w-4 text-primary" />
-              New: Zero-fee listings this month
-            </div>
-            
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
-              Find your next{" "}
-              <span className="text-primary">dream home</span>
-            </h1>
-            
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Browse verified rentals, apartments, and homes. Message landlords directly and secure your place with confidence.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="gap-2">
-                Explore listings
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-              <Button size="lg" variant="outline" className="gap-2">
-                <Play className="w-4 h-4" />
-                Watch demo
-              </Button>
-            </div>
-            
-            <div className="flex items-center gap-6 pt-4">
-              <div className="flex items-center gap-2">
-                <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-                <span className="text-sm text-muted-foreground">
-                  <span className="text-foreground font-medium">4.9/5</span> rating
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-primary" />
-                <span className="text-sm text-muted-foreground">
-                  <span className="text-foreground font-medium">10k+</span> listings
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-primary" />
-                <span className="text-sm text-muted-foreground">
-                  <span className="text-foreground font-medium">24/7</span> support
-                </span>
+    <>
+      <section className="relative isolate overflow-hidden bg-background py-24">
+        <Image
+          src="/modern-house-exterior.png"
+          alt="Luxury modern home"
+          fill
+          priority
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black/80" />
+
+        <div className="relative z-10">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-12">
+            <div className="mx-auto max-w-3xl text-center text-white">
+              <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/70">
+                Let us guide your home
+              </p>
+              <h1 className="mt-4 text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
+                Enjoy The Finest Homes
+              </h1>
+              <p className="mt-4 text-lg text-white/80">
+                From as low as $10 per day with limited time offer discounts. Find homes matched to your lifestyle with filters tailored for you.
+              </p>
+              <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <Button size="lg" className="h-12 min-w-[170px] gap-2 rounded-full bg-white text-gray-900 hover:bg-white/90">
+                  Explore Listings
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="h-12 min-w-[170px] rounded-full border-white/50 bg-transparent text-white hover:bg-white/10"
+                >
+                  Contact Agent
+                </Button>
               </div>
             </div>
-          </div>
-          
-          {/* Right Image */}
-          <div className="relative">
-            <div className="relative bg-background rounded-2xl h-80 md:h-[450px] border border-border overflow-hidden shadow-lg">
-              <Image
-                src="/modern-property-lifestyle.jpg"
-                alt="Modern property lifestyle showcase"
-                fill
-                priority
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
-              />
-            </div>
-            
-            <div className="absolute -bottom-4 left-4 right-4 sm:left-6 sm:right-auto sm:w-64 rounded-xl border border-border bg-background p-4 shadow-md">
-              <div className="flex items-start gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-                  <CheckCircle2 className="h-4 w-4 text-primary" />
+
+            <div className="mx-auto mt-10 w-full max-w-4xl rounded-[36px] bg-white/95 p-6 shadow-[0_30px_90px_rgba(15,23,42,0.35)] backdrop-blur">
+              <div className="flex flex-wrap gap-3">
+                {heroTabs.map((tab) => {
+                  const isActive = activeTab === tab.value
+                  return (
+                    <button
+                      key={tab.value}
+                      type="button"
+                      onClick={() => setActiveTab(tab.value)}
+                      className={`rounded-full px-6 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-black/40 ${
+                        isActive ? "bg-black text-white shadow-lg" : "border border-gray-200 text-gray-500"
+                      }`}
+                      aria-pressed={isActive}
+                    >
+                      {tab.label}
+                    </button>
+                  )
+                })}
+              </div>
+
+              <div className="mt-6 grid gap-4 md:grid-cols-[1.3fr_1fr_1fr_1fr_auto_auto] md:items-end">
+                <div className="rounded-2xl border border-gray-200 px-4 py-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
+                    Keyword
+                  </p>
+                  <Input
+                    className="mt-2 border-0 px-0 text-base text-gray-900 shadow-none focus-visible:ring-0"
+                    placeholder="Enter Keyword"
+                  />
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-foreground">Manzil Verified</p>
-                  <p className="text-xs text-muted-foreground">Listings reviewed for quality and safety</p>
+                <div className="rounded-2xl border border-gray-200 px-4 py-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
+                    Location
+                  </p>
+                  <Select defaultValue={locationOptions[0].value}>
+                    <SelectTrigger className="mt-2 h-auto border-0 px-0 text-base font-medium text-gray-900 shadow-none focus-visible:ring-0">
+                      <SelectValue placeholder="Select Location" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {locationOptions.map((location) => (
+                        <SelectItem key={location.value} value={location.value}>
+                          {location.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
+                <div className="rounded-2xl border border-gray-200 px-4 py-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
+                    Type
+                  </p>
+                  <Select defaultValue={propertyTypes[0].value}>
+                    <SelectTrigger className="mt-2 h-auto border-0 px-0 text-base font-medium text-gray-900 shadow-none focus-visible:ring-0">
+                      <SelectValue placeholder="All Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {propertyTypes.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="rounded-2xl border border-gray-200 px-4 py-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
+                    Budget
+                  </p>
+                  <Input
+                    className="mt-2 border-0 px-0 text-base text-gray-900 shadow-none focus-visible:ring-0"
+                    placeholder="$1,000 - $3,000"
+                  />
+                </div>
+           
+                <Button className="h-14 rounded-2xl bg-black px-8 text-base font-semibold text-white hover:bg-black/90">
+                  <Search className="mr-2 h-4 w-4" />
+                  Search
+                </Button>
               </div>
+            </div>
+
+            <div className="mx-auto mt-10 grid max-w-3xl gap-6 text-center text-white sm:grid-cols-3">
+              {heroStats.map((stat) => (
+                <div key={stat.label}>
+                  <p className="text-3xl font-semibold">{stat.value}</p>
+                  <p className="mt-1 text-sm text-white/80">{stat.label}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section className="bg-background py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12">
+          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+            <div>
+              <p className="text-sm uppercase tracking-[0.2em] text-primary">Nairobi villages</p>
+              <h2 className="mt-3 text-3xl font-semibold text-foreground">
+                Find properties in these neighborhoods
+              </h2>
+              <p className="mt-2 text-base text-muted-foreground">
+                Discover the best addresses across Nairobi suburbia curated for different lifestyles.
+              </p>
+            </div>
+            <Button variant="ghost" className="gap-2 text-sm">
+              View all villages
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </div>
+
+          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+            {nairobiVillages.map((village) => (
+              <div
+                key={village.name}
+                className="flex items-center gap-4 rounded-3xl border border-border/60 bg-card/70 p-4 shadow-sm transition hover:-translate-y-1 hover:border-primary/70"
+              >
+                <div className="relative h-16 w-16 overflow-hidden rounded-2xl">
+                  <Image
+                    src={village.image}
+                    alt={village.name}
+                    fill
+                    sizes="64px"
+                    className="object-cover"
+                  />
+                </div>
+                <div>
+                  <p className="text-base font-semibold text-foreground">{village.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {village.properties} properties
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
   )
 }
