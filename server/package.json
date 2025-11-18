@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "type": "module",
-  "scripts": {
+"scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
-     "postinstall": "prisma generate",
+    "postinstall": "PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1 prisma generate",
     "build": "npm run postinstall",
     "db-push": "prisma db push"
-  },
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
