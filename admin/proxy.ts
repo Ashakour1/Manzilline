@@ -9,7 +9,14 @@ export async function proxy(req: NextRequest) {
 
     const protectedRoutes = [
         '/dashboard',
-        '/properties'
+        '/properties',
+        '/landlords',
+        '/tenants',
+        '/payments',
+        '/maintenance',
+        '/documents',
+        '/reports',
+        '/settings'
     ]
 
     const auth = ['/']
@@ -32,8 +39,15 @@ export async function proxy(req: NextRequest) {
 
 export const config = {
     matcher: [
-        "/dashboard/:path",
-        "/properties/:path",
+        "/dashboard/:path*",
+        "/properties/:path*",
+        "/landlords/:path*",
+        "/tenants/:path*",
+        "/payments/:path*",
+        "/maintenance/:path*",
+        "/documents/:path*",
+        "/reports/:path*",
+        "/settings/:path*",
         "/"
 
     ]

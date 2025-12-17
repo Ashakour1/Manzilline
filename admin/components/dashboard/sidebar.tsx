@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useAuthStore } from "@/store/authStore"
-
+import { API_URL } from "@/lib/api"
 const menuItems = [
   { id: "dashboard", icon: LayoutGrid, label: "Dashboard", href: "/dashboard" },
   { id: "properties", icon: Building2, label: "Properties", href: "/properties" },
@@ -32,9 +32,29 @@ export function DashboardSidebar() {
   const router = useRouter()
   const { user, logout } = useAuthStore()
 
-  const handleLogout = () => {
-    logout()
-    router.push('/login')
+  const handleLogout = async () => {
+
+    try {
+      const response = await fetch(`${API_URL}/auth/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      })
+      if (!response.ok) {
+        throw new Error('Failed to logout')
+      }
+      logout()
+      router.push('/')
+    } catch (error) {
+      console.error('Error logging out:', error)
+    }
+
+    
+
+
+    
   }
 
   const getUserInitials = () => {
