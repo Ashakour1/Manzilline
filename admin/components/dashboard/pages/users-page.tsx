@@ -292,7 +292,7 @@ export function UsersPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <Users className="h-4 w-4 text-[#2a6f97]" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.total}</div>
@@ -302,7 +302,7 @@ export function UsersPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Administrators</CardTitle>
-            <Shield className="h-4 w-4 text-muted-foreground" />
+            <Shield className="h-4 w-4 text-[#2a6f97]" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.admins}</div>
@@ -312,7 +312,7 @@ export function UsersPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Regular Users</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <Users className="h-4 w-4 text-[#2a6f97]" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.regularUsers}</div>
@@ -407,7 +407,7 @@ export function UsersPage() {
                         <TableCell className="font-medium">{user.name}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
-                            <Mail className="h-3 w-3 text-muted-foreground" />
+                            <Mail className="h-3 w-3 text-[#2a6f97]" />
                             {user.email}
                           </div>
                         </TableCell>

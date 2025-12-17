@@ -39,7 +39,7 @@ export function ReportsPage() {
         <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-8 w-8 text-green-500" />
+              <TrendingUp className="h-8 w-8 text-[#2a6f97]" />
               <div>
                 <p className="text-muted-foreground text-sm font-medium">YTD Revenue</p>
                 <p className="text-3xl font-bold text-foreground">$345,000</p>

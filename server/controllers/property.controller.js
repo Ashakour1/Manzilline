@@ -246,10 +246,41 @@ export const updateProperty = asyncHandler(async (req, res) => {
 export const deleteProperty = asyncHandler(async (req, res) => {
     try {
         const { id } = req.params;
-        const property = await prisma.property.delete({
+        
+        // Check if property exists
+        const existingProperty = await prisma.property.findUnique({
             where: { id },
         });
-        res.status(200).json(property);
+
+        if (!existingProperty) {
+            return res.status(404).json({ message: 'Property not found' });
+        }
+
+        // Delete related records first (in case cascade doesn't work immediately after migration)
+        // Using a transaction to ensure atomicity
+        await prisma.$transaction(async (tx) => {
+            // Delete payments associated with this property
+            await tx.payment.deleteMany({
+                where: { propertyId: id },
+            });
+
+            // Delete property applications
+            await tx.propertyApplication.deleteMany({
+                where: { propertyId: id },
+            });
+
+            // Delete property images
+            await tx.propertyImages.deleteMany({
+                where: { propertyId: id },
+            });
+
+            // Finally, delete the property
+            await tx.property.delete({
+                where: { id },
+            });
+        });
+
+        res.status(200).json({ message: 'Property deleted successfully', id });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

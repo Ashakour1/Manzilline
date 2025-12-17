@@ -2,13 +2,14 @@
 
 import { FormEvent, useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/components/ui/use-toast"
-import { getLandlordById, registerLandlord, updateLandlord } from "@/services/landlords.service"
+import { getLandlordById, registerLandlord, updateLandlord, verifyLandlord } from "@/services/landlords.service"
 
 type LandlordFormState = {
   name: string
@@ -39,6 +40,8 @@ export function LandlordCreatePage({ landlordId }: LandlordCreatePageProps) {
   const [form, setForm] = useState<LandlordFormState>(initialFormState)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLoadingLandlord, setIsLoadingLandlord] = useState(false)
+  const [isVerified, setIsVerified] = useState(false)
+  const [isAccepting, setIsAccepting] = useState(false)
 
   const isEdit = Boolean(effectiveLandlordId)
 
@@ -60,6 +63,7 @@ export function LandlordCreatePage({ landlordId }: LandlordCreatePageProps) {
         company_name: landlord.company_name || "",
         address: landlord.address || "",
       })
+      setIsVerified(landlord.isVerified || false)
     } catch (err) {
       toast({
         title: "Error",
@@ -69,6 +73,27 @@ export function LandlordCreatePage({ landlordId }: LandlordCreatePageProps) {
       router.push("/landlords")
     } finally {
       setIsLoadingLandlord(false)
+    }
+  }
+
+  const handleAccept = async () => {
+    if (!effectiveLandlordId) return
+    setIsAccepting(true)
+    try {
+      await verifyLandlord(effectiveLandlordId, true)
+      setIsVerified(true)
+      toast({
+        title: "Success",
+        description: "Landlord verified successfully",
+      })
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: err instanceof Error ? err.message : "Failed to verify landlord",
+        variant: "destructive",
+      })
+    } finally {
+      setIsAccepting(false)
     }
   }
 
@@ -137,15 +162,41 @@ export function LandlordCreatePage({ landlordId }: LandlordCreatePageProps) {
           Back to Landlords
         </Button>
 
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">
-            {isEdit ? "Edit Landlord" : "Register New Landlord"}
-          </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            {isEdit
-              ? "Update landlord information"
-              : "Add a new landlord to the system"}
-          </p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">
+              {isEdit ? "Edit Landlord" : "Register New Landlord"}
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {isEdit
+                ? "Update landlord information"
+                : "Add a new landlord to the system"}
+            </p>
+          </div>
+          {isEdit && (
+            <div className="flex items-center gap-3">
+              <Badge variant={isVerified ? "default" : "secondary"} className="gap-2">
+                {isVerified ? (
+                  <>
+                    <CheckCircle2 className="h-3 w-3" />
+                    Verified
+                  </>
+                ) : (
+                  "Not Verified"
+                )}
+              </Badge>
+              {!isVerified && (
+                <Button
+                  onClick={handleAccept}
+                  disabled={isAccepting}
+                  className="gap-2"
+                >
+                  <CheckCircle2 className="h-4 w-4" />
+                  {isAccepting ? "Accepting..." : "Accept"}
+                </Button>
+              )}
+            </div>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

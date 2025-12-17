@@ -81,10 +81,30 @@ export const deleteLandlord = async (id: string) => {
   return response.json();
 };
 
+// Verify/Unverify landlord
+export const verifyLandlord = async (id: string, isVerified: boolean) => {
+  const response = await fetch(`${LANDLORD_API_URL}/${id}/verify`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ isVerified }),
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to update landlord verification status");
+  }
+
+  return response.json();
+};
+
 export default {
   registerLandlord,
   getLandlords,
   getLandlordById,
   updateLandlord,
   deleteLandlord,
+  verifyLandlord,
 };

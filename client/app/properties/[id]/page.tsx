@@ -77,7 +77,7 @@ export default function PropertyDetailPage() {
   // Format price with currency
   const formattedPrice = new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: property.currency || 'USD',
+    currency: property.currency || 'KES',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(property.price || 0)
@@ -129,7 +129,7 @@ export default function PropertyDetailPage() {
                       key={index}
                       onClick={() => setSelectedImageIndex(index)}
                       className={`relative h-24 rounded-lg overflow-hidden border-2 transition-all ${
-                        selectedImageIndex === index ? 'border-blue-600' : 'border-transparent hover:border-gray-300'
+                        selectedImageIndex === index ? 'border-primary' : 'border-transparent hover:border-gray-300'
                       }`}
                     >
                       <img
@@ -163,13 +163,13 @@ export default function PropertyDetailPage() {
               <div className="flex items-center justify-between p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
                 <div>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold text-gray-900">{formattedPrice}</span>
+                    <span className="text-4xl font-bold text-gray-900">KES{property.price?.toLocaleString() || property.price}</span>
                     {property.payment_frequency && (
                       <span className="text-lg text-gray-600">/ {property.payment_frequency.toLowerCase()}</span>
                     )}
                   </div>
                   {property.deposit_amount && (
-                    <p className="text-sm text-gray-600 mt-1">Deposit: {new Intl.NumberFormat('en-US', { style: 'currency', currency: property.currency || 'USD' }).format(property.deposit_amount)}</p>
+                    <p className="text-sm text-gray-600 mt-1">Deposit: KES{property.deposit_amount?.toLocaleString() || property.deposit_amount}</p>
                   )}
                 </div>
                 <div className="px-4 py-2 bg-white rounded-lg border border-gray-200">
@@ -182,7 +182,7 @@ export default function PropertyDetailPage() {
                 {property.bedrooms !== null && property.bedrooms !== undefined && (
                   <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
                     <div className="flex items-center gap-3 mb-2">
-                      <Bed className="w-6 h-6 text-blue-600" />
+                      <Bed className="w-6 h-6 text-primary" />
                       <span className="text-sm text-gray-600">Bedrooms</span>
                     </div>
                     <p className="text-xl font-bold text-gray-900">{property.bedrooms}</p>
@@ -191,7 +191,7 @@ export default function PropertyDetailPage() {
                 {property.bathrooms !== null && property.bathrooms !== undefined && (
                   <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
                     <div className="flex items-center gap-3 mb-2">
-                      <Bath className="w-6 h-6 text-blue-600" />
+                      <Bath className="w-6 h-6 text-primary" />
                       <span className="text-sm text-gray-600">Bathrooms</span>
                     </div>
                     <p className="text-xl font-bold text-gray-900">{property.bathrooms}</p>
@@ -200,7 +200,7 @@ export default function PropertyDetailPage() {
                 {property.size !== null && property.size !== undefined && (
                   <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
                     <div className="flex items-center gap-3 mb-2">
-                      <Maximize2 className="w-6 h-6 text-blue-600" />
+                      <Maximize2 className="w-6 h-6 text-primary" />
                       <span className="text-sm text-gray-600">Size</span>
                     </div>
                     <p className="text-xl font-bold text-gray-900">{property.size} sqft</p>
@@ -209,7 +209,7 @@ export default function PropertyDetailPage() {
                 {property.garages !== null && property.garages !== undefined && (
                   <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
                     <div className="flex items-center gap-3 mb-2">
-                      <Car className="w-6 h-6 text-blue-600" />
+                      <Car className="w-6 h-6 text-primary" />
                       <span className="text-sm text-gray-600">Garages</span>
                     </div>
                     <p className="text-xl font-bold text-gray-900">{property.garages}</p>
@@ -228,7 +228,7 @@ export default function PropertyDetailPage() {
                 {property.property_type && (
                   <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
                     <div className="flex items-center gap-2 mb-2">
-                      <Home className="w-5 h-5 text-blue-600" />
+                      <Home className="w-5 h-5 text-primary" />
                       <span className="text-sm font-semibold text-gray-700">Property Type</span>
                     </div>
                     <p className="text-lg text-gray-900 capitalize">{property.property_type.toLowerCase().replace('_', ' ')}</p>
@@ -237,7 +237,7 @@ export default function PropertyDetailPage() {
                 {property.floor !== null && property.floor !== undefined && (
                   <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
                     <div className="flex items-center gap-2 mb-2">
-                      <Layers className="w-5 h-5 text-blue-600" />
+                      <Layers className="w-5 h-5 text-primary" />
                       <span className="text-sm font-semibold text-gray-700">Floor</span>
                     </div>
                     <p className="text-lg text-gray-900">
@@ -248,7 +248,7 @@ export default function PropertyDetailPage() {
                 {property.is_furnished !== null && property.is_furnished !== undefined && (
                   <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
                     <div className="flex items-center gap-2 mb-2">
-                      <CheckCircle2 className="w-5 h-5 text-blue-600" />
+                      <CheckCircle2 className="w-5 h-5 text-primary" />
                       <span className="text-sm font-semibold text-gray-700">Furnished</span>
                     </div>
                     <p className="text-lg text-gray-900">{property.is_furnished ? 'Yes' : 'No'}</p>
@@ -257,7 +257,7 @@ export default function PropertyDetailPage() {
                 {property.balcony !== null && property.balcony !== undefined && (
                   <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
                     <div className="flex items-center gap-2 mb-2">
-                      <Building2 className="w-5 h-5 text-blue-600" />
+                      <Building2 className="w-5 h-5 text-primary" />
                       <span className="text-sm font-semibold text-gray-700">Balcony</span>
                     </div>
                     <p className="text-lg text-gray-900">{property.balcony ? 'Yes' : 'No'}</p>
@@ -316,7 +316,7 @@ export default function PropertyDetailPage() {
                         href={`mailto:${property.landlord.email}`}
                         className="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
                       >
-                        <Mail className="w-5 h-5 text-blue-600" />
+                        <Mail className="w-5 h-5 text-primary" />
                         <span className="text-gray-700">{property.landlord.email}</span>
                       </a>
                     )}
@@ -333,7 +333,7 @@ export default function PropertyDetailPage() {
 
 <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 mb-6">
                     <div className="flex items-center justify-center mb-4">
-                      <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
+                      <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
                         <MessageCircle className="w-8 h-8 text-white" />
                       </div>
                     </div>
@@ -343,7 +343,7 @@ export default function PropertyDetailPage() {
                     <p className="text-sm text-gray-600 text-center mb-4">
                       To view the landlord's contact information (name, email, and phone), please pay a support fee to the company.
                     </p>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                    <Button className="w-full bg-primary hover:bg-blue-700 text-white">
                       Pay Support Fee to View Details
                     </Button>
                     <p className="text-xs text-gray-500 text-center mt-3">
@@ -361,7 +361,9 @@ export default function PropertyDetailPage() {
                     </div> */}
                     {property.createdAt && (
                       <div className="flex items-center justify-between text-sm mt-2">
-                        <span className="text-gray-600">Listed</span>
+                        <span className="text-gray-600">
+                          <Calendar className="w-4 h-4" />
+                        </span>
                         <span className="text-gray-900">{new Date(property.createdAt).toLocaleDateString()}</span>
                       </div>
                     )}

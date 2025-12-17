@@ -68,6 +68,7 @@ export const loginUser = asyncHandler(async (req, res) => {
         secure: isProduction,
         sameSite: isProduction ? 'none' : 'lax',
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        path: '/', // Ensure cookie is accessible across all routes
     });
 
 
@@ -81,7 +82,12 @@ export const loginUser = asyncHandler(async (req, res) => {
 });
 
 export const logoutUser = asyncHandler(async (req, res) => {
-    res.clearCookie('manzilini');
+    res.clearCookie('manzilini', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        path: '/',
+    });
     res.status(200).json({
         message: 'Logged out successfully',
     });

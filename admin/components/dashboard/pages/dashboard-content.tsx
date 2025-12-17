@@ -15,165 +15,198 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  Legend,
 } from "recharts"
 import { useRouter } from "next/navigation";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Building2, Flame, ShieldCheck, Signal, TrendingUp } from "lucide-react"
-import { use, useEffect } from "react"
+import { Building2, Users, CreditCard, TrendingUp, ArrowUpRight, ArrowDownRight, Calendar, DollarSign } from "lucide-react"
+import { useEffect, useState, useMemo } from "react"
 import { useAuthStore } from "@/store/authStore"
+import {
+  getDashboardStats,
+  getRevenueData,
+  getOccupancyData,
+  getPropertyTypes,
+  getPaymentStatus,
+  getRecentActivity,
+  type DashboardStats,
+  type RevenueData,
+  type OccupancyData,
+  type PropertyTypeData,
+  type PaymentStatusData,
+  type RecentActivity,
+} from "@/services/dashboard.service"
 
-const headlineStats = [
-  { label: "Total earnings", value: "$320,123", change: "+11%", color: "text-emerald-600", bg: "bg-emerald-50", icon: Signal },
-  { label: "Properties", value: "250", change: "-11%", color: "text-rose-600", bg: "bg-rose-50", icon: Building2 },
-  { label: "Tenants", value: "2,263", change: "+11%", color: "text-emerald-600", bg: "bg-emerald-50", icon: ShieldCheck },
-  { label: "Landlords", value: "259", change: "-11%", color: "text-rose-600", bg: "bg-rose-50", icon: TrendingUp },
-]
-
-const cashflow = [
-  { month: "Jan", collected: 48000, target: 52000 },
-  { month: "Feb", collected: 51000, target: 52000 },
-  { month: "Mar", collected: 49500, target: 53000 },
-  { month: "Apr", collected: 56000, target: 53500 },
-  { month: "May", collected: 54000, target: 54000 },
-  { month: "Jun", collected: 59000, target: 54500 },
-  { month: "Jul", collected: 60500, target: 55000 },
-  { month: "Aug", collected: 63000, target: 55500 },
-  { month: "Sep", collected: 65000, target: 56000 },
-  { month: "Oct", collected: 67000, target: 56500 },
-  { month: "Nov", collected: 68000, target: 57000 },
-  { month: "Dec", collected: 72000, target: 58000 },
-]
-
-const leasingPace = [
-  { label: "Tour requests", value: 38 },
-  { label: "Applications", value: 26 },
-  { label: "Approvals", value: 18 },
-  { label: "Move-ins", value: 12 },
-]
-
-  
-
-const utilization = [
-  { name: "Stabilized", value: 68, color: "#22c55e" },
-  { name: "Lease-up", value: 22, color: "#38bdf8" },
-  { name: "Renovation", value: 10, color: "#f59e0b" },
-]
-
-const watchlist = [
-  { title: "Unit 5C | HVAC", note: "Vendor ETA today 4pm", status: "In progress" },
-  { title: "Invoice #1482", note: "Overdue 7 days — send reminder", status: "Action" },
-  { title: "Lease renewal | Apt 210", note: "Tenant asked for 18-month term", status: "Review" },
-]
-
-const tenants = [
-  { name: "Riya Ahmed", property: "Parkside 204", status: "Available" },
-  { name: "Miguel Torres", property: "Harborview 12B", status: "Pending" },
-  { name: "Nina Patel", property: "Townhome 8", status: "Unavailable" },
-]
-
-const toneMap: Record<string, string> = {
-  emerald: "from-emerald-500/90 to-emerald-600/70 text-emerald-900 dark:text-emerald-50",
-  sky: "from-sky-500/90 to-sky-600/70 text-sky-900 dark:text-sky-50",
-  violet: "from-indigo-500/90 to-violet-500/70 text-indigo-900 dark:text-indigo-50",
-  amber: "from-amber-500/90 to-amber-600/70 text-amber-900 dark:text-amber-50",
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="rounded-lg border border-gray-200 bg-white p-3">
+        <p className="text-sm font-medium text-gray-900">{label}</p>
+        {payload.map((entry: any, index: number) => (
+          <p key={index} className="text-sm text-gray-600" style={{ color: entry.color }}>
+            {entry.name}: {typeof entry.value === 'number' ? `$${entry.value.toLocaleString()}` : entry.value}
+          </p>
+        ))}
+      </div>
+    )
+  }
+  return null
 }
 
-const kpis = [
-  { label: "Portfolio value", value: "$42.8M", delta: "+3.2%", icon: TrendingUp, tone: "emerald" },
-  { label: "Occupancy", value: "91%", delta: "+2.1%", icon: Building2, tone: "sky" },
-  { label: "On-time payments", value: "88%", delta: "+5.4%", icon: ShieldCheck, tone: "violet" },
-  { label: "Open maintenance", value: "12", delta: "-3 vs last week", icon: Flame, tone: "amber" },
-]
-
 export function DashboardContent() {
-
   const router = useRouter()
-  const {user, isLoggedIn, isHydrated} = useAuthStore()
+  const { user, isLoggedIn, isHydrated } = useAuthStore()
+  
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [revenueData, setRevenueData] = useState<RevenueData[]>([])
+  const [occupancyData, setOccupancyData] = useState<OccupancyData[]>([])
+  const [propertyTypes, setPropertyTypes] = useState<PropertyTypeData[]>([])
+  const [paymentStatus, setPaymentStatus] = useState<PaymentStatusData[]>([])
+  const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if(!isHydrated) return
+    if (!isHydrated) return
 
-    if(!isLoggedIn){
+    if (!isLoggedIn) {
       router.replace("/")
       return
     }
 
-    
+    const loadDashboardData = async () => {
+      setIsLoading(true)
+      setError(null)
+      try {
+        const [
+          dashboardStats,
+          revenue,
+          occupancy,
+          propertyTypesData,
+          paymentStatusData,
+          activity,
+        ] = await Promise.all([
+          getDashboardStats(),
+          getRevenueData(),
+          getOccupancyData(),
+          getPropertyTypes(),
+          getPaymentStatus(),
+          getRecentActivity(),
+        ])
 
-
-  },[isHydrated,isLoggedIn,router])
-  if(!isHydrated){
-      return <h1>
-        loading
-      </h1>
+        setStats(dashboardStats)
+        setRevenueData(revenue)
+        setOccupancyData(occupancy)
+        setPropertyTypes(propertyTypesData)
+        setPaymentStatus(paymentStatusData)
+        setRecentActivity(activity)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load dashboard data")
+        console.error("Error loading dashboard:", err)
+      } finally {
+        setIsLoading(false)
+      }
     }
 
-    // if(isLoggedIn) return <h1>
-    //   loading
-    // </h1>
+    loadDashboardData()
+  }, [isHydrated, isLoggedIn, router])
 
-    // if()
-  // const {name,email} = useAuthStore();
+  const headlineStats = useMemo(() => {
+    if (!stats) return []
+    
+    return [
+      {
+        label: "Total Earnings",
+        value: `$${stats.totalEarnings.toLocaleString()}`,
+        change: stats.revenueChange ? `${stats.revenueChange > 0 ? '+' : ''}${stats.revenueChange.toFixed(1)}%` : "+0%",
+        isPositive: (stats.revenueChange || 0) >= 0,
+        icon: DollarSign,
+      },
+      {
+        label: "Properties",
+        value: stats.totalProperties.toString(),
+        change: stats.propertiesChange ? `${stats.propertiesChange > 0 ? '+' : ''}${stats.propertiesChange.toFixed(1)}%` : "+0%",
+        isPositive: (stats.propertiesChange || 0) >= 0,
+        icon: Building2,
+      },
+      {
+        label: "Active Tenants",
+        value: stats.activeTenants.toString(),
+        change: stats.tenantsChange ? `${stats.tenantsChange > 0 ? '+' : ''}${stats.tenantsChange.toFixed(1)}%` : "+0%",
+        isPositive: (stats.tenantsChange || 0) >= 0,
+        icon: Users,
+      },
+      {
+        label: "Monthly Revenue",
+        value: `$${stats.monthlyRevenue.toLocaleString()}`,
+        change: stats.revenueChange ? `${stats.revenueChange > 0 ? '+' : ''}${stats.revenueChange.toFixed(1)}%` : "+0%",
+        isPositive: (stats.revenueChange || 0) >= 0,
+        icon: TrendingUp,
+      },
+    ]
+  }, [stats])
 
-// console.log("Authenticated user:", name);
+  if (!isHydrated) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-muted-foreground">Loading...</div>
+      </div>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-muted-foreground">Loading dashboard...</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-destructive">Error: {error}</div>
+      </div>
+    )
+  }
+
+  const userName = user?.name?.split(' ')[0] || 'User'
+
   return (
-    <main className="flex-1 overflow-y-auto bg-gradient-to-b from-background via-background to-muted/50">
-      <div className="space-y-8 p-6 md:p-8">
-        <div className="space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Dashboard</p>
-              <h2 className="text-2xl font-semibold text-foreground">Good morning, Riyad</h2>
-            </div>
-            <Button variant="outline" size="sm">
-              Customize
-            </Button>
-          </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {headlineStats.map((stat) => (
-              <Card key={stat.label} className="border-border shadow-sm hover:shadow-md transition">
-                <CardContent className="p-5">
-                  <div className="flex items-start justify-between">
-                    <div className="space-y-1">
-                      <p className="text-sm font-semibold text-muted-foreground">{stat.label}</p>
-                      <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <span className={`inline-flex items-center gap-1 rounded-full px-2 py-1 ${stat.bg} ${stat.color}`}>
-                          <span className={stat.color}>{stat.change.startsWith("-") ? "↓" : "↑"}</span>
-                          <span className={stat.color}>{stat.change}</span>
-                        </span>
-                        <span>Last week</span>
-                      </div>
-                    </div>
-                    <div className="rounded-full bg-muted/60 p-2 text-muted-foreground">
-                      <stat.icon className="h-5 w-5" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+    <main className="flex-1 overflow-y-auto bg-gray-50/50">
+      <div className="space-y-6 p-6 md:p-8">
+        {/* Header */}
+        <div className="space-y-1">
+          <h1 className="text-3xl font-semibold tracking-tight text-gray-900">Dashboard</h1>
+          <p className="text-sm text-gray-600">Welcome back, {userName}. Here's your overview.</p>
         </div>
 
-       
-
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {kpis.map((item) => (
-            <Card key={item.label} className="border-none shadow-none">
-              <CardContent className="p-0">
-                <div className={`rounded-2xl bg-gradient-to-br ${toneMap[item.tone]} p-4 shadow-lg ring-1 ring-white/10`}>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="text-xs uppercase tracking-wide text-white/80">{item.label}</p>
-                      <p className="mt-2 text-2xl font-bold text-white">{item.value}</p>
-                      <p className="text-xs text-white/80">{item.delta}</p>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {headlineStats.map((stat, index) => (
+            <Card 
+              key={stat.label} 
+              className="group border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-0.5"
+            >
+              <CardContent className="p-6">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-gray-600">{stat.label}</p>
+                    <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
+                    <div className="flex items-center gap-1.5 text-xs">
+                      {stat.isPositive ? (
+                        <ArrowUpRight className="h-3.5 w-3.5 text-[#2a6f97]" />
+                      ) : (
+                        <ArrowDownRight className="h-3.5 w-3.5 text-gray-600" />
+                      )}
+                      <span className="text-gray-600">{stat.change} from last month</span>
                     </div>
-                    <div className="rounded-xl bg-white/20 p-2 text-white">
-                      <item.icon className="h-5 w-5" />
-                    </div>
+                  </div>
+                  <div className="rounded-lg bg-[#2a6f97]/10 p-3 text-[#2a6f97] transition-colors group-hover:bg-[#2a6f97]/20">
+                    <stat.icon className="h-5 w-5" />
                   </div>
                 </div>
               </CardContent>
@@ -181,66 +214,99 @@ export function DashboardContent() {
           ))}
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[2fr,1fr]">
-          <Card className="border border-border/70 shadow-md">
-            <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <CardTitle>Cashflow vs target</CardTitle>
-                <CardDescription>Monthly collections and targets</CardDescription>
-              </div>
-              <div className="flex gap-2">
-                <Button size="sm" variant="outline">
-                  Last 12 months
-                </Button>
-                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                  Export
-                </Button>
-              </div>
+        {/* Charts Grid */}
+        <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
+          {/* Revenue Chart */}
+          <Card className="border border-gray-200 bg-white">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-gray-900">Revenue & Expenses</CardTitle>
+              <CardDescription className="text-gray-600">Monthly financial overview</CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={320}>
-                <AreaChart data={cashflow}>
+                <AreaChart data={revenueData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                   <defs>
-                    <linearGradient id="cash" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#22d3ee" stopOpacity={0.6} />
-                      <stop offset="95%" stopColor="#22d3ee" stopOpacity={0.05} />
+                    <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#2a6f97" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#2a6f97" stopOpacity={0.05} />
+                    </linearGradient>
+                    <linearGradient id="expensesGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3a7fa7" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#3a7fa7" stopOpacity={0.05} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis dataKey="month" stroke="#9ca3af" />
-                  <YAxis stroke="#9ca3af" />
-                  <Tooltip contentStyle={{ backgroundColor: "#0f172a", color: "#fff", borderRadius: 12, border: "none" }} />
-                  <Area type="monotone" dataKey="collected" stroke="#06b6d4" strokeWidth={3} fill="url(#cash)" />
-                  <Line type="monotone" dataKey="target" stroke="#a855f7" strokeWidth={2} dot={{ r: 2 }} />
+                  <XAxis 
+                    dataKey="month" 
+                    stroke="#94a3b8"
+                    tick={{ fill: '#64748b', fontSize: 12 }}
+                    axisLine={{ stroke: '#e5e7eb' }}
+                  />
+                  <YAxis 
+                    stroke="#94a3b8"
+                    tick={{ fill: '#64748b', fontSize: 12 }}
+                    axisLine={{ stroke: '#e5e7eb' }}
+                    tickFormatter={(value) => `$${value / 1000}k`}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Area 
+                    type="monotone" 
+                    dataKey="revenue" 
+                    stroke="#2a6f97" 
+                    strokeWidth={2.5}
+                    fill="url(#revenueGradient)"
+                    name="Revenue"
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="expenses" 
+                    stroke="#3a7fa7" 
+                    strokeWidth={2}
+                    fill="url(#expensesGradient)"
+                    name="Expenses"
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
 
-          <Card className="border border-border/70 shadow-md">
+          {/* Property Types Pie Chart */}
+          <Card className="border border-gray-200 bg-white">
             <CardHeader>
-              <CardTitle>Portfolio mix</CardTitle>
-              <CardDescription>Current utilization by state</CardDescription>
+              <CardTitle className="text-lg font-semibold text-gray-900">Property Distribution</CardTitle>
+              <CardDescription className="text-gray-600">Portfolio composition</CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={260}>
                 <PieChart>
-                  <Pie data={utilization} dataKey="value" nameKey="name" innerRadius={60} outerRadius={90} paddingAngle={3}>
-                    {utilization.map((entry, index) => (
-                      <Cell key={entry.name + index} fill={entry.color} />
+                  <Pie
+                    data={propertyTypes as any}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={90}
+                    paddingAngle={2}
+                  >
+                    {propertyTypes.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip content={<CustomTooltip />} />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="grid grid-cols-3 gap-3 text-xs">
-                {utilization.map((item) => (
-                  <div key={item.name} className="rounded-lg border border-border/70 p-3">
+              <div className="mt-4 space-y-2">
+                {propertyTypes.map((item) => (
+                  <div key={item.name} className="flex items-center justify-between rounded-lg bg-gray-50/50 p-3">
                     <div className="flex items-center gap-2">
-                      <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                      <p className="font-semibold text-foreground">{item.name}</p>
+                      <div 
+                        className="h-3 w-3 rounded-full" 
+                        style={{ backgroundColor: item.fill }}
+                      />
+                      <span className="text-sm font-medium text-gray-700">{item.name}</span>
                     </div>
-                    <p className="text-muted-foreground mt-1">{item.value}% of units</p>
+                    <span className="text-sm font-semibold text-gray-900">{item.value}%</span>
                   </div>
                 ))}
               </div>
@@ -248,90 +314,113 @@ export function DashboardContent() {
           </Card>
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[1.4fr,1fr]">
-          <Card className="border border-border/70 shadow-md">
-            <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <CardTitle>Leasing funnel</CardTitle>
-                <CardDescription>Movement from tours to move-ins</CardDescription>
-              </div>
-              <Badge variant="outline" className="gap-2">
-                <Signal className="h-4 w-4" />
-                Strong pace
-              </Badge>
+        {/* Occupancy & Payments */}
+        <div className="grid gap-6 lg:grid-cols-[1.5fr,1fr]">
+          {/* Occupancy Chart */}
+          <Card className="border border-gray-200 bg-white">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-gray-900">Occupancy Rate</CardTitle>
+              <CardDescription className="text-gray-600">Monthly occupancy trends</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {leasingPace.map((item) => (
-                  <div key={item.label} className="rounded-xl border border-border/80 bg-muted/40 p-3">
-                    <p className="text-xs text-muted-foreground">{item.label}</p>
-                    <p className="text-2xl font-semibold text-foreground">{item.value}</p>
-                  </div>
-                ))}
-              </div>
-              <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={leasingPace}>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={280}>
+                <LineChart data={occupancyData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="occupancyGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#2a6f97" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#2a6f97" stopOpacity={0.05} />
+                    </linearGradient>
+                  </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis dataKey="label" stroke="#9ca3af" />
-                  <YAxis stroke="#9ca3af" />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#0ea5e9" radius={[10, 10, 0, 0]} />
-                </BarChart>
+                  <XAxis 
+                    dataKey="month" 
+                    stroke="#94a3b8"
+                    tick={{ fill: '#64748b', fontSize: 12 }}
+                    axisLine={{ stroke: '#e5e7eb' }}
+                  />
+                  <YAxis 
+                    stroke="#94a3b8"
+                    tick={{ fill: '#64748b', fontSize: 12 }}
+                    axisLine={{ stroke: '#e5e7eb' }}
+                    domain={[70, 100]}
+                    tickFormatter={(value) => `${value}%`}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Area 
+                    type="monotone" 
+                    dataKey="occupancy" 
+                    stroke="#2a6f97" 
+                    strokeWidth={3}
+                    fill="url(#occupancyGradient)"
+                    name="Occupancy"
+                  />
+                </LineChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
 
-          <Card className="border border-border/70 shadow-md">
+          {/* Payment Status */}
+          <Card className="border border-gray-200 bg-white">
             <CardHeader>
-              <CardTitle>Tenant signals</CardTitle>
-              <CardDescription>Quick scan of tenant health</CardDescription>
+              <CardTitle className="text-lg font-semibold text-gray-900">Payment Status</CardTitle>
+              <CardDescription className="text-gray-600">Current payment overview</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-3">
-              {tenants.map((tenant) => (
-                <div key={tenant.name} className="flex items-center justify-between rounded-lg border border-border/80 bg-muted/40 p-3">
-                  <div>
-                    <p className="font-semibold text-foreground">{tenant.name}</p>
-                    <p className="text-xs text-muted-foreground">{tenant.property}</p>
+            <CardContent>
+              <div className="space-y-4">
+                {paymentStatus.map((item) => (
+                  <div key={item.status} className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700">{item.status}</span>
+                      <span className="text-sm font-semibold text-gray-900">{item.count} payments</span>
+                    </div>
+                    <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                      <div
+                        className="h-full rounded-full bg-[#2a6f97] transition-all duration-500"
+                        style={{ 
+                          width: `${(item.count / paymentStatus.reduce((acc, curr) => acc + curr.count, 0)) * 100}%` 
+                        }}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-600">${item.amount.toLocaleString()}</p>
                   </div>
-                  <Badge
-                    variant="outline"
-                    className={
-                      tenant.status === "Available"
-                        ? "border-emerald-200/60 bg-emerald-50 text-emerald-700"
-                        : tenant.status === "Pending"
-                          ? "border-amber-200/60 bg-amber-50 text-amber-700"
-                          : "border-red-200/60 bg-red-50 text-red-700"
-                    }
-                  >
-                    {tenant.status}
-                  </Badge>
-                </div>
-              ))}
+                ))}
+              </div>
             </CardContent>
           </Card>
         </div>
 
-        <Card className="border border-border/70 shadow-md">
-          <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <CardTitle>Momentum board</CardTitle>
-              <CardDescription>What changed in the last 24 hours</CardDescription>
-            </div>
-            <Button size="sm" variant="outline">
-              View audit log
-            </Button>
+        {/* Recent Activity */}
+        <Card className="border border-gray-200 bg-white">
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold text-gray-900">Recent Activity</CardTitle>
+            <CardDescription className="text-gray-600">Latest transactions and updates</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={220}>
-              <LineChart data={cashflow.slice(-6)}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="month" stroke="#9ca3af" />
-                <YAxis stroke="#9ca3af" />
-                <Tooltip />
-                <Line type="monotone" dataKey="collected" stroke="#22c55e" strokeWidth={3} dot={{ r: 3 }} />
-                <Line type="monotone" dataKey="target" stroke="#0ea5e9" strokeWidth={3} dot={{ r: 3 }} />
-              </LineChart>
-            </ResponsiveContainer>
+            <div className="space-y-3">
+              {recentActivity.map((activity) => (
+                <div 
+                  key={activity.id} 
+                  className="flex items-center justify-between rounded-lg bg-gray-50/50 p-4 transition-colors hover:bg-gray-100/50"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 rounded-lg bg-[#2a6f97]/10 p-2">
+                      {activity.type === "Payment" && <CreditCard className="h-4 w-4 text-[#2a6f97]" />}
+                      {activity.type === "Lease" && <Building2 className="h-4 w-4 text-[#2a6f97]" />}
+                      {activity.type === "Maintenance" && <Calendar className="h-4 w-4 text-[#2a6f97]" />}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">{activity.description}</p>
+                      <p className="text-xs text-gray-600">{activity.time}</p>
+                    </div>
+                  </div>
+                  <span className={`text-sm font-semibold ${
+                    activity.amount.startsWith('-') ? 'text-gray-600' : 'text-gray-900'
+                  }`}>
+                    {activity.amount}
+                  </span>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>

@@ -10,6 +10,7 @@ import WhyChooseUsSection from "@/components/why-choose-us-section"
 import TestimonialsSection from "@/components/testimonials-section"
 import ApartmentTypesSection from "@/components/apartment-types-section"
 import CTASection from "@/components/cta-section"
+import LandlordCTASection from "@/components/landlord-cta-section"
 import FeaturedHousesSection from "@/components/featured-houses-section"
 
 export default function Home() {
@@ -20,11 +21,14 @@ export default function Home() {
       <Hero />
       <FeaturedHousesSection />
       <HelpSection />
+      <WhyChooseUsSection />
       <PropertyGrid onSelectProperty={setSelectedProperty} />
       <ApartmentTypesSection />
-      <WhyChooseUsSection />
-      <TestimonialsSection />
       <CTASection />
+
+      <TestimonialsSection />
+    
+      <LandlordCTASection />
       {/* <ServicesSection /> */}
       {selectedProperty && <PropertyModal property={selectedProperty} onClose={() => setSelectedProperty(null)} />}
     </>

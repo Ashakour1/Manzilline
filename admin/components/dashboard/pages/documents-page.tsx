@@ -81,8 +81,8 @@ export function DocumentsPage() {
             <CardContent className="pt-6">
               <div className="flex items-start justify-between gap-6">
                 <div className="flex items-start gap-4 flex-1">
-                  <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">
-                    <FileText className="h-6 w-6 text-blue-600" />
+                  <div className="bg-[#2a6f97]/10 dark:bg-[#2a6f97]/20 p-3 rounded-lg">
+                    <FileText className="h-6 w-6 text-[#2a6f97]" />
                   </div>
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-foreground">{doc.name}</h3>

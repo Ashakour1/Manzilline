@@ -320,7 +320,7 @@ export function PropertiesPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Properties</CardTitle>
-            <Building2 className="h-4 w-4 text-muted-foreground" />
+            <Building2 className="h-4 w-4 text-[#2a6f97]" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.total}</div>
@@ -330,47 +330,47 @@ export function PropertiesPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">For Rent</CardTitle>
-            <Home className="h-4 w-4 text-amber-600" />
+            <Home className="h-4 w-4 text-[#2a6f97]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-amber-600">{stats.forRent}</div>
+            <div className="text-2xl font-bold text-[#2a6f97]">{stats.forRent}</div>
             <p className="text-xs text-muted-foreground">Available for rent</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">For Sale</CardTitle>
-            <TrendingUp className="h-4 w-4 text-emerald-600" />
+            <TrendingUp className="h-4 w-4 text-[#2a6f97]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-emerald-600">{stats.forSale}</div>
+            <div className="text-2xl font-bold text-[#2a6f97]">{stats.forSale}</div>
             <p className="text-xs text-muted-foreground">Available for sale</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Rented</CardTitle>
-            <Home className="h-4 w-4 text-blue-600" />
+            <Home className="h-4 w-4 text-[#2a6f97]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{stats.rented}</div>
+            <div className="text-2xl font-bold text-[#2a6f97]">{stats.rented}</div>
             <p className="text-xs text-muted-foreground">Currently rented</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Featured</CardTitle>
-            <TrendingUp className="h-4 w-4 text-orange-600" />
+            <TrendingUp className="h-4 w-4 text-[#2a6f97]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{stats.featured}</div>
+            <div className="text-2xl font-bold text-[#2a6f97]">{stats.featured}</div>
             <p className="text-xs text-muted-foreground">Featured properties</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Value</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <DollarSign className="h-4 w-4 text-[#2a6f97]" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatCurrency(stats.totalValue)}</div>

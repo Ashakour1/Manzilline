@@ -4,16 +4,21 @@ import {
     getLandlords, 
     getLandlordById, 
     updateLandlord, 
-    deleteLandlord 
+    deleteLandlord,
+    verifyLandlord
 } from '../controllers/landlord.controller.js';
 import { AuthMiddleware } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
+// Public route for landlord registration (no auth required)
+router.post('/register', registerLandlord);
+// Admin route for landlord registration (auth required)
 router.post('/', AuthMiddleware, registerLandlord);
 router.get('/', getLandlords);
 router.get('/:id', getLandlordById);
 router.put('/:id', AuthMiddleware, updateLandlord);
+router.patch('/:id/verify', AuthMiddleware, verifyLandlord);
 router.delete('/:id', AuthMiddleware, deleteLandlord);
 
 export default router;

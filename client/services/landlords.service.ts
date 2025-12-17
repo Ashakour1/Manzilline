@@ -1,0 +1,38 @@
+const API_URL = "http://localhost:4000/api/v1";
+
+export interface LandlordRegistrationData {
+  name: string;
+  email: string;
+  phone?: string;
+  company_name?: string;
+  address?: string;
+}
+
+export interface Landlord {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  company_name?: string;
+  address?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+// Register a new landlord (public endpoint)
+export const registerLandlord = async (landlordData: LandlordRegistrationData): Promise<Landlord> => {
+  const response = await fetch(`${API_URL}/landlords/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(landlordData),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to register landlord");
+  }
+
+  return response.json();
+};

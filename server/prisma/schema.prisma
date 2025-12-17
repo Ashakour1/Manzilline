@@ -27,6 +27,7 @@ model Landlord {
   phone        String?
   company_name String?
   address      String?
+  isVerified   Boolean    @default(false)
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   properties   Property[]
@@ -64,6 +65,7 @@ model Property {
   updatedAt             DateTime              @updatedAt
   property_applications PropertyApplication[]
   images                PropertyImages[]
+  payments              Payment[]
 }
 
 model PropertyImages {
@@ -71,7 +73,7 @@ model PropertyImages {
   propertyId String
   url        String
   createdAt  DateTime @default(now())
-  property   Property @relation(fields: [propertyId], references: [id])
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 }
 
 model PropertyApplication {
@@ -81,8 +83,30 @@ model PropertyApplication {
   message    String?
   status     ApplicationStatus @default(PENDING)
   createdAt  DateTime          @default(now())
-  property   Property          @relation(fields: [propertyId], references: [id])
+  property   Property          @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   tenant     User              @relation(fields: [tenantId], references: [id])
+  payments   Payment[]
+}
+
+
+model Payment {
+  id         String            @id @default(cuid())
+  applicationId String
+  propertyId String
+  amount Float
+  status PaymentStatus @default(PENDING)
+  
+  paymentDate DateTime? @default(now())
+  createdAt DateTime @default(now())
+  application PropertyApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
 }
 
 enum ApplicationStatus {

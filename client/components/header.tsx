@@ -52,7 +52,7 @@ export default function Header() {
               </Link>
             </Button>
             <Button size="sm" asChild className="bg-primary hover:bg-primary/90 shadow-md">
-              <Link href="/properties" className="flex items-center gap-2">
+              <Link href="/landlords/register" className="flex items-center gap-2">
                 <Upload className="w-4 h-4" />
                 List Property
               </Link>
@@ -91,7 +91,7 @@ export default function Header() {
                   </Link>
                 </Button>
                 <Button size="sm" asChild className="w-full bg-primary hover:bg-primary/90 shadow-md">
-                  <Link href="/properties" className="flex items-center gap-2 justify-center">
+                  <Link href="/landlords/register" className="flex items-center gap-2 justify-center">
                     <Upload className="w-4 h-4" />
                     List Property
                   </Link>

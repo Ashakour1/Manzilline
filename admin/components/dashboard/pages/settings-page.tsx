@@ -17,7 +17,7 @@ export function SettingsPage() {
         <Card className="border-border shadow-sm">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <User className="h-5 w-5 text-blue-600" />
+              <User className="h-5 w-5 text-[#2a6f97]" />
               <div>
                 <CardTitle>Account Settings</CardTitle>
                 <CardDescription>Manage your account information</CardDescription>
@@ -49,7 +49,7 @@ export function SettingsPage() {
                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground"
               />
             </div>
-            <Button className="bg-blue-600 hover:bg-blue-700">Save Changes</Button>
+            <Button className="bg-[#2a6f97] hover:bg-[#2a6f97]/90">Save Changes</Button>
           </CardContent>
         </Card>
 
@@ -57,7 +57,7 @@ export function SettingsPage() {
         <Card className="border-border shadow-sm">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Lock className="h-5 w-5 text-blue-600" />
+              <Lock className="h-5 w-5 text-[#2a6f97]" />
               <div>
                 <CardTitle>Security</CardTitle>
                 <CardDescription>Manage your password and security settings</CardDescription>
@@ -94,7 +94,7 @@ export function SettingsPage() {
         <Card className="border-border shadow-sm">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Bell className="h-5 w-5 text-blue-600" />
+              <Bell className="h-5 w-5 text-[#2a6f97]" />
               <div>
                 <CardTitle>Notifications</CardTitle>
                 <CardDescription>Manage notification preferences</CardDescription>
@@ -131,7 +131,7 @@ export function SettingsPage() {
         <Card className="border-border shadow-sm">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-blue-600" />
+              <BarChart3 className="h-5 w-5 text-[#2a6f97]" />
               <div>
                 <CardTitle>Reports</CardTitle>
                 <CardDescription>Manage automated report generation</CardDescription>

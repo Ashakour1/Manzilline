@@ -87,7 +87,7 @@ export const getLandlordById = asyncHandler(async (req, res) => {
 export const updateLandlord = asyncHandler(async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, email, phone, company_name, address } = req.body || {};
+        const { name, email, phone, company_name, address, isVerified } = req.body || {};
 
         // Check if landlord exists
         const existingLandlord = await prisma.landlord.findUnique({
@@ -109,18 +109,54 @@ export const updateLandlord = asyncHandler(async (req, res) => {
             }
         }
 
+        // Build update data object, only including fields that are provided
+        const updateData = {};
+        if (name !== undefined) updateData.name = name;
+        if (email !== undefined) updateData.email = email;
+        if (phone !== undefined) updateData.phone = phone;
+        if (company_name !== undefined) updateData.company_name = company_name;
+        if (address !== undefined) updateData.address = address;
+        if (isVerified !== undefined) updateData.isVerified = isVerified;
+
         const landlord = await prisma.landlord.update({
             where: { id },
-            data: {
-                name,
-                email,
-                phone,
-                company_name,
-                address,
-            }
+            data: updateData
         });
 
         res.status(200).json(landlord);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Verify/Unverify landlord
+export const verifyLandlord = asyncHandler(async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { isVerified } = req.body || {};
+
+        // Check if landlord exists
+        const existingLandlord = await prisma.landlord.findUnique({
+            where: { id }
+        });
+
+        if (!existingLandlord) {
+            return res.status(404).json({ message: 'Landlord not found' });
+        }
+
+        if (typeof isVerified !== 'boolean') {
+            return res.status(400).json({ message: 'isVerified must be a boolean value' });
+        }
+
+        const landlord = await prisma.landlord.update({
+            where: { id },
+            data: { isVerified }
+        });
+
+        res.status(200).json({
+            ...landlord,
+            message: landlord.isVerified ? 'Landlord verified successfully' : 'Landlord unverified successfully'
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

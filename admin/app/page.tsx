@@ -58,21 +58,19 @@ export default function Home() {
   const HandleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // if (!formData.email || !formData.password) {
-      
-    //   return;
-    // }
-
-
     try{
       const data = await Login(formData.email, formData.password);
+
+      console.log("data", data)
+
+      router.push('/dashboard');
       
       
       // Assuming the response contains token, name, and email
       login({ token: data.token, name: data.name, email: data.email });
 
 
-      router.push('/dashboard');
+     
 
 
       

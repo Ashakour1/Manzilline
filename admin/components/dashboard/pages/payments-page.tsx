@@ -259,11 +259,11 @@ export function PaymentsPage() {
                     <TableCell className="font-medium">{payment.tenant}</TableCell>
                     <TableCell className="text-muted-foreground">{payment.property}</TableCell>
                     <TableCell className="flex items-center gap-1 font-semibold text-foreground">
-                      <DollarSign className="h-4 w-4 text-muted-foreground" />
+                      <DollarSign className="h-4 w-4 text-[#2a6f97]" />
                       {payment.amount}
                     </TableCell>
                     <TableCell className="flex items-center gap-1 text-foreground">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
+                      <Calendar className="h-4 w-4 text-[#2a6f97]" />
                       {payment.dueDate}
                     </TableCell>
                     <TableCell className="text-muted-foreground">{payment.method}</TableCell>
@@ -362,7 +362,7 @@ export function PaymentsPage() {
                     <p className="font-medium text-foreground">{payment.tenant}</p>
                     <p className="text-xs text-muted-foreground">{payment.property}</p>
                     <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
-                      <DollarSign className="h-4 w-4 text-muted-foreground" />
+                      <DollarSign className="h-4 w-4 text-[#2a6f97]" />
                       {payment.amount}
                       <Calendar className="ml-2 h-4 w-4 text-muted-foreground" />
                       Due {payment.dueDate}

@@ -133,3 +133,13 @@
     display: none;
   }
 }
+
+@keyframes scroll {
+  to {
+    transform: translate(calc(-50% - 0.5rem));
+  }
+}
+
+.animate-scroll {
+  animation: scroll var(--animation-duration, 140s) var(--animation-direction, forwards) linear infinite;
+}
