@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.routes.js';
 import { errorHandler } from "./middlewares/error.handler.js";
 import propertyRoutes from './routes/property.routes.js';
 import landlordRoutes from './routes/landlord.routes.js';
+import userRoutes from './routes/user.routes.js';
 import cookieParser from "cookie-parser";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -52,6 +53,7 @@ app.get("/",(req,res)=>{
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/properties', propertyRoutes);
 app.use('/api/v1/landlords', landlordRoutes);
+app.use('/api/v1/users', userRoutes);
 app.use(errorHandler);
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

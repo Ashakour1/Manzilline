@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LayoutGrid, Building2, Users, CreditCard, Wrench, FileText, BarChart3, Settings, UserCheck, LogOut, User } from "lucide-react"
+import { LayoutGrid, Building2, Users, CreditCard, Wrench, FileText, BarChart3, Settings, UserCheck, LogOut, User, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -20,6 +20,7 @@ const menuItems = [
   { id: "properties", icon: Building2, label: "Properties", href: "/properties" },
   { id: "landlords", icon: UserCheck, label: "Landlords", href: "/landlords" },
   { id: "tenants", icon: Users, label: "Tenants", href: "/tenants" },
+  { id: "users", icon: Shield, label: "Users", href: "/users" },
   { id: "payments", icon: CreditCard, label: "Payments", href: "/payments" },
   { id: "maintenance", icon: Wrench, label: "Maintenance", href: "/maintenance" },
   { id: "documents", icon: FileText, label: "Documents", href: "/documents" },
