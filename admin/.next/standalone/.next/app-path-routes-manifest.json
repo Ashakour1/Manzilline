@@ -1,0 +1,23 @@
+{
+  "/(dashboard)/dashboard/page": "/dashboard",
+  "/(dashboard)/documents/new/page": "/documents/new",
+  "/(dashboard)/documents/page": "/documents",
+  "/(dashboard)/landlords/[id]/edit/page": "/landlords/[id]/edit",
+  "/(dashboard)/landlords/[id]/page": "/landlords/[id]",
+  "/(dashboard)/landlords/new/page": "/landlords/new",
+  "/(dashboard)/landlords/page": "/landlords",
+  "/(dashboard)/maintenance/page": "/maintenance",
+  "/(dashboard)/payments/[id]/page": "/payments/[id]",
+  "/(dashboard)/payments/page": "/payments",
+  "/(dashboard)/properties/[id]/edit/page": "/properties/[id]/edit",
+  "/(dashboard)/properties/[id]/page": "/properties/[id]",
+  "/(dashboard)/properties/new/page": "/properties/new",
+  "/(dashboard)/properties/page": "/properties",
+  "/(dashboard)/reports/page": "/reports",
+  "/(dashboard)/settings/page": "/settings",
+  "/(dashboard)/tenants/page": "/tenants",
+  "/(dashboard)/users/page": "/users",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/page": "/"
+}

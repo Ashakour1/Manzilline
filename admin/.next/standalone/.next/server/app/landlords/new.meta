@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(dashboard)/layout,_N_T_/(dashboard)/landlords/layout,_N_T_/(dashboard)/landlords/new/layout,_N_T_/(dashboard)/landlords/new/page,_N_T_/landlords/new"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KGRhc2hib2FyZCk/landlords/new/__PAGE__",
+    "/!KGRhc2hib2FyZCk/landlords/new",
+    "/!KGRhc2hib2FyZCk/landlords",
+    "/!KGRhc2hib2FyZCk",
+    "/_index",
+    "/_head"
+  ]
+}

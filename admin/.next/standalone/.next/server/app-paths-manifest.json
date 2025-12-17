@@ -1,0 +1,23 @@
+{
+  "/(dashboard)/dashboard/page": "app/(dashboard)/dashboard/page.js",
+  "/(dashboard)/documents/new/page": "app/(dashboard)/documents/new/page.js",
+  "/(dashboard)/documents/page": "app/(dashboard)/documents/page.js",
+  "/(dashboard)/landlords/[id]/edit/page": "app/(dashboard)/landlords/[id]/edit/page.js",
+  "/(dashboard)/landlords/[id]/page": "app/(dashboard)/landlords/[id]/page.js",
+  "/(dashboard)/landlords/new/page": "app/(dashboard)/landlords/new/page.js",
+  "/(dashboard)/landlords/page": "app/(dashboard)/landlords/page.js",
+  "/(dashboard)/maintenance/page": "app/(dashboard)/maintenance/page.js",
+  "/(dashboard)/payments/[id]/page": "app/(dashboard)/payments/[id]/page.js",
+  "/(dashboard)/payments/page": "app/(dashboard)/payments/page.js",
+  "/(dashboard)/properties/[id]/edit/page": "app/(dashboard)/properties/[id]/edit/page.js",
+  "/(dashboard)/properties/[id]/page": "app/(dashboard)/properties/[id]/page.js",
+  "/(dashboard)/properties/new/page": "app/(dashboard)/properties/new/page.js",
+  "/(dashboard)/properties/page": "app/(dashboard)/properties/page.js",
+  "/(dashboard)/reports/page": "app/(dashboard)/reports/page.js",
+  "/(dashboard)/settings/page": "app/(dashboard)/settings/page.js",
+  "/(dashboard)/tenants/page": "app/(dashboard)/tenants/page.js",
+  "/(dashboard)/users/page": "app/(dashboard)/users/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js"
+}
