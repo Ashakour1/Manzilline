@@ -61,8 +61,14 @@ export default function Home() {
     try{
       const data = await Login(formData.email, formData.password);
 
-    
-      window.location.href = "/dashboard";
+      // Persist auth state for dashboard route guard.
+      login({
+        token: data.token,
+        name: data.name,
+        email: data.email,
+      });
+
+      router.replace("/dashboard");
       
       
       // // Assuming the response contains token, name, and email
