@@ -61,13 +61,12 @@ export default function Home() {
     try{
       const data = await Login(formData.email, formData.password);
 
-      console.log("data", data)
-
-      router.replace("/dashboard");
+    
+      window.location.href = "/dashboard";
       
       
-      // Assuming the response contains token, name, and email
-      login({ token: data.token, name: data.name, email: data.email });
+      // // Assuming the response contains token, name, and email
+      // login(data);
 
 
      

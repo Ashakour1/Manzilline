@@ -66,9 +66,12 @@ export function DashboardContent() {
   const [propertyTypes, setPropertyTypes] = useState<PropertyTypeData[]>([])
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatusData[]>([])
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([])
+  // Only used for initial auth gate; dashboard widgets load progressively.
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  // Dashboard requests can be slow (large lists). Don't block the whole UI:
+  // render immediately and load each widget in parallel with placeholders.
   useEffect(() => {
     if (!isHydrated) return
 
@@ -77,41 +80,73 @@ export function DashboardContent() {
       return
     }
 
-    const loadDashboardData = async () => {
-      setIsLoading(true)
-      setError(null)
-      try {
-        const [
-          dashboardStats,
-          revenue,
-          occupancy,
-          propertyTypesData,
-          paymentStatusData,
-          activity,
-        ] = await Promise.all([
-          getDashboardStats(),
-          getRevenueData(),
-          getOccupancyData(),
-          getPropertyTypes(),
-          getPaymentStatus(),
-          getRecentActivity(),
-        ])
+    let cancelled = false
+    setIsLoading(false) // stop full-screen loading once auth is ready
+    setError(null)
 
-        setStats(dashboardStats)
-        setRevenueData(revenue)
-        setOccupancyData(occupancy)
-        setPropertyTypes(propertyTypesData)
-        setPaymentStatus(paymentStatusData)
-        setRecentActivity(activity)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load dashboard data")
-        console.error("Error loading dashboard:", err)
-      } finally {
-        setIsLoading(false)
-      }
+    const safe = <T,>(setter: (v: T) => void, value: T) => {
+      if (cancelled) return
+      setter(value)
     }
 
-    loadDashboardData()
+    ;(async () => {
+      try {
+        const v = await getDashboardStats()
+        safe(setStats, v)
+      } catch (err) {
+        console.error("Error loading dashboard stats:", err)
+        if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load dashboard stats")
+      }
+    })()
+
+    ;(async () => {
+      try {
+        const v = await getRevenueData()
+        safe(setRevenueData, v)
+      } catch (err) {
+        console.error("Error loading revenue data:", err)
+      }
+    })()
+
+    ;(async () => {
+      try {
+        const v = await getOccupancyData()
+        safe(setOccupancyData, v)
+      } catch (err) {
+        console.error("Error loading occupancy data:", err)
+      }
+    })()
+
+    ;(async () => {
+      try {
+        const v = await getPropertyTypes()
+        safe(setPropertyTypes, v)
+      } catch (err) {
+        console.error("Error loading property types:", err)
+      }
+    })()
+
+    ;(async () => {
+      try {
+        const v = await getPaymentStatus()
+        safe(setPaymentStatus, v)
+      } catch (err) {
+        console.error("Error loading payment status:", err)
+      }
+    })()
+
+    ;(async () => {
+      try {
+        const v = await getRecentActivity()
+        safe(setRecentActivity, v)
+      } catch (err) {
+        console.error("Error loading recent activity:", err)
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
   }, [isHydrated, isLoggedIn, router])
 
   const headlineStats = useMemo(() => {
@@ -149,6 +184,15 @@ export function DashboardContent() {
     ]
   }, [stats])
 
+  const headlineStatsFallback = useMemo(() => {
+    return [
+      { label: "Total Earnings", icon: DollarSign },
+      { label: "Properties", icon: Building2 },
+      { label: "Active Tenants", icon: Users },
+      { label: "Monthly Revenue", icon: TrendingUp },
+    ]
+  }, [])
+
   if (!isHydrated) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -165,14 +209,6 @@ export function DashboardContent() {
     )
   }
 
-  if (error) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-destructive">Error: {error}</div>
-      </div>
-    )
-  }
-
   const userName = user?.name?.split(' ')[0] || 'User'
 
   return (
@@ -184,9 +220,15 @@ export function DashboardContent() {
           <p className="text-sm text-gray-600">Welcome back, {userName}. Here's your overview.</p>
         </div>
 
+        {error ? (
+          <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
+            {error}
+          </div>
+        ) : null}
+
         {/* Stats Cards */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {headlineStats.map((stat, index) => (
+          {(headlineStats.length ? headlineStats : headlineStatsFallback).map((stat: any) => (
             <Card 
               key={stat.label} 
               className="group border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-0.5"
@@ -195,15 +237,24 @@ export function DashboardContent() {
                 <div className="flex items-start justify-between">
                   <div className="space-y-2">
                     <p className="text-sm font-medium text-gray-600">{stat.label}</p>
-                    <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
-                    <div className="flex items-center gap-1.5 text-xs">
-                      {stat.isPositive ? (
-                        <ArrowUpRight className="h-3.5 w-3.5 text-[#2a6f97]" />
-                      ) : (
-                        <ArrowDownRight className="h-3.5 w-3.5 text-gray-600" />
-                      )}
-                      <span className="text-gray-600">{stat.change} from last month</span>
-                    </div>
+                    {headlineStats.length ? (
+                      <>
+                        <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
+                        <div className="flex items-center gap-1.5 text-xs">
+                          {stat.isPositive ? (
+                            <ArrowUpRight className="h-3.5 w-3.5 text-[#2a6f97]" />
+                          ) : (
+                            <ArrowDownRight className="h-3.5 w-3.5 text-gray-600" />
+                          )}
+                          <span className="text-gray-600">{stat.change} from last month</span>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="h-7 w-28 animate-pulse rounded-md bg-gray-200" />
+                        <div className="h-4 w-40 animate-pulse rounded-md bg-gray-100" />
+                      </>
+                    )}
                   </div>
                   <div className="rounded-lg bg-[#2a6f97]/10 p-3 text-[#2a6f97] transition-colors group-hover:bg-[#2a6f97]/20">
                     <stat.icon className="h-5 w-5" />
