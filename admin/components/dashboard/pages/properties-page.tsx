@@ -29,6 +29,8 @@ import {
   Building2,
   Image as ImageIcon,
   X,
+  CheckCircle,
+  Star,
 } from "lucide-react"
 import { getProperties } from "@/services/properties.service"
 import { deleteProperty } from "@/services/properties.service"
@@ -316,65 +318,89 @@ export function PropertiesPage() {
       </div>
 
       {/* Statistics Cards */}
-      <div className="mb-6 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
-        <Card>
+      <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <Card className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Properties</CardTitle>
-            <Building2 className="h-4 w-4 text-[#2a6f97]" />
+            <CardTitle className="text-sm font-medium text-gray-600">Total Properties</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
+              <Building2 className="h-4 w-4 text-[#2a6f97]" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
-            <p className="text-xs text-muted-foreground">All properties</p>
+            <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+            <p className="text-xs text-gray-500 mt-1">All properties</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">For Rent</CardTitle>
-            <Home className="h-4 w-4 text-[#2a6f97]" />
+            <CardTitle className="text-sm font-medium text-gray-600">For Rent</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
+              <Home className="h-4 w-4 text-[#2a6f97]" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[#2a6f97]">{stats.forRent}</div>
-            <p className="text-xs text-muted-foreground">Available for rent</p>
+            <div className="text-2xl font-bold text-gray-900">{stats.forRent}</div>
+            <p className="text-xs text-gray-500 mt-1">Available for rent</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">For Sale</CardTitle>
-            <TrendingUp className="h-4 w-4 text-[#2a6f97]" />
+            <CardTitle className="text-sm font-medium text-gray-600">For Sale</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
+              <TrendingUp className="h-4 w-4 text-[#2a6f97]" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[#2a6f97]">{stats.forSale}</div>
-            <p className="text-xs text-muted-foreground">Available for sale</p>
+            <div className="text-2xl font-bold text-gray-900">{stats.forSale}</div>
+            <p className="text-xs text-gray-500 mt-1">Available for sale</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Rented</CardTitle>
-            <Home className="h-4 w-4 text-[#2a6f97]" />
+            <CardTitle className="text-sm font-medium text-gray-600">Rented</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
+              <Home className="h-4 w-4 text-[#2a6f97]" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[#2a6f97]">{stats.rented}</div>
-            <p className="text-xs text-muted-foreground">Currently rented</p>
+            <div className="text-2xl font-bold text-gray-900">{stats.rented}</div>
+            <p className="text-xs text-gray-500 mt-1">Currently rented</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Featured</CardTitle>
-            <TrendingUp className="h-4 w-4 text-[#2a6f97]" />
+            <CardTitle className="text-sm font-medium text-gray-600">Sold</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
+              <CheckCircle className="h-4 w-4 text-[#2a6f97]" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[#2a6f97]">{stats.featured}</div>
-            <p className="text-xs text-muted-foreground">Featured properties</p>
+            <div className="text-2xl font-bold text-gray-900">{stats.sold}</div>
+            <p className="text-xs text-gray-500 mt-1">Properties sold</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Value</CardTitle>
-            <DollarSign className="h-4 w-4 text-[#2a6f97]" />
+            <CardTitle className="text-sm font-medium text-gray-600">Featured</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
+              <Star className="h-4 w-4 text-[#2a6f97]" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(stats.totalValue)}</div>
-            <p className="text-xs text-muted-foreground">Portfolio value</p>
+            <div className="text-2xl font-bold text-gray-900">{stats.featured}</div>
+            <p className="text-xs text-gray-500 mt-1">Featured properties</p>
+          </CardContent>
+        </Card>
+        <Card className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-gray-600">Total Value</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
+              <DollarSign className="h-4 w-4 text-[#2a6f97]" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-gray-900">{formatCurrency(stats.totalValue)}</div>
+            <p className="text-xs text-gray-500 mt-1">Portfolio value</p>
           </CardContent>
         </Card>
       </div>
