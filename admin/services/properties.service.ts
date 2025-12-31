@@ -1,4 +1,4 @@
-import { API_URL } from "../lib/api";
+import { API_URL, getAuthHeaders } from "../lib/api";
 
 const PROPERTY_API_URL = `${API_URL}/properties`;
 
@@ -22,8 +22,8 @@ export const registerProperty = async (propertyData = {}) => {
 
   const response = await fetch(PROPERTY_API_URL, {
     method: "POST",
+    headers: getAuthHeaders(),
     body: formData,
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -35,7 +35,7 @@ export const registerProperty = async (propertyData = {}) => {
 
 export const getProperties = async () => {
   const response = await fetch(PROPERTY_API_URL, {
-    credentials: "include",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {
@@ -47,7 +47,7 @@ export const getProperties = async () => {
 
 export const getPropertyById = async (id: string) => {
   const response = await fetch(`${PROPERTY_API_URL}/${id}`, {
-    credentials: "include",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {
@@ -60,11 +60,10 @@ export const getPropertyById = async (id: string) => {
 export const updateProperty = async (id: string, updates = {}) => {
   const response = await fetch(`${PROPERTY_API_URL}/${id}`, {
     method: "PUT",
-    headers: {
+    headers: getAuthHeaders({
       "Content-Type": "application/json",
-    },
+    }),
     body: JSON.stringify(updates),
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -77,7 +76,7 @@ export const updateProperty = async (id: string, updates = {}) => {
 export const deleteProperty = async (id: string) => {
   const response = await fetch(`${PROPERTY_API_URL}/${id}`, {
     method: "DELETE",
-    credentials: "include",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {

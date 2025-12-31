@@ -1,11 +1,11 @@
-import { API_URL   } from "../lib/api";
+import { API_URL, getAuthHeaders } from "../lib/api";
 
 const USERS_API_URL = `${API_URL}/users`;
 
 // Get all users
 export const getUsers = async () => {
   const response = await fetch(USERS_API_URL, {
-    credentials: "include",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {
@@ -18,7 +18,7 @@ export const getUsers = async () => {
 // Get user by ID
 export const getUserById = async (id: string) => {
   const response = await fetch(`${USERS_API_URL}/${id}`, {
-    credentials: "include",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {
@@ -37,11 +37,10 @@ export const createUser = async (userData: {
 }) => {
   const response = await fetch(USERS_API_URL, {
     method: "POST",
-    headers: {
+    headers: getAuthHeaders({
       "Content-Type": "application/json",
-    },
+    }),
     body: JSON.stringify(userData),
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -61,11 +60,10 @@ export const updateUser = async (id: string, updates: {
 }) => {
   const response = await fetch(`${USERS_API_URL}/${id}`, {
     method: "PUT",
-    headers: {
+    headers: getAuthHeaders({
       "Content-Type": "application/json",
-    },
+    }),
     body: JSON.stringify(updates),
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -80,7 +78,7 @@ export const updateUser = async (id: string, updates: {
 export const deleteUser = async (id: string) => {
   const response = await fetch(`${USERS_API_URL}/${id}`, {
     method: "DELETE",
-    credentials: "include",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {

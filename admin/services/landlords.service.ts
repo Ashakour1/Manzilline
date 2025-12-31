@@ -1,4 +1,4 @@
-import { API_URL } from "../lib/api";
+import { API_URL, getAuthHeaders } from "../lib/api";
 
 const LANDLORD_API_URL = `${API_URL}/landlords`;
 
@@ -6,11 +6,10 @@ const LANDLORD_API_URL = `${API_URL}/landlords`;
 export const registerLandlord = async (landlordData = {}) => {
   const response = await fetch(LANDLORD_API_URL, {
     method: "POST",
-    headers: {
+    headers: getAuthHeaders({
       "Content-Type": "application/json",
-    },
+    }),
     body: JSON.stringify(landlordData),
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -24,7 +23,7 @@ export const registerLandlord = async (landlordData = {}) => {
 // Get all landlords
 export const getLandlords = async () => {
   const response = await fetch(LANDLORD_API_URL, {
-    credentials: "include",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {
@@ -37,7 +36,7 @@ export const getLandlords = async () => {
 // Get landlord by ID
 export const getLandlordById = async (id: string) => {
   const response = await fetch(`${LANDLORD_API_URL}/${id}`, {
-    credentials: "include",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {
@@ -51,11 +50,10 @@ export const getLandlordById = async (id: string) => {
 export const updateLandlord = async (id: string, updates = {}) => {
   const response = await fetch(`${LANDLORD_API_URL}/${id}`, {
     method: "PUT",
-    headers: {
+    headers: getAuthHeaders({
       "Content-Type": "application/json",
-    },
+    }),
     body: JSON.stringify(updates),
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -70,7 +68,7 @@ export const updateLandlord = async (id: string, updates = {}) => {
 export const deleteLandlord = async (id: string) => {
   const response = await fetch(`${LANDLORD_API_URL}/${id}`, {
     method: "DELETE",
-    credentials: "include",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {
@@ -85,11 +83,10 @@ export const deleteLandlord = async (id: string) => {
 export const verifyLandlord = async (id: string, isVerified: boolean) => {
   const response = await fetch(`${LANDLORD_API_URL}/${id}/verify`, {
     method: "PATCH",
-    headers: {
+    headers: getAuthHeaders({
       "Content-Type": "application/json",
-    },
+    }),
     body: JSON.stringify({ isVerified }),
-    credentials: "include",
   });
 
   if (!response.ok) {

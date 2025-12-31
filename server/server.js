@@ -9,7 +9,6 @@ import propertyRoutes from './routes/property.routes.js';
 import landlordRoutes from './routes/landlord.routes.js';
 import userRoutes from './routes/user.routes.js';
 import fieldAgentsRoutes from './routes/field-agents.routes.js';
-import cookieParser from "cookie-parser";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,7 +42,6 @@ app.use(cors(
 
 
 app.use(express.json());
-app.use(cookieParser())
 // Serve static files from uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

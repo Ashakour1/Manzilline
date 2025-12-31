@@ -55,12 +55,6 @@ export function DashboardSidebar() {
   const pathname = usePathname()
   const { user, logout } = useAuthStore()
   const [isLoggingOut, setIsLoggingOut] = useState(false)
-
-   function clearAuthCookie() {
-    if (typeof document === "undefined") return;
-  
-    document.cookie = `manzilini=; path=/; max-age=0`;
-  }
   
   const handleLogout = async () => {
     if (isLoggingOut) return
@@ -72,24 +66,20 @@ export function DashboardSidebar() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
       })
       if (!response.ok) {
         throw new Error('Failed to logout')
       }
       logout()
-      clearAuthCookie()
       window.location.href = '/'
     } catch (error) {
       console.error('Error logging out:', error)
+      // Even if logout fails, clear local state
+      logout()
+      window.location.href = '/'
     } finally {
       setIsLoggingOut(false)
     }
-
-    
-
-
-    
   }
 
   const getUserInitials = () => {

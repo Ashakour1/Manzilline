@@ -61,17 +61,6 @@ export const loginUser = asyncHandler(async (req, res) => {
 
     const token = generateToken(user.id);
 
-    // const isProduction = process.env.NODE_ENV === 'production';
-
-    res.cookie('manzilini', token, {
-        httpOnly: true,
-        secure: true, // Must be true when sameSite is "none"
-        maxAge: 1000 * 60 * 60 * 24 * 30,
-        sameSite: "none", // Required for cross-origin requests
-        path: "/",
-    });
-
-
     res.status(200).json({
         _id: user.id,
         name: user.name,
@@ -82,13 +71,6 @@ export const loginUser = asyncHandler(async (req, res) => {
 });
 
 export const logoutUser = asyncHandler(async (req, res) => {
-    res.clearCookie('manzilini', {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        path: "/",
-  
-    });
     res.status(200).json({
         message: 'Logged out successfully',
     });

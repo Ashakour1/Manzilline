@@ -1,11 +1,11 @@
-import { API_URL } from "../lib/api";
+import { API_URL, getAuthHeaders } from "../lib/api";
 
 const FIELD_AGENTS_API_URL = `${API_URL}/field-agents`;
 
 // Get all field agents
 export const getFieldAgents = async () => {
   const response = await fetch(FIELD_AGENTS_API_URL, {
-    credentials: "include",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {
@@ -18,7 +18,7 @@ export const getFieldAgents = async () => {
 // Get field agent by ID
 export const getFieldAgentById = async (id: string) => {
   const response = await fetch(`${FIELD_AGENTS_API_URL}/${id}`, {
-    credentials: "include",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {
@@ -51,8 +51,8 @@ export const createFieldAgent = async (agentData: {
 
   const response = await fetch(FIELD_AGENTS_API_URL, {
     method: "POST",
+    headers: getAuthHeaders(),
     body: formData,
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -89,8 +89,8 @@ export const updateFieldAgent = async (
 
   const response = await fetch(`${FIELD_AGENTS_API_URL}/${id}`, {
     method: "PUT",
+    headers: getAuthHeaders(),
     body: formData,
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -105,7 +105,7 @@ export const updateFieldAgent = async (
 export const deleteFieldAgent = async (id: string) => {
   const response = await fetch(`${FIELD_AGENTS_API_URL}/${id}`, {
     method: "DELETE",
-    credentials: "include",
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {
