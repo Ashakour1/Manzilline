@@ -4,9 +4,9 @@ import jwt from 'jsonwebtoken';
 import prisma from '../db/prisma.js';
 
 export const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, password } = req.body || {};
+    const { name, email, password, role } = req.body || {};
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !role) {
         res.status(400);
         throw new Error('Please fill in all fields');
     }
@@ -24,7 +24,7 @@ export const registerUser = asyncHandler(async (req, res) => {
             name,
             email,
             password: hashedPassword,
-            role: 'USER',   
+            role: role 
         }
     });
 

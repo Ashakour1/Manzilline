@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Building2, Users, CreditCard, TrendingUp, ArrowUpRight, ArrowDownRight, Calendar, DollarSign } from "lucide-react"
+import { Building2, Users, CreditCard, TrendingUp, ArrowUpRight, ArrowDownRight, Calendar, DollarSign, FileText, MapPin, Clock, CheckCircle, XCircle } from "lucide-react"
 import { useEffect, useState, useMemo } from "react"
 import { useAuthStore } from "@/store/authStore"
 import {
@@ -39,6 +39,9 @@ import {
   type PaymentStatusData,
   type RecentActivity,
 } from "@/services/dashboard.service"
+import { getMyPropertyApplications, type PropertyApplication } from "@/services/property-applications.service"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -66,9 +69,17 @@ export function DashboardContent() {
   const [propertyTypes, setPropertyTypes] = useState<PropertyTypeData[]>([])
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatusData[]>([])
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([])
+  const [applications, setApplications] = useState<PropertyApplication[]>([])
+  const [applicationsLoading, setApplicationsLoading] = useState(false)
   // Only used for initial auth gate; dashboard widgets load progressively.
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  // Check if user is admin
+  const isAdmin = useMemo(() => {
+    const role = user?.role?.toUpperCase()
+    return role === "SUPER_ADMIN" || role === "ADMIN"
+  }, [user?.role])
 
   // Dashboard requests can be slow (large lists). Don't block the whole UI:
   // render immediately and load each widget in parallel with placeholders.
@@ -144,10 +155,29 @@ export function DashboardContent() {
       }
     })()
 
+    // Load property applications for non-admin users
+    if (!isAdmin) {
+      ;(async () => {
+        try {
+          setApplicationsLoading(true)
+          const v = await getMyPropertyApplications()
+          if (!cancelled) {
+            setApplications(v)
+          }
+        } catch (err) {
+          console.error("Error loading property applications:", err)
+        } finally {
+          if (!cancelled) {
+            setApplicationsLoading(false)
+          }
+        }
+      })()
+    }
+
     return () => {
       cancelled = true
     }
-  }, [isHydrated, isLoggedIn, router])
+  }, [isHydrated, isLoggedIn, router, isAdmin])
 
   const headlineStats = useMemo(() => {
     if (!stats) return []
@@ -211,12 +241,128 @@ export function DashboardContent() {
 
   const userName = user?.name?.split(' ')[0] || 'User'
 
+  // Render property applications view for non-admin users
+  if (!isAdmin) {
+    return (
+      <main className="flex-1 overflow-y-auto bg-white">
+        <div className="space-y-6 p-4 sm:p-6 lg:p-8">
+          {/* Header */}
+          <div className="space-y-1">
+            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900">My Property Applications</h1>
+            <p className="text-sm text-gray-600">View and manage your property applications</p>
+          </div>
+
+          {applicationsLoading ? (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Card key={i} className="border border-gray-200">
+                  <CardContent className="p-6">
+                    <Skeleton className="h-48 w-full mb-4" />
+                    <Skeleton className="h-4 w-3/4 mb-2" />
+                    <Skeleton className="h-4 w-1/2" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : applications.length === 0 ? (
+            <Card className="border border-gray-200">
+              <CardContent className="p-12">
+                <Empty>
+                  <EmptyHeader>
+                    <EmptyTitle>No Applications Yet</EmptyTitle>
+                    <EmptyDescription>
+                      You haven't applied to any properties yet. Browse properties to get started.
+                    </EmptyDescription>
+                  </EmptyHeader>
+                </Empty>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {applications.map((application) => {
+                const statusColors = {
+                  PENDING: "bg-yellow-100 text-yellow-800 border-yellow-200",
+                  APPROVED: "bg-green-100 text-green-800 border-green-200",
+                  REJECTED: "bg-red-100 text-red-800 border-red-200",
+                }
+                const statusIcons = {
+                  PENDING: Clock,
+                  APPROVED: CheckCircle,
+                  REJECTED: XCircle,
+                }
+                const StatusIcon = statusIcons[application.status]
+
+                return (
+                  <Card key={application.id} className="border border-gray-200 hover:shadow-lg transition-shadow">
+                    <div className="relative h-48 overflow-hidden rounded-t-lg">
+                      {application.property.images && application.property.images.length > 0 ? (
+                        <img
+                          src={application.property.images[0].url}
+                          alt={application.property.title}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                          <Building2 className="h-12 w-12 text-gray-400" />
+                        </div>
+                      )}
+                      <Badge
+                        className={`absolute top-3 right-3 ${statusColors[application.status]}`}
+                      >
+                        <StatusIcon className="h-3 w-3 mr-1" />
+                        {application.status}
+                      </Badge>
+                    </div>
+                    <CardContent className="p-6">
+                      <CardTitle className="text-lg mb-2 line-clamp-1">
+                        {application.property.title}
+                      </CardTitle>
+                      <div className="space-y-2 text-sm text-gray-600 mb-4">
+                        <div className="flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-gray-400" />
+                          <span className="line-clamp-1">{application.property.address}, {application.property.city}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <DollarSign className="h-4 w-4 text-gray-400" />
+                          <span className="font-semibold text-gray-900">
+                            ${Number(application.property.price).toLocaleString()}
+                            {application.property.property_type && ` / ${application.property.property_type}`}
+                          </span>
+                        </div>
+                      </div>
+                      {application.message && (
+                        <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                          {application.message}
+                        </p>
+                      )}
+                      <div className="flex items-center justify-between text-xs text-gray-500 pt-4 border-t border-gray-200">
+                        <span>Applied {new Date(application.createdAt).toLocaleDateString()}</span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => router.push(`/properties/${application.property.id}`)}
+                        >
+                          View Property
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      </main>
+    )
+  }
+
+  // Render full dashboard for admin users
   return (
-    <main className="flex-1 overflow-y-auto bg-gray-50/50">
-      <div className="space-y-6 p-6 md:p-8">
+    <main className="flex-1 overflow-y-auto bg-white">
+      <div className="space-y-6 p-4 sm:p-6 lg:p-8">
         {/* Header */}
         <div className="space-y-1">
-          <h1 className="text-3xl font-semibold tracking-tight text-gray-900">Dashboard</h1>
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900">Dashboard</h1>
           <p className="text-sm text-gray-600">Welcome back, {userName}. Here's your overview.</p>
         </div>
 

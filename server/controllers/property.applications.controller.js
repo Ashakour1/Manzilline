@@ -96,7 +96,7 @@ export const deletePropertyApplication = asyncHandler(async (req, res) => {
     res.status(200).json(propertyApplication);
 });
 
-    export const getPropertyApplicationsByTenant = asyncHandler(async (req, res) => {
+export const getPropertyApplicationsByTenant = asyncHandler(async (req, res) => {
     const { tenantId } = req.params;
     if (!tenantId) {
         res.status(400);
@@ -104,6 +104,20 @@ export const deletePropertyApplication = asyncHandler(async (req, res) => {
     }
     const propertyApplications = await prisma.propertyApplication.findMany({
         where: { tenantId },
+        include: {
+            property: {
+                include: {
+                    images: {
+                        select: {
+                            url: true
+                        }
+                    }
+                }
+            }
+        },
+        orderBy: {
+            createdAt: 'desc'
+        }
     });
     res.status(200).json(propertyApplications);
 });

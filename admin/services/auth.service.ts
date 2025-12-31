@@ -10,7 +10,9 @@ const Login = async (email: string, password: string) => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to login");
+    const errorData = await response.json().catch(() => ({ message: "Failed to login" }));
+    const errorMessage = errorData.message || errorData.error || "Failed to login. Please check your credentials.";
+    throw new Error(errorMessage);
   }
 
   return response.json();
