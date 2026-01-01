@@ -51,7 +51,7 @@ type User = {
   updatedAt?: string
   _count?: {
     property_applications: number
-    properties: number
+    properties?: number
   }
 }
 

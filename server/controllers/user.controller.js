@@ -19,8 +19,7 @@ export const getUsers = asyncHandler(async (req, res) => {
                 updatedAt: true,
                 _count: {
                     select: {
-                        property_applications: true,
-                        properties: true
+                        property_applications: true
                     }
                 }
             }
