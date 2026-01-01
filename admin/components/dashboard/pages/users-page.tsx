@@ -28,6 +28,7 @@ import {
   Filter,
   X,
   MoreVertical,
+  Building2,
 } from "lucide-react"
 import { getUsers, deleteUser, createUser, updateUser } from "@/services/users.service"
 import { useToast } from "@/components/ui/use-toast"
@@ -50,6 +51,7 @@ type User = {
   updatedAt?: string
   _count?: {
     property_applications: number
+    properties: number
   }
 }
 
@@ -328,53 +330,53 @@ export function UsersPage() {
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Total Users</CardTitle>
-            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
-              <Users className="h-4 w-4 text-[#2a6f97]" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3 pt-3">
+            <CardTitle className="text-xs font-medium text-gray-600">Total Users</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-1.5">
+              <Users className="h-3 w-3 text-[#2a6f97]" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
-            <p className="text-xs text-gray-500 mt-1">All registered users</p>
+          <CardContent className="px-3 pb-3">
+            <div className="text-lg font-bold text-gray-900">{stats.total}</div>
+            <p className="text-[10px] text-gray-500 mt-0.5">All registered users</p>
           </CardContent>
         </Card>
         <Card className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Administrators</CardTitle>
-            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
-              <Shield className="h-4 w-4 text-[#2a6f97]" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3 pt-3">
+            <CardTitle className="text-xs font-medium text-gray-600">Administrators</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-1.5">
+              <Shield className="h-3 w-3 text-[#2a6f97]" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{stats.admins}</div>
-            <p className="text-xs text-gray-500 mt-1">Admin & Super Admin</p>
+          <CardContent className="px-3 pb-3">
+            <div className="text-lg font-bold text-gray-900">{stats.admins}</div>
+            <p className="text-[10px] text-gray-500 mt-0.5">Admin & Super Admin</p>
           </CardContent>
         </Card>
         <Card className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Regular Users</CardTitle>
-            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
-              <UserCheck className="h-4 w-4 text-[#2a6f97]" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3 pt-3">
+            <CardTitle className="text-xs font-medium text-gray-600">Regular Users</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-1.5">
+              <UserCheck className="h-3 w-3 text-[#2a6f97]" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{stats.regularUsers}</div>
-            <p className="text-xs text-gray-500 mt-1">Standard users</p>
+          <CardContent className="px-3 pb-3">
+            <div className="text-lg font-bold text-gray-900">{stats.regularUsers}</div>
+            <p className="text-[10px] text-gray-500 mt-0.5">Standard users</p>
           </CardContent>
         </Card>
         <Card className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Property Owners</CardTitle>
-            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
-              <Users className="h-4 w-4 text-[#2a6f97]" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3 pt-3">
+            <CardTitle className="text-xs font-medium text-gray-600">Property Owners</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-1.5">
+              <Users className="h-3 w-3 text-[#2a6f97]" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{stats.propertyOwners}</div>
-            <p className="text-xs text-gray-500 mt-1">Property owners</p>
+          <CardContent className="px-3 pb-3">
+            <div className="text-lg font-bold text-gray-900">{stats.propertyOwners}</div>
+            <p className="text-[10px] text-gray-500 mt-0.5">Property owners</p>
           </CardContent>
         </Card>
       </div>
@@ -522,6 +524,7 @@ export function UsersPage() {
                         </button>
                       </TableHead>
                       <TableHead className="font-semibold text-gray-700">Applications</TableHead>
+                      <TableHead className="font-semibold text-gray-700">Properties Created</TableHead>
                       <TableHead>
                         <button
                           className="flex items-center gap-2 font-semibold text-gray-700 hover:text-gray-900 transition-colors"
@@ -571,6 +574,14 @@ export function UsersPage() {
                           <Badge variant="secondary" className="font-medium">
                             {user._count?.property_applications || 0}
                           </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Building2 className="h-3.5 w-3.5 text-gray-400" />
+                            <Badge variant="outline" className="font-medium">
+                              {user._count?.properties || 0}
+                            </Badge>
+                          </div>
                         </TableCell>
                         <TableCell className="text-gray-600">
                           {user.createdAt

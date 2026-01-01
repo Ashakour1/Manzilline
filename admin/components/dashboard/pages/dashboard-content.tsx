@@ -379,31 +379,31 @@ export function DashboardContent() {
               key={stat.label} 
               className="group border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-0.5"
             >
-              <CardContent className="p-4">
+              <CardContent className="p-3">
                 <div className="flex items-start justify-between">
-                  <div className="space-y-1.5">
-                    <p className="text-xs font-medium text-gray-600">{stat.label}</p>
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-medium text-gray-600">{stat.label}</p>
                     {headlineStats.length ? (
                       <>
-                        <p className="text-xl font-semibold text-gray-900">{stat.value}</p>
-                        <div className="flex items-center gap-1.5 text-[10px]">
+                        <p className="text-lg font-semibold text-gray-900">{stat.value}</p>
+                        <div className="flex items-center gap-1 text-[9px]">
                           {stat.isPositive ? (
-                            <ArrowUpRight className="h-3 w-3 text-[#2a6f97]" />
+                            <ArrowUpRight className="h-2.5 w-2.5 text-[#2a6f97]" />
                           ) : (
-                            <ArrowDownRight className="h-3 w-3 text-gray-600" />
+                            <ArrowDownRight className="h-2.5 w-2.5 text-gray-600" />
                           )}
                           <span className="text-gray-600">{stat.change} from last month</span>
                         </div>
                       </>
                     ) : (
                       <>
-                        <div className="h-6 w-24 animate-pulse rounded-md bg-gray-200" />
-                        <div className="h-3 w-32 animate-pulse rounded-md bg-gray-100" />
+                        <div className="h-5 w-20 animate-pulse rounded-md bg-gray-200" />
+                        <div className="h-2.5 w-28 animate-pulse rounded-md bg-gray-100" />
                       </>
                     )}
                   </div>
-                  <div className="rounded-lg bg-[#2a6f97]/10 p-2 text-[#2a6f97] transition-colors group-hover:bg-[#2a6f97]/20">
-                    <stat.icon className="h-4 w-4" />
+                  <div className="rounded-lg bg-[#2a6f97]/10 p-1.5 text-[#2a6f97] transition-colors group-hover:bg-[#2a6f97]/20">
+                    <stat.icon className="h-3 w-3" />
                   </div>
                 </div>
               </CardContent>

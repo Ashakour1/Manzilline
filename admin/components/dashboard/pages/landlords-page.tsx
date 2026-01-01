@@ -205,41 +205,41 @@ export function LandlordsPage() {
       </div>
 
       {/* Statistics */}
-      <div className="grid gap-3 md:grid-cols-3">
+      <div className="grid gap-2 md:grid-cols-3">
         <Card className="border-border/50 shadow-sm transition-shadow hover:shadow-md">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-muted-foreground">Total Landlords</CardTitle>
-            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
-              <Users className="h-5 w-5 text-[#2a6f97]" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3 pt-3">
+            <CardTitle className="text-xs font-semibold text-muted-foreground">Total Landlords</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-1.5">
+              <Users className="h-3 w-3 text-[#2a6f97]" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-foreground">{stats.total}</div>
-            <p className="mt-1 text-xs text-muted-foreground">Registered landlords</p>
+          <CardContent className="px-3 pb-3">
+            <div className="text-lg font-bold text-foreground">{stats.total}</div>
+            <p className="mt-0.5 text-[10px] text-muted-foreground">Registered landlords</p>
           </CardContent>
         </Card>
         <Card className="border-border/50 shadow-sm transition-shadow hover:shadow-md">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-muted-foreground">With Properties</CardTitle>
-            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
-              <Building2 className="h-5 w-5 text-[#2a6f97]" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3 pt-3">
+            <CardTitle className="text-xs font-semibold text-muted-foreground">With Properties</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-1.5">
+              <Building2 className="h-3 w-3 text-[#2a6f97]" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-foreground">{stats.withProperties}</div>
-            <p className="mt-1 text-xs text-muted-foreground">Active landlords</p>
+          <CardContent className="px-3 pb-3">
+            <div className="text-lg font-bold text-foreground">{stats.withProperties}</div>
+            <p className="mt-0.5 text-[10px] text-muted-foreground">Active landlords</p>
           </CardContent>
         </Card>
         <Card className="border-border/50 shadow-sm transition-shadow hover:shadow-md">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-muted-foreground">Total Properties</CardTitle>
-            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
-              <Building2 className="h-5 w-5 text-[#2a6f97]" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3 pt-3">
+            <CardTitle className="text-xs font-semibold text-muted-foreground">Total Properties</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-1.5">
+              <Building2 className="h-3 w-3 text-[#2a6f97]" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-foreground">{stats.totalProperties}</div>
-            <p className="mt-1 text-xs text-muted-foreground">Managed properties</p>
+          <CardContent className="px-3 pb-3">
+            <div className="text-lg font-bold text-foreground">{stats.totalProperties}</div>
+            <p className="mt-0.5 text-[10px] text-muted-foreground">Managed properties</p>
           </CardContent>
         </Card>
       </div>

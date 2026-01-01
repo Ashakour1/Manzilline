@@ -104,17 +104,19 @@ export const createProperty = asyncHandler(async (req, res) => {
     try {
         const { title, description, property_type, status, price, currency, payment_frequency, deposit_amount, country, city, address, zip_code, latitude, longitude, bedrooms, bathrooms, garages, size, is_furnished, floor, total_floors, balcony, amenities, is_featured, landlord_id } = req.body || {};
 
-        if (!title || !description || !property_type || !status || !price || !currency || !payment_frequency || !deposit_amount || !country || !city || !address || !zip_code || !latitude || !longitude || !bedrooms || !bathrooms || !garages || !size || !is_furnished || !floor || !total_floors || !balcony || !amenities || !landlord_id) {
+        if (!title || !description || !property_type || !status || !price || !currency || !payment_frequency || !deposit_amount || !country || !city || !address || !zip_code || !latitude || !longitude || !bedrooms || !bathrooms || !garages || !size || !is_furnished || !floor || !total_floors || !balcony || !amenities) {
             return res.status(400).json({ message: 'All required fields must be provided' });
         }
 
-        // Validate that landlord exists
-        const landlord = await prisma.landlord.findUnique({
-            where: { id: landlord_id }
-        });
+        // Validate that landlord exists if landlord_id is provided
+        if (landlord_id) {
+            const landlord = await prisma.landlord.findUnique({
+                where: { id: landlord_id }
+            });
 
-        if (!landlord) {
-            return res.status(400).json({ message: 'Landlord not found' });
+            if (!landlord) {
+                return res.status(400).json({ message: 'Landlord not found' });
+            }
         }
 
         // Convert uploaded files to publicly accessible URLs served by this API
@@ -148,8 +150,17 @@ export const createProperty = asyncHandler(async (req, res) => {
             balcony : balcony === 'true' || balcony === true,
             amenities: Array.isArray(amenities) ? amenities : JSON.parse(amenities),
             is_featured : is_featured === 'true' || is_featured === true,
-            landlord_id,
         };
+
+        // Only include landlord_id if provided
+        if (landlord_id) {
+            propertyData.landlord_id = landlord_id;
+        }
+
+        // Set the user who created this property (from auth middleware)
+        if (req.user && req.user.id) {
+            propertyData.user_id = req.user.id;
+        }
 
         if (imageUrls.length) {
             propertyData.images = {
@@ -189,8 +200,8 @@ export const updateProperty = asyncHandler(async (req, res) => {
             return res.status(404).json({ message: 'Property not found' });
         }
 
-        // If landlord_id is being updated, validate that landlord exists
-        if (landlord_id) {
+        // If landlord_id is being updated and provided, validate that landlord exists
+        if (landlord_id !== undefined && landlord_id !== null && landlord_id !== '') {
             const landlord = await prisma.landlord.findUnique({
                 where: { id: landlord_id }
             });
@@ -225,7 +236,10 @@ export const updateProperty = asyncHandler(async (req, res) => {
         if (balcony !== undefined) updateData.balcony = balcony === 'true' || balcony === true;
         if (amenities !== undefined) updateData.amenities = Array.isArray(amenities) ? amenities : JSON.parse(amenities);
         if (is_featured !== undefined) updateData.is_featured = is_featured === 'true' || is_featured === true;
-        if (landlord_id !== undefined) updateData.landlord_id = landlord_id;
+        if (landlord_id !== undefined) {
+            // Allow null or empty string to remove landlord association
+            updateData.landlord_id = (landlord_id === '' || landlord_id === null) ? null : landlord_id;
+        }
 
         const property = await prisma.property.update({
             where: { id },

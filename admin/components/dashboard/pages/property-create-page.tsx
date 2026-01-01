@@ -183,7 +183,7 @@ export function PropertyCreatePage({ propertyId }: PropertyCreatePageProps) {
   }, [effectivePropertyId, toast])
 
   const buildPayload = () => {
-    return {
+    const payload: any = {
       title: form.title,
       description: form.description,
       property_type: form.property_type,
@@ -208,8 +208,14 @@ export function PropertyCreatePage({ propertyId }: PropertyCreatePageProps) {
       balcony: Boolean(form.balcony),
       amenities: amenityList,
       is_featured: Boolean(form.is_featured),
-      landlord_id: form.landlord_id,
     }
+
+    // Only include landlord_id if provided
+    if (form.landlord_id && form.landlord_id.trim() !== "") {
+      payload.landlord_id = form.landlord_id
+    }
+    
+    return payload
   }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -613,16 +619,17 @@ export function PropertyCreatePage({ propertyId }: PropertyCreatePageProps) {
             </div>
             <div className="grid gap-3 md:grid-cols-1">
               <div className="space-y-2">
-                <Label htmlFor="landlord_id">Landlord *</Label>
+                <Label htmlFor="landlord_id">Landlord</Label>
                 <Select 
-                  value={form.landlord_id} 
-                  onValueChange={handleLandlordChange}
+                  value={form.landlord_id && form.landlord_id.trim() !== "" ? form.landlord_id : "none"} 
+                  onValueChange={(value) => handleLandlordChange(value === "none" ? "" : value)}
                   disabled={isLoadingLandlords}
                 >
                   <SelectTrigger id="landlord_id">
-                    <SelectValue placeholder={isLoadingLandlords ? "Loading landlords..." : "Select a landlord"} />
+                    <SelectValue placeholder={isLoadingLandlords ? "Loading landlords..." : "Select a landlord (optional)"} />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="none">None (No landlord)</SelectItem>
                     {landlords.length === 0 && !isLoadingLandlords ? (
                       <div className="p-2 text-sm text-muted-foreground">No landlords available</div>
                     ) : (
@@ -636,7 +643,7 @@ export function PropertyCreatePage({ propertyId }: PropertyCreatePageProps) {
                 </Select>
                 {landlords.length === 0 && !isLoadingLandlords && (
                   <p className="text-xs text-muted-foreground">
-                    <a href="/landlords/new" className="text-primary hover:underline">Create a landlord</a> first
+                    <a href="/landlords/new" className="text-primary hover:underline">Create a landlord</a> or leave empty
                   </p>
                 )}
               </div>

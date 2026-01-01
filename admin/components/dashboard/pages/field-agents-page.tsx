@@ -179,29 +179,29 @@ export function FieldAgentsPage() {
       </div>
 
       {/* Statistics */}
-      <div className="grid gap-3 md:grid-cols-2">
+      <div className="grid gap-2 md:grid-cols-2">
         <Card className="border-border/50 shadow-sm transition-shadow hover:shadow-md">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-muted-foreground">Total Agents</CardTitle>
-            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
-              <Users className="h-5 w-5 text-[#2a6f97]" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3 pt-3">
+            <CardTitle className="text-xs font-semibold text-muted-foreground">Total Agents</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-1.5">
+              <Users className="h-3 w-3 text-[#2a6f97]" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-foreground">{stats.total}</div>
-            <p className="mt-1 text-xs text-muted-foreground">Registered field agents</p>
+          <CardContent className="px-3 pb-3">
+            <div className="text-lg font-bold text-foreground">{stats.total}</div>
+            <p className="mt-0.5 text-[10px] text-muted-foreground">Registered field agents</p>
           </CardContent>
         </Card>
         <Card className="border-border/50 shadow-sm transition-shadow hover:shadow-md">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-muted-foreground">With Images</CardTitle>
-            <div className="rounded-lg bg-[#2a6f97]/10 p-2">
-              <MapPin className="h-5 w-5 text-[#2a6f97]" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3 pt-3">
+            <CardTitle className="text-xs font-semibold text-muted-foreground">With Images</CardTitle>
+            <div className="rounded-lg bg-[#2a6f97]/10 p-1.5">
+              <MapPin className="h-3 w-3 text-[#2a6f97]" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-foreground">{stats.withImage}</div>
-            <p className="mt-1 text-xs text-muted-foreground">Agents with profile images</p>
+          <CardContent className="px-3 pb-3">
+            <div className="text-lg font-bold text-foreground">{stats.withImage}</div>
+            <p className="mt-0.5 text-[10px] text-muted-foreground">Agents with profile images</p>
           </CardContent>
         </Card>
       </div>

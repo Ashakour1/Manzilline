@@ -199,7 +199,7 @@ export function PaymentsPage() {
         </Card>
       </section>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-4 mb-8">
+      <div className="grid grid-cols-1 gap-2 lg:grid-cols-4 mb-6">
         {[
           { label: "Collected this month", value: "$5,224", detail: "+12% vs last cycle" },
           { label: "Outstanding balance", value: "$3,700", detail: "$2.5k pending • $1.2k overdue" },
@@ -207,14 +207,14 @@ export function PaymentsPage() {
           { label: "Avg. pay time", value: "2.4 days", detail: "After invoice due date" },
         ].map((stat) => (
           <Card key={stat.label} className="border-border shadow-sm">
-            <CardContent className="pt-6">
+            <CardContent className="pt-3 px-3 pb-3">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs text-muted-foreground">{stat.label}</p>
-                  <p className="text-3xl font-bold text-foreground">{stat.value}</p>
-                  <p className="text-xs text-muted-foreground mt-2">{stat.detail}</p>
+                  <p className="text-[10px] text-muted-foreground">{stat.label}</p>
+                  <p className="text-lg font-bold text-foreground">{stat.value}</p>
+                  <p className="text-[10px] text-muted-foreground mt-1">{stat.detail}</p>
                 </div>
-                <ArrowUpRight className="h-5 w-5 text-muted-foreground/80" />
+                <ArrowUpRight className="h-3 w-3 text-muted-foreground/80" />
               </div>
             </CardContent>
           </Card>

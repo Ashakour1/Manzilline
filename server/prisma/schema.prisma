@@ -59,8 +59,8 @@ model Property {
   balcony               Boolean?              @default(false)
   amenities             String[]
   is_featured           Boolean?              @default(false)
-  landlord_id           String
-  landlord              Landlord @relation(fields: [landlord_id], references: [id], onDelete: Restrict)
+  landlord_id           String?
+  landlord              Landlord? @relation(fields: [landlord_id], references: [id], onDelete: Restrict)
   createdAt             DateTime              @default(now())
   updatedAt             DateTime              @updatedAt
   property_applications PropertyApplication[]
