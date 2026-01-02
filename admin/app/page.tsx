@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { ArrowRight, Building2, Eye, EyeOff, Fingerprint, Lock, Mail, ShieldCheck, Sparkles, AlertCircle } from "lucide-react"
 
@@ -44,9 +44,16 @@ export default function Home() {
     password: "",
   });
 
-  const { login } = useAuthStore();
+  const { login, isLoggedIn, isHydrated } = useAuthStore();
 
   const router = useRouter();
+
+  // Redirect logged-in users to dashboard
+  useEffect(() => {
+    if (isHydrated && isLoggedIn) {
+      router.replace("/dashboard");
+    }
+  }, [isHydrated, isLoggedIn, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -85,6 +92,11 @@ export default function Home() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  // Don't render login form if user is already logged in (will redirect)
+  if (isHydrated && isLoggedIn) {
+    return null;
   }
 
   return (
