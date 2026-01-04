@@ -301,37 +301,65 @@ export default function PropertyDetailPage() {
                 <div className="rounded-2xl p-6 ">
                   <h3 className="text-xl font-bold text-gray-900 mb-6">Contact Information</h3>
                   
+                  {/* Check if landlord information exists */}
+                  {property.landlord && (property.landlord.name || property.landlord.email || property.landlord.phone) ? (
+                    <>
+                      {property.landlord.name && (
+                        <div className="mb-4">
+                          <p className="text-sm text-gray-600 mb-1">Contact Name</p>
+                          <p className="text-lg font-semibold text-gray-900">{property.landlord.name}</p>
+                        </div>
+                      )}
 
-                  {/* // to see the landlord details you want to pay a small fee to the landlord
-                  {property.landlord.name && (
-                    <div className="mb-4">
-                      <p className="text-sm text-gray-600 mb-1">Contact Name</p>
-                      <p className="text-lg font-semibold text-gray-900">{property.landlord.name}</p>
-                    </div>
-                  )}
+                      <div className="space-y-4 mb-6">
+                        {property.landlord.email && (
+                          <a
+                            href={`mailto:${property.landlord.email}`}
+                            className="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                          >
+                            <Mail className="w-5 h-5 text-primary" />
+                            <span className="text-gray-700">{property.landlord.email}</span>
+                          </a>
+                        )}
+                        {property.landlord.phone && (
+                          <a
+                            href={`tel:${property.landlord.phone}`}
+                            className="flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
+                          >
+                            <Phone className="w-5 h-5 text-green-600" />
+                            <span className="text-gray-700">{property.landlord.phone}</span>
+                          </a>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Site Contact Information */}
+                      <div className="mb-4">
+                        <p className="text-sm text-gray-600 mb-1">Contact Name</p>
+                        <p className="text-lg font-semibold text-gray-900">Manzilini Support</p>
+                      </div>
 
-                  <div className="space-y-4 mb-6">
-                    {property.landlord.email && (
-                      <a
-                        href={`mailto:${property.landlord.email}`}
-                        className="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
-                      >
-                        <Mail className="w-5 h-5 text-primary" />
-                        <span className="text-gray-700">{property.landlord.email}</span>
-                      </a>
-                    )}
-                    {property.landlord.phone && (
-                      <a
-                        href={`tel:${property.landlord.phone}`}
-                        className="flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
-                      >
-                        <Phone className="w-5 h-5 text-green-600" />
-                        <span className="text-gray-700">{property.landlord.phone}</span>
-                      </a>
-                    )}
-                  </div> */}
+                      <div className="space-y-4 mb-6">
+                        <a
+                          href="mailto:info@manzilini.com"
+                          className="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                        >
+                          <Mail className="w-5 h-5 text-primary" />
+                          <span className="text-gray-700">info@manzilini.com</span>
+                        </a>
+                        <a
+                          href="tel:+254700000000"
+                          className="flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
+                        >
+                          <Phone className="w-5 h-5 text-green-600" />
+                          <span className="text-gray-700">+254 700 000 000</span>
+                        </a>
+                      </div>
+                    </>
+                  )} 
 
-<div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 mb-6">
+{/* <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 mb-6">
                     <div className="flex items-center justify-center mb-4">
                       <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
                         <MessageCircle className="w-8 h-8 text-white" />
@@ -350,7 +378,7 @@ export default function PropertyDetailPage() {
                       Secure payment • Instant access
                     </p>
                   </div>
-                  
+                   */}
 
                 
 
