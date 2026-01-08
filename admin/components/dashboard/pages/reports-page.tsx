@@ -4,12 +4,11 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts"
-import { TrendingUp, Download, Users, Building2, FileText, DollarSign, UserCheck, AlertCircle, Loader2 } from "lucide-react"
+import { TrendingUp, Download, Users, Building2, FileText, DollarSign, UserCheck, AlertCircle, Loader2, Calendar } from "lucide-react"
 import { getReports, type ReportsData } from "@/services/reports.service"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Calendar } from "lucide-react"
 
 const COLORS = ['#2a6f97', '#60a5fa', '#93c5fd', '#dbeafe', '#3b82f6', '#1e40af'];
 

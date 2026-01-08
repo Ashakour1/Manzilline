@@ -66,7 +66,12 @@ export const getReports = asyncHandler(async (req, res) => {
                 _count: {
                     select: {
                         properties: monthFilter ? {
-                            where: dateFilter
+                            where: {
+                                createdAt: {
+                                    gte: dateFilter.createdAt.gte,
+                                    lte: dateFilter.createdAt.lte
+                                }
+                            }
                         } : true
                     }
                 }
