@@ -26,13 +26,35 @@ export const getPropertiesForUser = asyncHandler(async (req, res) => {
             const allProperties = await prisma.property.findMany({
                 include: {
                     images: true,
-                    landlord: true
+                    landlord: true,
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                            role: true,
+                            image: true
+                        }
+                    }
                 }
             });
             return res.status(200).json(allProperties);
         }else{
             const properties = await prisma.property.findMany({
                 where: { userId },
+                include: {
+                    images: true,
+                    landlord: true,
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                            role: true,
+                            image: true
+                        }
+                    }
+                }
             });
             return res.status(200).json(properties);
         }
@@ -69,7 +91,16 @@ export const getProperties = asyncHandler(async (req, res) => {
         ],
         include: {
             images: true,
-            landlord: true
+            landlord: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    role: true,
+                    image: true
+                }
+            }
         }
     });
 
@@ -134,7 +165,16 @@ export const getPropertyById = asyncHandler(async (req, res) => {
             where: { id },
             include : {
                 images: true,
-                landlord: true
+                landlord: true,
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        role: true,
+                        image: true
+                    }
+                }
             }
         });
         res.status(200).json(property);
@@ -151,6 +191,21 @@ export const createProperty = asyncHandler(async (req, res) => {
 
         if (!title || !description || !property_type || !status || !price || !currency || !payment_frequency || !deposit_amount || !country || !city || !address || !zip_code || !latitude || !longitude || !bedrooms || !bathrooms || !garages || !size || !is_furnished || !floor || !total_floors || !balcony || !amenities) {
             return res.status(400).json({ message: 'All required fields must be provided' });
+        }
+
+        // Get the authenticated user ID (creator)
+        const userId = req.user?.id;
+        if (!userId) {
+            return res.status(401).json({ message: 'User authentication required' });
+        }
+
+        // Validate that user exists
+        const user = await prisma.user.findUnique({
+            where: { id: userId }
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
         }
 
         // Validate that landlord exists if landlord_id is provided
@@ -202,6 +257,9 @@ export const createProperty = asyncHandler(async (req, res) => {
             propertyData.landlord_id = landlord_id;
         }
 
+        // Set the creator userId
+        propertyData.userId = userId;
+
         if (imageUrls.length) {
             propertyData.images = {
                 create: imageUrls.map((url) => ({ url })),
@@ -218,7 +276,16 @@ export const createProperty = asyncHandler(async (req, res) => {
                 },
                 include: { 
                     images: true,
-                    landlord: true
+                    landlord: true,
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                            role: true,
+                            image: true
+                        }
+                    }
                 },
             });
         });
@@ -292,7 +359,17 @@ export const updateProperty = asyncHandler(async (req, res) => {
             where: { id },
             data: updateData,
             include: {
-                landlord: true
+                images: true,
+                landlord: true,
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        role: true,
+                        image: true
+                    }
+                }
             }
         });
 
