@@ -243,7 +243,6 @@ export function UserCreatePage() {
                 {form.agentId && (
                   <p className="text-xs text-muted-foreground">Name and email will be auto-filled from the selected agent</p>
                 )}
-              </div>
             </div>
           </section>
 
