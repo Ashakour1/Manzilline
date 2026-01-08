@@ -583,6 +583,7 @@ export function UsersPage() {
                         </button>
                       </TableHead>
                       <TableHead className="font-semibold text-gray-700">Status</TableHead>
+                      <TableHead className="font-semibold text-gray-700">Properties</TableHead>
                       <TableHead className="font-semibold text-gray-700">Applications</TableHead>
                       <TableHead className="font-semibold text-gray-700">Field Agent</TableHead>
                       <TableHead>
@@ -650,6 +651,12 @@ export function UsersPage() {
                                 Inactive
                               </span>
                             )}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="font-medium">
+                            <Building2 className="mr-1 h-3 w-3 inline" />
+                            {user._count?.properties || 0}
                           </Badge>
                         </TableCell>
                         <TableCell>
@@ -773,6 +780,10 @@ export function UsersPage() {
                                     Inactive
                                   </span>
                                 )}
+                              </Badge>
+                              <Badge variant="outline" className="text-xs">
+                                <Building2 className="mr-1 h-3 w-3 inline" />
+                                {user._count?.properties || 0} properties
                               </Badge>
                               <Badge variant="secondary" className="text-xs">
                                 {user._count?.property_applications || 0} applications
