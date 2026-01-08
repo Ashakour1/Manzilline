@@ -15,6 +15,7 @@ export const getUsers = asyncHandler(async (req, res) => {
                 name: true,
                 email: true,
                 role: true,
+                status: true,
                 image: true,
                 createdAt: true,
                 updatedAt: true,
@@ -50,6 +51,7 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
                 name: true,
                 email: true,
                 role: true,
+                status: true,
                 image: true,
                 createdAt: true,
                 updatedAt: true,
@@ -87,6 +89,7 @@ export const getUserById = asyncHandler(async (req, res) => {
                 name: true,
                 email: true,
                 role: true,
+                status: true,
                 image: true,
                 createdAt: true,
                 updatedAt: true,
@@ -116,7 +119,7 @@ export const getUserById = asyncHandler(async (req, res) => {
 // Create user
 export const createUser = asyncHandler(async (req, res) => {
     try {
-        const { name, email, password, role, agentId } = req.body || {};
+        const { name, email, password, role, status, agentId } = req.body || {};
 
         if (!name || !email || !password) {
             return res.status(400).json({ message: 'Name, email, and password are required' });
@@ -154,6 +157,7 @@ export const createUser = asyncHandler(async (req, res) => {
                     email,
                     password: hashedPassword,
                     role: role || 'USER',
+                    status: status || 'ACTIVE',
                     agentId: agentId || null,
                 },
                 select: {
@@ -161,6 +165,7 @@ export const createUser = asyncHandler(async (req, res) => {
                     name: true,
                     email: true,
                     role: true,
+                    status: true,
                     image: true,
                     createdAt: true,
                     updatedAt: true,
@@ -188,7 +193,7 @@ export const createUser = asyncHandler(async (req, res) => {
 export const updateUser = asyncHandler(async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, email, role, password, agentId } = req.body || {};
+        const { name, email, role, status, password, agentId } = req.body || {};
 
         // Check if user exists
         const existingUser = await prisma.user.findUnique({
@@ -223,10 +228,16 @@ export const updateUser = asyncHandler(async (req, res) => {
             }
         }
 
+        // Validate status if provided
+        if (status !== undefined && status !== 'ACTIVE' && status !== 'INACTIVE') {
+            return res.status(400).json({ message: 'Status must be either ACTIVE or INACTIVE' });
+        }
+
         const updateData = {};
         if (name !== undefined) updateData.name = name;
         if (email !== undefined) updateData.email = email;
         if (role !== undefined) updateData.role = role;
+        if (status !== undefined) updateData.status = status;
         if (password !== undefined) {
             updateData.password = await bcrypt.hash(password, 10);
         }
@@ -242,6 +253,7 @@ export const updateUser = asyncHandler(async (req, res) => {
                 name: true,
                 email: true,
                 role: true,
+                status: true,
                 image: true,
                 createdAt: true,
                 updatedAt: true,

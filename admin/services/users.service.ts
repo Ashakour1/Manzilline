@@ -34,6 +34,7 @@ export const createUser = async (userData: {
   email: string;
   password: string;
   role?: string;
+  status?: string;
   agentId?: string | null;
 }) => {
   const response = await fetch(USERS_API_URL, {
@@ -57,6 +58,7 @@ export const updateUser = async (id: string, updates: {
   name?: string;
   email?: string;
   role?: string;
+  status?: string;
   password?: string;
   agentId?: string | null;
 }) => {

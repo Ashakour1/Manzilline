@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken'
-export const AuthMiddleware = (req, res, next) => {
+import prisma from '../db/prisma.js'
+
+export const AuthMiddleware = async (req, res, next) => {
     try {
         // Get token from Authorization header
         const authHeader = req.headers.authorization;
@@ -19,6 +21,36 @@ export const AuthMiddleware = (req, res, next) => {
         }
         
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        // Fetch user from database to check status
+        const user = await prisma.user.findUnique({
+            where: { id: decoded.id },
+            select: {
+                id: true,
+                role: true,
+                status: true
+            }
+        });
+        
+        if (!user) {
+            return res.status(401).json({
+                message: 'User not found'
+            });
+        }
+        
+        // Check if user is inactive
+        if (user.status === 'INACTIVE') {
+            // Block access for admin users if inactive
+            if (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') {
+                return res.status(403).json({
+                    message: 'Access denied - Your account is inactive. Please contact support.'
+                });
+            }
+            // For non-admin users, also block access
+            return res.status(403).json({
+                message: 'Access denied - Your account is inactive. Please contact support.'
+            });
+        }
         
         // Token was generated with { id }, so use decoded.id
         req.user = { id: decoded.id };

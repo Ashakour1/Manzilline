@@ -29,6 +29,9 @@ import {
   X,
   MoreVertical,
   Building2,
+  UserX,
+  CheckCircle2,
+  XCircle,
 } from "lucide-react"
 import { getUsers, deleteUser, updateUser } from "@/services/users.service"
 import { getFieldAgents } from "@/services/field-agents.service"
@@ -47,6 +50,7 @@ type User = {
   name: string
   email: string
   role: string
+  status?: string
   image?: string
   createdAt?: string
   updatedAt?: string
@@ -78,6 +82,7 @@ export function UsersPage() {
   const [userToDelete, setUserToDelete] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [roleFilter, setRoleFilter] = useState<string>("all")
+  const [statusFilter, setStatusFilter] = useState<string>("all")
   const [sortField, setSortField] = useState<SortField>("createdAt")
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc")
   const [currentPage, setCurrentPage] = useState(1)
@@ -88,6 +93,7 @@ export function UsersPage() {
     email: "",
     password: "",
     role: "USER",
+    status: "ACTIVE",
     agentId: "" as string | null,
   })
   const [fieldAgents, setFieldAgents] = useState<Array<{ id: string; name: string; email: string }>>([])
@@ -131,8 +137,10 @@ export function UsersPage() {
     const admins = users.filter((u) => u.role === "ADMIN" || u.role === "SUPER_ADMIN").length
     const regularUsers = users.filter((u) => u.role === "USER").length
     const propertyOwners = users.filter((u) => u.role === "PROPERTY_OWNER").length
+    const activeUsers = users.filter((u) => u.status === "ACTIVE").length
+    const inactiveUsers = users.filter((u) => u.status === "INACTIVE").length
 
-    return { total, admins, regularUsers, propertyOwners }
+    return { total, admins, regularUsers, propertyOwners, activeUsers, inactiveUsers }
   }, [users])
 
   // Filtered and sorted users
@@ -145,8 +153,9 @@ export function UsersPage() {
 
       const matchesSearch = !term || name.includes(term) || email.includes(term) || role.includes(term)
       const matchesRole = roleFilter === "all" || user.role === roleFilter
+      const matchesStatus = statusFilter === "all" || user.status === statusFilter
 
-      return matchesSearch && matchesRole
+      return matchesSearch && matchesRole && matchesStatus
     })
 
     // Sorting
@@ -181,7 +190,7 @@ export function UsersPage() {
     })
 
     return filtered
-  }, [users, searchTerm, roleFilter, sortField, sortDirection])
+  }, [users, searchTerm, roleFilter, statusFilter, sortField, sortDirection])
 
   // Pagination
   const totalPages = Math.ceil(filteredAndSortedUsers.length / itemsPerPage)
@@ -239,13 +248,14 @@ export function UsersPage() {
         name: formData.name,
         email: formData.email,
         role: formData.role,
+        status: formData.status,
         agentId: formData.agentId || null,
         ...(formData.password && { password: formData.password }),
       })
       await loadUsers()
       setEditDialogOpen(false)
       setEditingUser(null)
-      setFormData({ name: "", email: "", password: "", role: "USER", agentId: "" })
+      setFormData({ name: "", email: "", password: "", role: "USER", status: "ACTIVE", agentId: "" })
       toast({
         title: "Success",
         description: "User updated successfully",
@@ -266,9 +276,30 @@ export function UsersPage() {
       email: user.email,
       password: "",
       role: user.role,
+      status: user.status || "ACTIVE",
       agentId: user.agentId || "",
     })
     setEditDialogOpen(true)
+  }
+
+  const handleToggleStatus = async (user: User) => {
+    const newStatus = user.status === "ACTIVE" ? "INACTIVE" : "ACTIVE"
+    try {
+      await updateUser(user.id, {
+        status: newStatus,
+      })
+      await loadUsers()
+      toast({
+        title: "Success",
+        description: `User ${newStatus === "ACTIVE" ? "activated" : "deactivated"} successfully`,
+      })
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: err instanceof Error ? err.message : "Failed to update user status",
+        variant: "destructive",
+      })
+    }
   }
 
   const getRoleBadgeVariant = (role: string) => {
@@ -296,10 +327,11 @@ export function UsersPage() {
   const clearFilters = () => {
     setSearchTerm("")
     setRoleFilter("all")
+    setStatusFilter("all")
     setCurrentPage(1)
   }
 
-  const hasActiveFilters = searchTerm || roleFilter !== "all"
+  const hasActiveFilters = searchTerm || roleFilter !== "all" || statusFilter !== "all"
 
   return (
     <div className="space-y-4 p-3 sm:p-4 lg:p-5">
@@ -319,7 +351,7 @@ export function UsersPage() {
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-6">
         <Card className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3 pt-3">
             <CardTitle className="text-xs font-medium text-gray-600">Total Users</CardTitle>
@@ -366,6 +398,30 @@ export function UsersPage() {
           <CardContent className="px-3 pb-3">
             <div className="text-lg font-bold text-gray-900">{stats.propertyOwners}</div>
             <p className="text-[10px] text-gray-500 mt-0.5">Property owners</p>
+          </CardContent>
+        </Card>
+        <Card className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3 pt-3">
+            <CardTitle className="text-xs font-medium text-gray-600">Active Users</CardTitle>
+            <div className="rounded-lg bg-green-100 p-1.5">
+              <CheckCircle2 className="h-3 w-3 text-green-600" />
+            </div>
+          </CardHeader>
+          <CardContent className="px-3 pb-3">
+            <div className="text-lg font-bold text-gray-900">{stats.activeUsers}</div>
+            <p className="text-[10px] text-gray-500 mt-0.5">Active accounts</p>
+          </CardContent>
+        </Card>
+        <Card className="border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 px-3 pt-3">
+            <CardTitle className="text-xs font-medium text-gray-600">Inactive Users</CardTitle>
+            <div className="rounded-lg bg-gray-100 p-1.5">
+              <UserX className="h-3 w-3 text-gray-600" />
+            </div>
+          </CardHeader>
+          <CardContent className="px-3 pb-3">
+            <div className="text-lg font-bold text-gray-900">{stats.inactiveUsers}</div>
+            <p className="text-[10px] text-gray-500 mt-0.5">Inactive accounts</p>
           </CardContent>
         </Card>
       </div>
@@ -419,6 +475,20 @@ export function UsersPage() {
                 <SelectItem value="ADMIN">Admin</SelectItem>
                 <SelectItem value="SUPER_ADMIN">Super Admin</SelectItem>
                 <SelectItem value="PROPERTY_OWNER">Property Owner</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={statusFilter} onValueChange={(value) => {
+              setStatusFilter(value)
+              setCurrentPage(1)
+            }}>
+              <SelectTrigger className="w-full sm:w-[180px] h-11 border-gray-300">
+                <Filter className="mr-2 h-4 w-4" />
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="ACTIVE">Active</SelectItem>
+                <SelectItem value="INACTIVE">Inactive</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -512,6 +582,7 @@ export function UsersPage() {
                           )}
                         </button>
                       </TableHead>
+                      <TableHead className="font-semibold text-gray-700">Status</TableHead>
                       <TableHead className="font-semibold text-gray-700">Applications</TableHead>
                       <TableHead className="font-semibold text-gray-700">Field Agent</TableHead>
                       <TableHead>
@@ -560,6 +631,28 @@ export function UsersPage() {
                           </Badge>
                         </TableCell>
                         <TableCell>
+                          <Badge 
+                            variant={user.status === "ACTIVE" ? "default" : "secondary"} 
+                            className={`font-medium ${
+                              user.status === "ACTIVE" 
+                                ? "bg-green-100 text-green-800 hover:bg-green-100" 
+                                : "bg-gray-100 text-gray-800 hover:bg-gray-100"
+                            }`}
+                          >
+                            {user.status === "ACTIVE" ? (
+                              <span className="flex items-center gap-1">
+                                <CheckCircle2 className="h-3 w-3" />
+                                Active
+                              </span>
+                            ) : (
+                              <span className="flex items-center gap-1">
+                                <XCircle className="h-3 w-3" />
+                                Inactive
+                              </span>
+                            )}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
                           <Badge variant="secondary" className="font-medium">
                             {user._count?.property_applications || 0}
                           </Badge>
@@ -604,6 +697,22 @@ export function UsersPage() {
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
+                                onClick={() => handleToggleStatus(user)}
+                              >
+                                {user.status === "ACTIVE" ? (
+                                  <>
+                                    <UserX className="mr-2 h-4 w-4" />
+                                    Deactivate User
+                                  </>
+                                ) : (
+                                  <>
+                                    <CheckCircle2 className="mr-2 h-4 w-4" />
+                                    Activate User
+                                  </>
+                                )}
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
                                 onClick={() => {
                                   setUserToDelete(user.id)
                                   setDeleteDialogOpen(true)
@@ -641,9 +750,29 @@ export function UsersPage() {
                               <Mail className="h-3.5 w-3.5 text-gray-400 flex-shrink-0" />
                               <p className="text-sm text-gray-600 truncate">{user.email}</p>
                             </div>
-                            <div className="flex items-center gap-2 mt-2">
+                            <div className="flex items-center gap-2 mt-2 flex-wrap">
                               <Badge variant={getRoleBadgeVariant(user.role)} className="text-xs">
                                 {user.role.replace('_', ' ')}
+                              </Badge>
+                              <Badge 
+                                variant={user.status === "ACTIVE" ? "default" : "secondary"} 
+                                className={`text-xs ${
+                                  user.status === "ACTIVE" 
+                                    ? "bg-green-100 text-green-800" 
+                                    : "bg-gray-100 text-gray-800"
+                                }`}
+                              >
+                                {user.status === "ACTIVE" ? (
+                                  <span className="flex items-center gap-1">
+                                    <CheckCircle2 className="h-3 w-3" />
+                                    Active
+                                  </span>
+                                ) : (
+                                  <span className="flex items-center gap-1">
+                                    <XCircle className="h-3 w-3" />
+                                    Inactive
+                                  </span>
+                                )}
                               </Badge>
                               <Badge variant="secondary" className="text-xs">
                                 {user._count?.property_applications || 0} applications
@@ -682,6 +811,22 @@ export function UsersPage() {
                             <DropdownMenuItem onClick={() => openEditDialog(user)}>
                               <Pencil className="mr-2 h-4 w-4" />
                               Edit User
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={() => handleToggleStatus(user)}
+                            >
+                              {user.status === "ACTIVE" ? (
+                                <>
+                                  <UserX className="mr-2 h-4 w-4" />
+                                  Deactivate User
+                                </>
+                              ) : (
+                                <>
+                                  <CheckCircle2 className="mr-2 h-4 w-4" />
+                                  Activate User
+                                </>
+                              )}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
@@ -821,6 +966,18 @@ export function UsersPage() {
                   <SelectItem value="SUPER_ADMIN">Super Admin</SelectItem>
                   <SelectItem value="PROPERTY_OWNER">Property Owner</SelectItem>
                   <SelectItem value="AGENT">Agent</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-status" className="text-sm font-medium">Status</Label>
+              <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value })}>
+                <SelectTrigger className="h-11">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ACTIVE">Active</SelectItem>
+                  <SelectItem value="INACTIVE">Inactive</SelectItem>
                 </SelectContent>
               </Select>
             </div>

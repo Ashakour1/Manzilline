@@ -24,7 +24,8 @@ export const registerUser = asyncHandler(async (req, res) => {
             name,
             email,
             password: hashedPassword,
-            role: role 
+            role: role,
+            status: 'ACTIVE' // Default to active for new registrations
         }
     });
 
@@ -33,6 +34,7 @@ export const registerUser = asyncHandler(async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        status: user.status,
     });
 
 });
@@ -53,6 +55,12 @@ export const loginUser = asyncHandler(async (req, res) => {
         throw new Error('User not found');
     }
 
+    // Check if user is inactive
+    if (user.status === 'INACTIVE') {
+        res.status(403);
+        throw new Error('Your account is inactive. Please contact support.');
+    }
+
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) {
         res.status(400);
@@ -66,6 +74,7 @@ export const loginUser = asyncHandler(async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        status: user.status,
         token: token,
     });
 });

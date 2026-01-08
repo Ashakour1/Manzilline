@@ -16,6 +16,7 @@ type UserFormState = {
   email: string
   password: string
   role: string
+  status: string
   agentId: string | null
 }
 
@@ -24,6 +25,7 @@ const initialFormState: UserFormState = {
   email: "",
   password: "",
   role: "USER",
+  status: "ACTIVE",
   agentId: null,
 }
 
@@ -94,6 +96,7 @@ export function UserCreatePage() {
         email: form.email,
         password: form.password,
         role: form.role,
+        status: form.status,
         agentId: form.agentId,
       })
       toast({
@@ -204,9 +207,22 @@ export function UserCreatePage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="agentId">
-                  Field Agent <span className="text-muted-foreground font-normal">(optional)</span>
-                </Label>
+                <Label htmlFor="status">Status *</Label>
+                <Select value={form.status} onValueChange={(value) => handleInputChange("status", value)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ACTIVE">Active</SelectItem>
+                    <SelectItem value="INACTIVE">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="agentId">
+                Field Agent <span className="text-muted-foreground font-normal">(optional)</span>
+              </Label>
                 <Select 
                   value={form.agentId || "none"} 
                   onValueChange={handleAgentChange}
