@@ -192,7 +192,7 @@ export const getReports = asyncHandler(async (req, res) => {
                 image: user.image,
                 createdAt: user.createdAt,
                 statistics: {
-                    propertyApplicationsCount: user.propertyApplicationsCount,
+                    // propertyApplicationsCount: user.propertyApplicationsCount,
                     totalApplicationValue: user.totalApplicationValue,
                     applicationsByStatus: user.applicationsByStatus,
                     // Note: Landlords and properties created count would require schema changes
