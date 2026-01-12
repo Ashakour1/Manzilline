@@ -31,9 +31,9 @@ const propertyTypes = [
 ]
 
 const heroStats = [
-  { value: "680", label: "Award Winning" },
-  { value: "8K+", label: "Happy Customers" },
-  { value: "500+", label: "Property Ready" },
+  { value: "47", label: "Counties Covered" },
+  { value: "24/7", label: "Available Support" },
+  { value: "100%", label: "Trusted Platform" },
 ]
 
 const nairobiVillages = [
@@ -267,10 +267,9 @@ export default function Hero() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-12">
             <div className="mx-auto max-w-3xl text-center text-white">
               <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/70">
-                Your Dream Home Awaits You
-              </p>
+              All in One Platform              </p>
               <h1 className="mt-4 text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-                Discover Premium Properties
+              Kenya’s Housing, Simplified
               </h1>
               <p className="mt-4 text-lg text-white/80">
                 Find your perfect home with our extensive collection of premium properties. Expertly curated listings tailored to match your unique lifestyle and preferences.
