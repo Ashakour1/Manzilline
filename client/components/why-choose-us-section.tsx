@@ -1,6 +1,6 @@
 "use client"
 
-import { Shield, Key, Wallet, Home, Award, CheckCircle, Smile } from "lucide-react"
+import { Shield, Key, Wallet, Home, Award, CheckCircle, Smile, Phone } from "lucide-react"
 import Image from "next/image"
 
 const services = [
@@ -22,9 +22,9 @@ const services = [
 ]
 
 const stats = [
-  { value: "4M", label: "Award Winning", icon: Award },
-  { value: "18K", label: "Property Ready", icon: CheckCircle },
-  { value: "23M", label: "Happy Customer", icon: Smile },
+  { value: "47+", label: "Counties Covered", icon: Award },
+  { value: "24/7", label: "Available Support", icon: CheckCircle },
+  { value: "100%", label: "Trusted Platform", icon: Phone },
 ]
 
 export default function WhyChooseUsSection() {
