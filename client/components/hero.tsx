@@ -38,124 +38,229 @@ const heroStats = [
 
 const nairobiVillages = [
   {
-    name: "Avington",
+    name: "Nairobi",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Ruaka",
+    name: "Mombasa",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Muthaiga",
+    name: "Kisumu",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1486304873000-235643847519?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Kikuyu",
+    name: "Nakuru",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Kamukunji",
+    name: "Eldoret",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1459535653751-d571815e906b?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Loresho",
+    name: "Thika",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Kayole",
+    name: "Malindi",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Westlands",
+    name: "Nyeri",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1486304873000-235643847519?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Karen",
+    name: "Embu",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Runda",
+    name: "Meru",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1459535653751-d571815e906b?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Kileleshwa",
+    name: "Kitale",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Kitisuru",
+    name: "Kakamega",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Syokimau",
+    name: "Garissa",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1486304873000-235643847519?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Dagoretti North",
+    name: "Lamu",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Kasarani",
+    name: "Machakos",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1459535653751-d571815e906b?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Kilimani",
+    name: "Kericho",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Gigiri",
+    name: "Naivasha",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Mathare",
+    name: "Nanyuki",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1486304873000-235643847519?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Lang'ata",
+    name: "Bungoma",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Hurlingham",
+    name: "Busia",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1459535653751-d571815e906b?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Embakasi",
+    name: "Homa Bay",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Makadara",
+    name: "Kisii",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Nyari",
+    name: "Kilifi",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1486304873000-235643847519?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80"
   },
   {
-    name: "Starehe",
+    name: "Voi",
     properties: 0,
-    image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=400&q=60"
+    image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Narok",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Nyamira",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Migori",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Siaya",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Bomet",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Kajiado",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Kiambu",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Murang'a",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Nyahururu",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Lodwar",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Marsabit",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Wajir",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Mandera",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Isiolo",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Kapenguria",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Maralal",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Moyale",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Diani",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Watamu",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Ruiru",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80"
+  },
+  {
+    name: "Athi River",
+    properties: 0,
+    image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80"
   },
 ]
 
