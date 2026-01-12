@@ -91,18 +91,18 @@ export default function Footer() {
 
         {/* Social Media */}
         <div className="py-6 border-t border-border flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">© 2025 PropertyHub. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">© 2025 Manzilini. All rights reserved.</p>
           <div className="flex gap-4">
-            <a href="#" className="text-muted-foreground hover:text-primary transition">
+            <a href="https://www.facebook.com/profile.php?id=61586517446007" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition" aria-label="Facebook">
               <Facebook className="w-5 h-5" />
             </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition">
+            <a href="#" className="text-muted-foreground hover:text-primary transition" aria-label="Twitter">
               <Twitter className="w-5 h-5" />
             </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition">
+            <a href="https://www.instagram.com/manzilinihq/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition" aria-label="Instagram">
               <Instagram className="w-5 h-5" />
             </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition">
+            <a href="#" className="text-muted-foreground hover:text-primary transition" aria-label="LinkedIn">
               <Linkedin className="w-5 h-5" />
             </a>
           </div>

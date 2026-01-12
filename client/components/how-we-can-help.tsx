@@ -35,7 +35,7 @@ const items = [
   {
     title: "Buy a property",
     description:
-      "Nullam sollicitudin blandit eros eu pretium. Nullam maximus ultricies auctor.",
+      "Browse verified property listings across Kenya. Find your dream home with detailed information, virtual tours, and secure communication with verified sellers.",
     cta: "Find a home",
     variant: "outline" as const,
     icon : <House width={40} height={40}/>
@@ -43,7 +43,7 @@ const items = [
   {
     title: "Sell a property",
     description:
-      "Nullam sollicitudin blandit eros eu pretium. Nullam maximus ultricies auctor.",
+      "List your property on our platform and reach thousands of potential buyers. Our verified listing system ensures your property gets maximum visibility and genuine inquiries.",
     cta: "Place an ad",
     variant: "default" as const,
     featured: true,
@@ -52,7 +52,7 @@ const items = [
   {
     title: "Rent a property",
     description:
-      "Nullam sollicitudin blandit eros eu pretium. Nullam maximus ultricies auctor.",
+      "Discover rental properties that match your budget and preferences. From apartments to houses, find verified listings with transparent pricing and secure rental processes.",
     cta: "Find a rental",
     variant: "outline" as const,
     icon : <ShieldCheck width={40} height={40} />
@@ -65,7 +65,7 @@ export default function HelpSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-start mb-14">
           <h2 className="text-3xl md:text-3xl font-bold text-foreground">See How Manzilini Can Help</h2>
-          <p className="mt-3 text-muted-foreground">Aliquam lacinia diam quis lacus euismod</p>
+          <p className="mt-3 text-muted-foreground">Whether you're buying, selling, or renting, we provide the tools and services you need for a seamless real estate experience.</p>
         </div>
 
         <div className="grid gap-2 md:grid-cols-3">

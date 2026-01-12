@@ -7,17 +7,17 @@ const services = [
   {
     icon: Shield,
     title: "Property Management",
-    description: "Nullam sollicitudin blandit eros eu pretium. Nullam maximus ultricies auctor.",
+    description: "Comprehensive property management solutions to help landlords efficiently manage their properties, handle tenant relations, and maintain their investments.",
   },
   {
     icon: Key,
     title: "Mortgage Services",
-    description: "Nullam sollicitudin blandit eros eu pretium. Nullam maximus ultricies auctor.",
+    description: "Expert guidance and support for property financing options, helping you navigate mortgage applications and secure the best rates for your property purchase.",
   },
   {
     icon: Wallet,
     title: "Currency Services",
-    description: "Nullam sollicitudin blandit eros eu pretium. Nullam maximus ultricies auctor.",
+    description: "Flexible payment solutions and currency conversion services to make property transactions seamless, whether you're paying locally or internationally.",
   },
 ]
 
@@ -61,7 +61,7 @@ export default function WhyChooseUsSection() {
           <div className="flex flex-col justify-center">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Why Choose Us</h2>
             <p className="text-muted-foreground mb-8 leading-relaxed">
-              As the complexity of buildings to increase, the field of architecture.
+              We provide comprehensive real estate solutions that simplify property search, management, and transactions. Our integrated platform connects tenants, landlords, and homeowners with verified properties and trusted services across Kenya.
             </p>
 
             <div className="space-y-6">

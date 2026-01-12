@@ -6,7 +6,7 @@ import Image from "next/image"
 const testimonials = [
   {
     title: "Great Work",
-    quote: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et",
+    quote: "Manzilini made finding my apartment so easy! The verified listings gave me confidence, and I found my perfect home in just a few days. Highly recommend their platform.",
     rating: 5,
     name: "Ali Tufan",
     role: "Marketing",
@@ -14,7 +14,7 @@ const testimonials = [
   },
   {
     title: "Good Job",
-    quote: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae",
+    quote: "As a landlord, Manzilini has been a game-changer. I've been able to list my properties easily and connect with genuine tenants. The platform is user-friendly and reliable.",
     rating: 4,
     name: "Albert Flores",
     role: "Designer",
@@ -22,7 +22,7 @@ const testimonials = [
   },
   {
     title: "Perfect",
-    quote: "Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo",
+    quote: "The transparency and security features on Manzilini are excellent. I felt safe throughout the entire rental process, and the support team was always available when I needed help.",
     rating: 5,
     name: "Robert Fox",
     role: "Developer",
@@ -30,7 +30,7 @@ const testimonials = [
   },
   {
     title: "Work Hard",
-    quote: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et",
+    quote: "I love how Manzilini brings everything together - property search, home services, and secure communication. It's truly an all-in-one platform that simplifies real estate.",
     rating: 3,
     name: "Marvin McKinney",
     role: "Marketing",
@@ -44,7 +44,7 @@ export default function TestimonialsSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">People Love Living with Manzilini</h2>
-          <p className="text-muted-foreground">Aliquam lacinia diam quis lacus euismod</p>
+          <p className="text-muted-foreground">See what our community of tenants, landlords, and homeowners have to say about their experience with Manzilini.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -110,7 +110,7 @@ export default function CitiesSection() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
           <div>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">Properties By Cities</h2>
-            <p className="text-muted-foreground">Aliquam lacinia diam quis lacus euismod</p>
+            <p className="text-muted-foreground">Explore properties across Kenya's top cities and neighborhoods. Find your perfect home in the location that suits your lifestyle.</p>
           </div>
           <Link
             href="/cities"
