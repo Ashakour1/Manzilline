@@ -12,6 +12,8 @@ import {
   CheckCircle2,
   User,
   Building,
+  UserCheck,
+  UserX,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -29,6 +31,7 @@ type Landlord = {
   company_name?: string
   address?: string
   isVerified?: boolean
+  status?: "ACTIVE" | "INACTIVE"
   createdAt?: string
   properties?: {
     id: string
@@ -132,6 +135,17 @@ export default function AgentLandlordDetailsPage() {
               </Badge>
             ) : (
               <Badge variant="secondary">Unverified</Badge>
+            )}
+            {landlord.status === "ACTIVE" ? (
+              <Badge className="bg-green-50 text-green-700 border border-green-100 dark:bg-green-950 dark:text-green-300">
+                <UserCheck className="mr-1 h-3 w-3" />
+                Active
+              </Badge>
+            ) : (
+              <Badge variant="secondary" className="bg-gray-50 text-gray-700 border border-gray-100 dark:bg-gray-950 dark:text-gray-300">
+                <UserX className="mr-1 h-3 w-3" />
+                Inactive
+              </Badge>
             )}
           </div>
         </div>
@@ -283,11 +297,35 @@ export default function AgentLandlordDetailsPage() {
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <CheckCircle2 className="h-3.5 w-3.5" />
-                    <span>Status</span>
+                    <span>Verification</span>
                   </div>
                   <Badge variant={landlord.isVerified ? "default" : "secondary"} className="ml-6">
                     {landlord.isVerified ? "Verified" : "Unverified"}
                   </Badge>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    {landlord.status === "ACTIVE" ? (
+                      <UserCheck className="h-3.5 w-3.5" />
+                    ) : (
+                      <UserX className="h-3.5 w-3.5" />
+                    )}
+                    <span>Status</span>
+                  </div>
+                  {landlord.status === "ACTIVE" ? (
+                    <Badge className="ml-6 bg-green-50 text-green-700 border border-green-100 dark:bg-green-950 dark:text-green-300">
+                      <UserCheck className="mr-1 h-3 w-3" />
+                      Active
+                    </Badge>
+                  ) : (
+                    <Badge variant="secondary" className="ml-6 bg-gray-50 text-gray-700 border border-gray-100 dark:bg-gray-950 dark:text-gray-300">
+                      <UserX className="mr-1 h-3 w-3" />
+                      Inactive
+                    </Badge>
+                  )}
                 </div>
               </CardContent>
             </Card>

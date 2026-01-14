@@ -31,6 +31,7 @@ export const registerLandlord = asyncHandler(async (req, res) => {
                     phone,
                     company_name,
                     address,
+                    status: 'ACTIVE', // Default status
                 }
             });
         });
@@ -169,7 +170,7 @@ export const getLandlordById = asyncHandler(async (req, res) => {
 export const updateLandlord = asyncHandler(async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, email, phone, company_name, address, isVerified } = req.body || {};
+        const { name, email, phone, company_name, address, isVerified, status } = req.body || {};
 
         // Check if landlord exists
         const existingLandlord = await prisma.landlord.findUnique({
@@ -191,6 +192,11 @@ export const updateLandlord = asyncHandler(async (req, res) => {
             }
         }
 
+        // Validate status if provided
+        if (status !== undefined && !['ACTIVE', 'INACTIVE'].includes(status)) {
+            return res.status(400).json({ message: 'Status must be ACTIVE or INACTIVE' });
+        }
+
         // Build update data object, only including fields that are provided
         const updateData = {};
         if (name !== undefined) updateData.name = name;
@@ -199,6 +205,7 @@ export const updateLandlord = asyncHandler(async (req, res) => {
         if (company_name !== undefined) updateData.company_name = company_name;
         if (address !== undefined) updateData.address = address;
         if (isVerified !== undefined) updateData.isVerified = isVerified;
+        if (status !== undefined) updateData.status = status;
 
         const landlord = await prisma.landlord.update({
             where: { id },
@@ -238,6 +245,39 @@ export const verifyLandlord = asyncHandler(async (req, res) => {
         res.status(200).json({
             ...landlord,
             message: landlord.isVerified ? 'Landlord verified successfully' : 'Landlord unverified successfully'
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Update landlord status (Active/Inactive)
+export const updateLandlordStatus = asyncHandler(async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body || {};
+
+        // Check if landlord exists
+        const existingLandlord = await prisma.landlord.findUnique({
+            where: { id }
+        });
+
+        if (!existingLandlord) {
+            return res.status(404).json({ message: 'Landlord not found' });
+        }
+
+        if (!status || !['ACTIVE', 'INACTIVE'].includes(status)) {
+            return res.status(400).json({ message: 'Status must be ACTIVE or INACTIVE' });
+        }
+
+        const landlord = await prisma.landlord.update({
+            where: { id },
+            data: { status }
+        });
+
+        res.status(200).json({
+            ...landlord,
+            message: `Landlord status updated to ${status} successfully`
         });
     } catch (error) {
         res.status(500).json({ message: error.message });

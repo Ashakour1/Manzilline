@@ -23,8 +23,10 @@ import {
   Phone,
   Building2,
   CheckCircle2,
+  UserCheck,
+  UserX,
 } from "lucide-react"
-import { getLandlords, deleteLandlord, verifyLandlord } from "@/services/landlords.service"
+import { getLandlords, deleteLandlord, verifyLandlord, updateLandlordStatus } from "@/services/landlords.service"
 import { useToast } from "@/components/ui/use-toast"
 
 type Landlord = {
@@ -35,6 +37,7 @@ type Landlord = {
   company_name?: string
   address?: string
   isVerified?: boolean
+  status?: "ACTIVE" | "INACTIVE"
   createdAt?: string
   properties?: { id: string; title: string; status: string }[]
 }
@@ -52,6 +55,7 @@ export function LandlordsPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [landlordToDelete, setLandlordToDelete] = useState<string | null>(null)
   const [acceptingId, setAcceptingId] = useState<string | null>(null)
+  const [updatingStatusId, setUpdatingStatusId] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [sortField, setSortField] = useState<SortField>("createdAt")
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc")
@@ -191,6 +195,27 @@ export function LandlordsPage() {
     }
   }
 
+  const handleToggleStatus = async (id: string, currentStatus: "ACTIVE" | "INACTIVE" | undefined) => {
+    setUpdatingStatusId(id)
+    try {
+      const newStatus = currentStatus === "ACTIVE" ? "INACTIVE" : "ACTIVE"
+      await updateLandlordStatus(id, newStatus)
+      await loadLandlords()
+      toast({
+        title: "Success",
+        description: `Landlord status updated to ${newStatus} successfully`,
+      })
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: err instanceof Error ? err.message : "Failed to update landlord status",
+        variant: "destructive",
+      })
+    } finally {
+      setUpdatingStatusId(null)
+    }
+  }
+
   return (
     <div className="space-y-4 p-3 sm:p-4 lg:p-5">
       <div className="flex items-center justify-between">
@@ -309,6 +334,7 @@ export function LandlordsPage() {
                         </TableHead>
                         <TableHead className="h-12 font-semibold text-foreground">Phone</TableHead>
                         <TableHead className="h-12 font-semibold text-foreground">Company</TableHead>
+                        <TableHead className="h-12 font-semibold text-foreground">Verification</TableHead>
                         <TableHead className="h-12 font-semibold text-foreground">Status</TableHead>
                         <TableHead className="h-12 font-semibold text-foreground">Properties</TableHead>
                         <TableHead className="h-12 font-semibold text-foreground">
@@ -367,6 +393,19 @@ export function LandlordsPage() {
                             </Badge>
                           </TableCell>
                           <TableCell className="py-4">
+                            {landlord.status === "ACTIVE" ? (
+                              <Badge className="bg-green-50 text-green-700 border border-green-100 dark:bg-green-950 dark:text-green-300">
+                                <UserCheck className="mr-1 h-3 w-3" />
+                                Active
+                              </Badge>
+                            ) : (
+                              <Badge variant="secondary" className="bg-gray-50 text-gray-700 border border-gray-100 dark:bg-gray-950 dark:text-gray-300">
+                                <UserX className="mr-1 h-3 w-3" />
+                                Inactive
+                              </Badge>
+                            )}
+                          </TableCell>
+                          <TableCell className="py-4">
                             <Badge variant="outline" className="font-medium">
                               {landlord.properties?.length || 0}
                             </Badge>
@@ -396,6 +435,26 @@ export function LandlordsPage() {
                                   <CheckCircle2 className="h-4 w-4" />
                                 </Button>
                               )}
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleToggleStatus(landlord.id, landlord.status)}
+                                disabled={updatingStatusId === landlord.id}
+                                className={`h-8 w-8 rounded-md transition-colors ${
+                                  landlord.status === "ACTIVE"
+                                    ? "text-amber-600 hover:bg-amber-50 hover:text-amber-700 dark:hover:bg-amber-900/20"
+                                    : "text-green-600 hover:bg-green-50 hover:text-green-700 dark:hover:bg-green-900/20"
+                                }`}
+                                title={landlord.status === "ACTIVE" ? "Deactivate landlord" : "Activate landlord"}
+                              >
+                                {updatingStatusId === landlord.id ? (
+                                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                                ) : landlord.status === "ACTIVE" ? (
+                                  <UserX className="h-4 w-4" />
+                                ) : (
+                                  <UserCheck className="h-4 w-4" />
+                                )}
+                              </Button>
                               <Button
                                 variant="ghost"
                                 size="sm"

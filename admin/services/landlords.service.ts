@@ -109,6 +109,24 @@ export const verifyLandlord = async (id: string, isVerified: boolean) => {
   return response.json();
 };
 
+// Update landlord status (Active/Inactive)
+export const updateLandlordStatus = async (id: string, status: "ACTIVE" | "INACTIVE") => {
+  const response = await fetch(`${LANDLORD_API_URL}/${id}/status`, {
+    method: "PATCH",
+    headers: getAuthHeaders({
+      "Content-Type": "application/json",
+    }),
+    body: JSON.stringify({ status }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to update landlord status");
+  }
+
+  return response.json();
+};
+
 export default {
   registerLandlord,
   getLandlords,
@@ -116,4 +134,5 @@ export default {
   updateLandlord,
   deleteLandlord,
   verifyLandlord,
+  updateLandlordStatus,
 };

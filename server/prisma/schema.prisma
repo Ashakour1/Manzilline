@@ -34,6 +34,7 @@ model Landlord {
   company_name String?
   address      String?
   isVerified   Boolean    @default(false)
+  status       LandlordStatus @default(ACTIVE)
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   properties   Property[]
@@ -143,6 +144,10 @@ model IdCounter {
   @@map("id_counters")
 }
 
+enum LandlordStatus {
+  ACTIVE
+  INACTIVE
+}
 enum PaymentStatus {
   PENDING
   COMPLETED

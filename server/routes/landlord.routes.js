@@ -6,7 +6,8 @@ import {
     updateLandlord, 
     deleteLandlord,
     verifyLandlord,
-    getLandlordsForAgent
+    getLandlordsForAgent,
+    updateLandlordStatus
 } from '../controllers/landlord.controller.js';
 import { AuthMiddleware } from '../middlewares/auth.middleware.js';
 
@@ -22,6 +23,7 @@ router.get('/agent', AuthMiddleware, getLandlordsForAgent);
 router.get('/:id', getLandlordById);
 router.put('/:id', AuthMiddleware, updateLandlord);
 router.patch('/:id/verify', AuthMiddleware, verifyLandlord);
+router.patch('/:id/status', AuthMiddleware, updateLandlordStatus);
 router.delete('/:id', AuthMiddleware, deleteLandlord);
 
 export default router;
