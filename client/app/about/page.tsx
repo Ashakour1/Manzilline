@@ -137,7 +137,7 @@ export default function About() {
               </div>
               <div className="relative bg-primary/10 rounded-xl h-96 md:h-[500px] border border-border overflow-hidden">
                 <Image
-                  src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&h=600&fit=crop"
+                  src="/about.png"
                   alt="Manzilini team"
                   fill
                   className="object-cover"

@@ -39,7 +39,11 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "m_store",
       onRehydrateStorage: () => (state) => {
-        state?.setHydrated();
+        // Set isLoggedIn based on whether user exists after rehydration
+        if (state) {
+          state.isLoggedIn = !!state.user;
+          state.setHydrated();
+        }
       },
     }
   )

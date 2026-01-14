@@ -10,6 +10,8 @@ import landlordRoutes from './routes/landlord.routes.js';
 import userRoutes from './routes/user.routes.js';
 import fieldAgentsRoutes from './routes/field-agents.routes.js';
 import reportsRoutes from './routes/reports.routes.js';
+import activityRoutes from './routes/activity.routes.js';
+import { initializeScheduledJobs } from './utils/scheduler.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -56,7 +58,12 @@ app.use('/api/v1/landlords', landlordRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/field-agents', fieldAgentsRoutes);
 app.use('/api/v1/reports', reportsRoutes);
+app.use('/api/v1/activity', activityRoutes);
 app.use(errorHandler);
+
+// Initialize scheduled jobs for activity tracking
+initializeScheduledJobs();
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

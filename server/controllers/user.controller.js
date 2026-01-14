@@ -286,18 +286,19 @@ export const deleteUser = asyncHandler(async (req, res) => {
 
         // Check if user exists
         const user = await prisma.user.findUnique({
-            where: { id },
-            include: {
-                property_applications: true
-            }
+            where: { id }
         });
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Check if user has property applications
-        if (user.property_applications.length > 0) {
+        // Check if user has property applications by querying PropertyApplication directly
+        const propertyApplications = await prisma.propertyApplication.findMany({
+            where: { tenantId: id }
+        });
+
+        if (propertyApplications.length > 0) {
             return res.status(400).json({ 
                 message: 'Cannot delete user with existing property applications. Please delete or reassign applications first.' 
             });

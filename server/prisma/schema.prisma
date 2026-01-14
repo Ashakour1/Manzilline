@@ -16,10 +16,13 @@ model User {
   role                  Role                  @default(USER)
   status                UserStatus            @default(ACTIVE)
   password              String
+  isOnline              Boolean               @default(false)
+  lastSeen              DateTime?
   createdAt             DateTime              @default(now())
   updatedAt             DateTime              @updatedAt
   // property_applications PropertyApplication[]
   properties Property[]
+  activities            UserActivity[]
 
   // link to agent profile
   agentId String?
@@ -213,4 +216,21 @@ enum ContactMethod {
 enum UserStatus {
   ACTIVE
   INACTIVE
+}
+
+model UserActivity {
+  id          String   @id @default(cuid())
+  userId      String
+  action      String   // e.g., "LOGIN", "LOGOUT", "VIEW_PROPERTY", etc.
+  description String?
+  metadata    String?  // JSON string for additional data
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([action])
+  @@map("user_activities")
 }
