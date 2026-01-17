@@ -8,8 +8,7 @@ import {
   Users, 
   UserCheck, 
   LogOut, 
-  Menu,
-  Activity
+  Menu
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -24,7 +23,6 @@ const agentMenuItems = [
   { id: "dashboard", icon: LayoutGrid, label: "Dashboard", href: "/agent/dashboard" },
   { id: "properties", icon: Building2, label: "Properties", href: "/agent/properties" },
   { id: "landlords", icon: UserCheck, label: "Landlords", href: "/agent/landlords" },
-  { id: "activity-logs", icon: Activity, label: "Activity Logs", href: "/agent/activity-logs" },
 //   { id: "tenants", icon: Users, label: "Tenants", href: "/agent/tenants" },
 ]
 

@@ -6,14 +6,10 @@ import { useRouter } from "next/navigation"
 import { AgentSidebar } from "@/components/dashboard/agent-sidebar"
 import { DashboardHeader } from "@/components/dashboard/header"
 import { useAuthStore } from "@/store/authStore"
-import { useActivityTracker } from "@/hooks/use-activity-tracker"
 
 export default function AgentLayout({ children }: { children: ReactNode }) {
   const { isLoggedIn, isHydrated, user } = useAuthStore();
   const router = useRouter();
-  
-  // Track user activity and online status
-  useActivityTracker();
 
   // Redirect unauthenticated users to agent login
   useEffect(() => {

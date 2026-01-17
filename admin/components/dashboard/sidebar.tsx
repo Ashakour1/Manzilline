@@ -15,8 +15,7 @@ import {
   LogOut, 
   Shield, 
   MapPin,
-  Menu,
-  Activity
+  Menu
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -36,7 +35,6 @@ const menuItems = [
   { id: "payments", icon: CreditCard, label: "Payments", href: "/payments" },
   { id: "maintenance", icon: Wrench, label: "Maintenance", href: "/maintenance" },
   { id: "documents", icon: FileText, label: "Documents", href: "/documents" },
-  { id: "activity-logs", icon: Activity, label: "Activity Logs", href: "/activity-logs" },
   { id: "reports", icon: BarChart3, label: "Reports", href: "/reports" },
   { id: "settings", icon: Settings, label: "Settings", href: "/settings" },
 ]

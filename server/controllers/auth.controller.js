@@ -69,34 +69,6 @@ export const loginUser = asyncHandler(async (req, res) => {
 
     const token = generateToken(user.id);
 
-    // Update user online status and lastSeen
-    await prisma.user.update({
-        where: { id: user.id },
-        data: {
-            isOnline: true,
-            lastSeen: new Date(),
-        },
-    });
-
-    // Log login activity
-    const ipAddress = req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']?.split(',')[0];
-    const userAgent = req.headers['user-agent'];
-
-    prisma.userActivity
-        .create({
-            data: {
-                userId: user.id,
-                action: 'LOGIN',
-                description: 'User logged in',
-                ipAddress,
-                userAgent,
-            },
-        })
-        .catch((error) => {
-            // Log error but don't block login
-            console.error('Error logging login activity:', error);
-        });
-
     res.status(200).json({
         _id: user.id,
         name: user.name,
@@ -108,40 +80,6 @@ export const loginUser = asyncHandler(async (req, res) => {
 });
 
 export const logoutUser = asyncHandler(async (req, res) => {
-    const userId = req.user?.id;
-
-    // If user is authenticated, log logout activity and set offline
-    if (userId) {
-        // Log logout activity
-        const ipAddress = req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']?.split(',')[0];
-        const userAgent = req.headers['user-agent'];
-
-        await prisma.userActivity.create({
-            data: {
-                userId,
-                action: 'LOGOUT',
-                description: 'User logged out',
-                ipAddress,
-                userAgent,
-            },
-        }).catch((error) => {
-            // Log error but don't block logout
-            console.error('Error logging logout activity:', error);
-        });
-
-        // Set user offline
-        await prisma.user.update({
-            where: { id: userId },
-            data: {
-                isOnline: false,
-                lastSeen: new Date(),
-            },
-        }).catch((error) => {
-            // Log error but don't block logout
-            console.error('Error setting user offline:', error);
-        });
-    }
-
     res.status(200).json({
         message: 'Logged out successfully',
     });
