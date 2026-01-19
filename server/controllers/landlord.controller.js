@@ -95,7 +95,7 @@ export const getLandlords = asyncHandler(async (req, res) => {
     }
 });
 
-// Get landlords for agents (only landlords with properties assigned to agent's users)
+// Get landlords for agents (only landlords registered by users assigned to the agent)
 export const getLandlordsForAgent = asyncHandler(async (req, res) => {
     try {
         const userId = req.user.id;
@@ -126,36 +126,20 @@ export const getLandlordsForAgent = asyncHandler(async (req, res) => {
 
         const assignedUserIds = assignedUsers.map(u => u.id);
 
-        // Get properties created by users assigned to this agent
-        const agentProperties = await prisma.property.findMany({
-            where: { 
-                userId: { in: assignedUserIds }
-            },
-            select: {
-                landlord_id: true
-            }
-        });
-
-        // Get unique landlord IDs from properties
-        const landlordIds = [...new Set(agentProperties.map(p => p.landlord_id).filter(Boolean))];
-
-        if (landlordIds.length === 0) {
+        if (assignedUserIds.length === 0) {
             return res.status(200).json([]);
         }
 
-        // Get landlords who have properties assigned to this agent
+        // Get landlords registered by users assigned to this agent
         const landlords = await prisma.landlord.findMany({
             where: {
-                id: { in: landlordIds }
+                createdBy: { in: assignedUserIds }
             },
             orderBy: {
                 createdAt: 'desc'
             },
             include: {
                 properties: {
-                    where: {
-                        userId: { in: assignedUserIds }
-                    },
                     select: {
                         id: true,
                         title: true,
