@@ -20,6 +20,20 @@ export interface Landlord {
   updatedAt?: string;
 }
 
+export interface LandlordLoginData {
+  email: string;
+  password: string;
+}
+
+export interface LandlordLoginResponse {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  token: string;
+}
+
 // Register a new landlord (public endpoint)
 export const registerLandlord = async (landlordData: LandlordRegistrationData): Promise<Landlord> => {
   const response = await fetch(`${API_URL}/landlords/register`, {
@@ -33,6 +47,24 @@ export const registerLandlord = async (landlordData: LandlordRegistrationData): 
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error.message || "Failed to register landlord");
+  }
+
+  return response.json();
+};
+
+// Login landlord
+export const loginLandlord = async (loginData: LandlordLoginData): Promise<LandlordLoginResponse> => {
+  const response = await fetch(`${API_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(loginData),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to login");
   }
 
   return response.json();

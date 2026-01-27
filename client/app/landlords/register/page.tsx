@@ -297,8 +297,8 @@ export default function LandlordRegisterPage() {
               {/* Login Link */}
               <div className="text-center text-sm text-gray-600">
                 Already have an account?{" "}
-                <Link href="/contact" className="text-gray-900 hover:underline font-medium">
-                  Contact us
+                <Link href="/landlords/login" className="text-gray-900 hover:underline font-medium">
+                  Sign in
                 </Link>
               </div>
             </form>
