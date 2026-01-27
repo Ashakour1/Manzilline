@@ -3,6 +3,7 @@ const API_URL = "http://localhost:4000/api/v1";
 export interface LandlordRegistrationData {
   name: string;
   email: string;
+  password: string;
   phone?: string;
   company_name?: string;
   address?: string;

@@ -15,6 +15,7 @@ export default function LandlordRegisterPage() {
   const [formData, setFormData] = useState<LandlordRegistrationData>({
     name: "",
     email: "",
+    password: "",
     phone: "",
     company_name: "",
     address: "",
@@ -41,8 +42,8 @@ export default function LandlordRegisterPage() {
 
     try {
       // Validate required fields
-      if (!formData.name.trim() || !formData.email.trim()) {
-        setErrorMessage("Name and email are required fields")
+      if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim()) {
+        setErrorMessage("Name, email, and password are required fields")
         setSubmitStatus("error")
         setIsSubmitting(false)
         return
@@ -57,16 +58,25 @@ export default function LandlordRegisterPage() {
         return
       }
 
+      // Basic password validation
+      if (formData.password.trim().length < 6) {
+        setErrorMessage("Password must be at least 6 characters long")
+        setSubmitStatus("error")
+        setIsSubmitting(false)
+        return
+      }
+
       await registerLandlord({
         name: formData.name.trim(),
         email: formData.email.trim(),
+        password: formData.password.trim(),
         phone: formData.phone?.trim() || undefined,
         company_name: formData.company_name?.trim() || undefined,
         address: formData.address?.trim() || undefined,
       })
 
       setSubmitStatus("success")
-      setFormData({ name: "", email: "", phone: "", company_name: "", address: "" })
+      setFormData({ name: "", email: "", password: "", phone: "", company_name: "", address: "" })
     
     } catch (error) {
       setSubmitStatus("error")
@@ -175,6 +185,8 @@ export default function LandlordRegisterPage() {
                 />
               </div>
 
+             
+
               {/* Company Name */}
               <div className="space-y-2">
                 <Label htmlFor="company_name" className="text-sm font-medium text-gray-700">
@@ -252,6 +264,23 @@ export default function LandlordRegisterPage() {
                     disabled={isSubmitting}
                   />
                 </div>
+              </div>
+               {/* Password Field */}
+               <div className="space-y-2">
+                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                  Password <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="Create a secure password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  className="border-gray-300 focus:border-gray-500 focus:ring-gray-500"
+                  disabled={isSubmitting}
+                />
               </div>
 
               {/* Submit Button */}
