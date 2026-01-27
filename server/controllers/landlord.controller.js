@@ -2,7 +2,7 @@ import asyncHandler from 'express-async-handler';
 import prisma from '../db/prisma.js';
 import bcrypt from 'bcrypt';
 import { generateUniqueIdAndCreate } from '../utils/idGenerator.js';
-import { sendWelcomeEmail, sendLandlordApprovalEmail, sendLandlordInactiveEmail, sendLandlordRejectionEmail, sendLandlordActivationEmail } from '../services/email.service.js';
+import { sendWelcomeEmail, sendLandlordApprovalEmail, sendLandlordInactiveEmail, sendLandlordRejectionEmail, sendLandlordActivationEmail, sendUserCredentialsEmail } from '../services/email.service.js';
 
 
 
@@ -63,7 +63,7 @@ export const registerLandlord = asyncHandler(async (req, res) => {
             }
         );
 
-        // ✅ Create user for landlord (non-blocking)
+        // ✅ Create user for landlord
         let user = null;
 
         try {
@@ -77,8 +77,7 @@ export const registerLandlord = asyncHandler(async (req, res) => {
                             email,
                             password: hashedPassword,
                             role: 'LANDLORD',
-                            status: 'ACTIVE',
-                            landlordId: landlord.id
+                            status: 'INACTIVE'
                         },
                         select: {
                             id: true,
@@ -92,26 +91,45 @@ export const registerLandlord = asyncHandler(async (req, res) => {
                 }
             );
 
-            // 📧 Send credentials email
-            await sendUserCredentialsEmail(
-                email,
-                name,
-                password,
-                'LANDLORD',
-                user.id
-            );
+            // Update landlord's createdBy to link to the user (if not already set by admin)
+            if (!createdBy) {
+                await prisma.landlord.update({
+                    where: { id: landlord.id },
+                    data: { createdBy: user.id }
+                });
+            }
 
-            await prisma.user.update({
-                where: { id: user.id },
-                data: {
-                    is_sent_email: true,
-                    is_sent_at: new Date()
-                }
-            });
+            // 📧 Send credentials email (non-blocking)
+            try {
+                await sendUserCredentialsEmail(
+                    email,
+                    name,
+                    password,
+                    'LANDLORD',
+                    user.id
+                );
+
+                await prisma.user.update({
+                    where: { id: user.id },
+                    data: {
+                        is_sent_email: true,
+                        is_sent_at: new Date()
+                    }
+                });
+            } catch (emailError) {
+                console.error('Email sending failed:', emailError);
+                // User is still created, just email failed
+            }
 
         } catch (userError) {
-            console.error('User creation/email failed:', userError);
-            // Landlord remains created
+            console.error('User creation failed:', userError);
+            // If user creation fails, we should still return the landlord but log the error
+            // Consider rolling back landlord creation if user creation is critical
+            return res.status(500).json({ 
+                message: 'Failed to create user account',
+                error: userError.message,
+                landlord 
+            });
         }
 
         res.status(201).json({
