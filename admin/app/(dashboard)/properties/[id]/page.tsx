@@ -21,6 +21,10 @@ import {
   EyeOff,
   Calendar,
   Building2,
+  Star,
+  ChevronRight,
+  ExternalLink,
+  Heart,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -28,6 +32,7 @@ import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { getPropertyById, publishProperty } from "@/services/properties.service"
 import { useToast } from "@/components/ui/use-toast"
+import { Skeleton } from "@/components/ui/skeleton"
 
 type Property = {
   id: string
@@ -86,6 +91,7 @@ export default function PropertyDetailsPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isPublishing, setIsPublishing] = useState(false)
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
 
   useEffect(() => {
     if (!propertyId) return
@@ -142,16 +148,18 @@ export default function PropertyDetailsPage() {
 
   if (isLoading) {
     return (
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-3 sm:p-4 lg:p-5">
         <div className="mx-auto flex max-w-7xl flex-col gap-6">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={() => router.back()} className="px-0">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
-            </Button>
-          </div>
-          <div className="flex items-center justify-center py-12">
-            <p className="text-sm text-muted-foreground">Loading property details…</p>
+          <Skeleton className="h-10 w-32" />
+          <Skeleton className="h-96 w-full" />
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2 space-y-6">
+              <Skeleton className="h-64 w-full" />
+              <Skeleton className="h-64 w-full" />
+            </div>
+            <div className="space-y-6">
+              <Skeleton className="h-64 w-full" />
+            </div>
           </div>
         </div>
       </main>
@@ -160,14 +168,12 @@ export default function PropertyDetailsPage() {
 
   if (error) {
     return (
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-3 sm:p-4 lg:p-5">
         <div className="mx-auto flex max-w-7xl flex-col gap-6">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={() => router.back()} className="px-0">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
-            </Button>
-          </div>
+          <Button variant="ghost" size="sm" onClick={() => router.back()} className="px-0">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Button>
           <div className="rounded-lg border border-destructive/50 bg-destructive/5 p-4">
             <p className="text-sm text-destructive">{error}</p>
           </div>
@@ -180,18 +186,23 @@ export default function PropertyDetailsPage() {
     return null
   }
 
+  const mainImage = property.images && property.images.length > 0 ? property.images[selectedImageIndex] : null
+  const otherImages = property.images && property.images.length > 1 ? property.images.filter((_, i) => i !== selectedImageIndex).slice(0, 3) : []
+
   return (
-    <main className="flex-1 p-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-8">
+    <main className="flex-1 p-3 sm:p-4 lg:p-5">
+      <div className="mx-auto flex max-w-7xl flex-col gap-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={() => router.back()} className="px-0">
+            <Button variant="ghost" size="sm" onClick={() => router.push("/properties")} className="px-0">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back
             </Button>
-            <div className="h-6 w-px bg-border" />
-            <h1 className="text-2xl font-semibold text-foreground">Property Details</h1>
+            <Separator orientation="vertical" className="h-6" />
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">Property Details</h1>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -219,398 +230,425 @@ export default function PropertyDetailsPage() {
             </Button>
             <Button onClick={() => router.push(`/properties/${propertyId}/edit`)} className="gap-2">
               <Edit className="h-4 w-4" />
-              Edit Property
+              Edit
             </Button>
           </div>
         </div>
 
-        {/* Hero Section */}
-        <div className="space-y-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="outline" className="font-medium">
-              {property.property_type}
-            </Badge>
-            <Badge variant={getStatusVariant(property.status)} className="uppercase font-medium">
-              {property.status}
-            </Badge>
-            {property.is_published ? (
-              <Badge className="bg-green-50 text-green-700 border border-green-100 dark:bg-green-950 dark:text-green-300">
-                <Globe className="mr-1 h-3 w-3" />
-                Published
-              </Badge>
-            ) : (
-              <Badge variant="secondary">
-                <EyeOff className="mr-1 h-3 w-3" />
-                Unpublished
-              </Badge>
-            )}
-          </div>
-          <div className="flex flex-wrap items-start justify-between gap-6">
-            <div className="flex-1 space-y-2">
-              <h2 className="text-4xl font-bold text-foreground">{property.title}</h2>
-              {property.description && (
-                <p className="text-base leading-relaxed text-muted-foreground max-w-3xl">{property.description}</p>
-              )}
-            </div>
-            <div className="flex flex-col items-end gap-1">
-              <span className="text-3xl font-bold text-foreground">
-                {formatPrice(property.price, property.currency, property.payment_frequency)}
-              </span>
-              {property.deposit_amount && (
-                <span className="text-sm text-muted-foreground">
-                  Deposit: {property.currency} {Number(property.deposit_amount).toLocaleString()}
-                </span>
-              )}
-            </div>
+        {/* Location Breadcrumb */}
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <span className="hover:text-foreground cursor-pointer">{property.country}</span>
+          <ChevronRight className="h-4 w-4" />
+          <span className="hover:text-foreground cursor-pointer">{property.city}</span>
+          {property.zip_code && (
+            <>
+              <ChevronRight className="h-4 w-4" />
+              <span>{property.zip_code}</span>
+            </>
+          )}
+          {(property.latitude && property.longitude) && (
+            <>
+              <Separator orientation="vertical" className="h-4" />
+              <Button variant="ghost" size="sm" className="h-auto p-0 text-sm" asChild>
+                <a href={`https://www.google.com/maps?q=${property.latitude},${property.longitude}`} target="_blank" rel="noopener noreferrer">
+                  View on map
+                  <ExternalLink className="ml-1 h-3 w-3" />
+                </a>
+              </Button>
+            </>
+          )}
+        </div>
+
+        {/* Title and Address */}
+        <div>
+          <h2 className="text-3xl font-bold text-foreground mb-2">{property.title}</h2>
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <MapPin className="h-4 w-4" />
+            <span>{property.address}, {property.city}, {property.country}</span>
           </div>
         </div>
 
-        {/* Images Gallery */}
-        {property.images && property.images.length > 0 && (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-foreground">Property Images</h3>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {property.images.map((image, index) => (
-                <div
-                  key={image.url}
-                  className="group relative overflow-hidden rounded-lg border bg-muted/30 transition-all hover:shadow-lg"
-                >
+        {/* Image Gallery */}
+        {property.images && property.images.length > 0 ? (
+          <div className="grid gap-4 md:grid-cols-4">
+            <div className="md:col-span-3">
+              <div className="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted">
+                {mainImage && (
                   <img
-                    src={image.url}
-                    alt={`${property.title} - Image ${index + 1}`}
-                    className="h-64 w-full object-cover transition-transform group-hover:scale-105"
+                    src={mainImage.url}
+                    alt={property.title}
+                    className="h-full w-full object-cover"
                   />
-                </div>
-              ))}
+                )}
+              </div>
             </div>
+            {otherImages.length > 0 && (
+              <div className="grid gap-4">
+                {otherImages.map((image, index) => (
+                  <button
+                    key={image.url}
+                    type="button"
+                    onClick={() => {
+                      const originalIndex = property.images!.findIndex(img => img.url === image.url)
+                      setSelectedImageIndex(originalIndex)
+                    }}
+                    className="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted transition-opacity hover:opacity-80"
+                  >
+                    <img
+                      src={image.url}
+                      alt={`${property.title} - Image ${index + 2}`}
+                      className="h-full w-full object-cover"
+                    />
+                  </button>
+                ))}
+                {property.images.length > 4 && (
+                  <div className="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted/50 flex items-center justify-center">
+                    <span className="text-sm font-medium text-muted-foreground">
+                      +{property.images.length - 4} more
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted flex items-center justify-center">
+            <p className="text-sm text-muted-foreground">No images available</p>
           </div>
         )}
 
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* Main Details */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Property Specifications */}
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-foreground">Property Specifications</h3>
-              <div className="grid gap-6 sm:grid-cols-2">
-                {property.bedrooms && (
-                  <div className="flex items-start gap-3">
-                    <div className="rounded-lg bg-primary/10 p-2.5">
-                      <Bed className="h-5 w-5 text-primary" />
+        <div className="grid gap-6 lg:grid-cols-3">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Accommodates Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Accommodates</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
+                  {property.bedrooms && (
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1">Bedrooms</p>
+                      <p className="text-2xl font-bold text-foreground">{property.bedrooms}</p>
                     </div>
-                    <div className="flex-1">
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Bedrooms</p>
-                      <p className="mt-1 text-lg font-semibold text-foreground">{property.bedrooms}</p>
+                  )}
+                  {property.bathrooms && (
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1">Bathrooms</p>
+                      <p className="text-2xl font-bold text-foreground">{property.bathrooms}</p>
                     </div>
-                  </div>
-                )}
-                {property.bathrooms && (
-                  <div className="flex items-start gap-3">
-                    <div className="rounded-lg bg-primary/10 p-2.5">
-                      <Bath className="h-5 w-5 text-primary" />
+                  )}
+                  {property.garages && (
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1">Garages</p>
+                      <p className="text-2xl font-bold text-foreground">{property.garages}</p>
                     </div>
-                    <div className="flex-1">
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Bathrooms</p>
-                      <p className="mt-1 text-lg font-semibold text-foreground">{property.bathrooms}</p>
-                    </div>
-                  </div>
-                )}
-                {property.garages && (
-                  <div className="flex items-start gap-3">
-                    <div className="rounded-lg bg-primary/10 p-2.5">
-                      <Car className="h-5 w-5 text-primary" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Garages</p>
-                      <p className="mt-1 text-lg font-semibold text-foreground">{property.garages}</p>
-                    </div>
-                  </div>
-                )}
-                {property.size && (
-                  <div className="flex items-start gap-3">
-                    <div className="rounded-lg bg-primary/10 p-2.5">
-                      <Square className="h-5 w-5 text-primary" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Size</p>
-                      <p className="mt-1 text-lg font-semibold text-foreground">
-                        {Number(property.size).toLocaleString()} sq ft
+                  )}
+                  {property.size && (
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1">Size</p>
+                      <p className="text-2xl font-bold text-foreground">
+                        {Number(property.size).toLocaleString()} <span className="text-base font-normal">sq ft</span>
                       </p>
                     </div>
+                  )}
+                </div>
+                {property.floor && (
+                  <div className="mt-4 pt-4 border-t">
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <Layers className="h-4 w-4" />
+                      View floor plan
+                    </Button>
                   </div>
                 )}
-                {property.floor && (
-                  <div className="flex items-start gap-3">
-                    <div className="rounded-lg bg-primary/10 p-2.5">
-                      <Layers className="h-5 w-5 text-primary" />
+              </CardContent>
+            </Card>
+
+            {/* Property Details */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Property Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Property Type</p>
+                    <p className="mt-1 text-sm font-medium text-foreground">{property.property_type}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Status</p>
+                    <div className="mt-1">
+                      <Badge variant={getStatusVariant(property.status)} className="uppercase">
+                        {property.status}
+                      </Badge>
                     </div>
-                    <div className="flex-1">
+                  </div>
+                  {property.floor && (
+                    <div>
                       <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Floor</p>
-                      <p className="mt-1 text-lg font-semibold text-foreground">
+                      <p className="mt-1 text-sm font-medium text-foreground">
                         {property.floor}
                         {property.total_floors && ` of ${property.total_floors}`}
                       </p>
                     </div>
-                  </div>
-                )}
-                <div className="flex items-start gap-3">
-                  <div className="rounded-lg bg-primary/10 p-2.5">
-                    <Sparkles className="h-5 w-5 text-primary" />
-                  </div>
-                  <div className="flex-1">
+                  )}
+                  <div>
                     <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Furnished</p>
                     <div className="mt-1 flex items-center gap-2">
                       {property.is_furnished ? (
-                        <CheckCircle2 className="h-5 w-5 text-green-600" />
+                        <CheckCircle2 className="h-4 w-4 text-green-600" />
                       ) : (
-                        <XCircle className="h-5 w-5 text-muted-foreground" />
+                        <XCircle className="h-4 w-4 text-muted-foreground" />
                       )}
-                      <p className="text-lg font-semibold text-foreground">
+                      <p className="text-sm font-medium text-foreground">
                         {property.is_furnished ? "Yes" : "No"}
                       </p>
                     </div>
                   </div>
-                </div>
-                {property.balcony !== undefined && (
-                  <div className="flex items-start gap-3">
-                    <div className="rounded-lg bg-primary/10 p-2.5">
-                      <Sparkles className="h-5 w-5 text-primary" />
-                    </div>
-                    <div className="flex-1">
+                  {property.balcony !== undefined && (
+                    <div>
                       <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Balcony</p>
                       <div className="mt-1 flex items-center gap-2">
                         {property.balcony ? (
-                          <CheckCircle2 className="h-5 w-5 text-green-600" />
+                          <CheckCircle2 className="h-4 w-4 text-green-600" />
                         ) : (
-                          <XCircle className="h-5 w-5 text-muted-foreground" />
+                          <XCircle className="h-4 w-4 text-muted-foreground" />
                         )}
-                        <p className="text-lg font-semibold text-foreground">{property.balcony ? "Yes" : "No"}</p>
+                        <p className="text-sm font-medium text-foreground">{property.balcony ? "Yes" : "No"}</p>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <Separator />
-
-            {/* Location */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                <MapPin className="h-5 w-5" />
-                Location
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Address</p>
-                  <p className="mt-1 text-base font-medium text-foreground">
-                    {property.address}, {property.city}, {property.country}
-                  </p>
+                  )}
                 </div>
-                {property.zip_code && (
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Zip Code</p>
-                    <p className="mt-1 text-base font-medium text-foreground">{property.zip_code}</p>
+                {property.description && (
+                  <div className="pt-4 border-t">
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-2">Description</p>
+                    <p className="text-sm text-foreground leading-relaxed">{property.description}</p>
                   </div>
                 )}
-                {property.latitude && property.longitude && (
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Coordinates</p>
-                    <p className="mt-1 text-base font-medium text-foreground">
-                      {property.latitude}, {property.longitude}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
+              </CardContent>
+            </Card>
 
             {/* Amenities */}
             {property.amenities && property.amenities.length > 0 && (
-              <>
-                <Separator />
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                    <Sparkles className="h-5 w-5" />
-                    Amenities
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Amenities</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
                     {property.amenities.map((amenity) => (
-                      <Badge key={amenity} variant="secondary" className="px-3 py-1.5 font-normal">
-                        {amenity}
-                      </Badge>
+                      <div key={amenity} className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-green-600 flex-shrink-0" />
+                        <span className="text-sm text-foreground">{amenity}</span>
+                      </div>
                     ))}
                   </div>
-                </div>
-              </>
+                </CardContent>
+              </Card>
             )}
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
-            <div className="sticky top-8 space-y-6">
-              {/* Property Creator Information */}
-              {property.user && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <User className="h-5 w-5" />
-                      Property Creator
-                    </CardTitle>
-                    <CardDescription>User who created this property</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
+            {/* Pricing & Actions Card */}
+            <Card className="sticky top-6">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Pricing</CardTitle>
+                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <Heart className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-bold text-foreground">
+                      {formatPrice(property.price, property.currency, property.payment_frequency)}
+                    </span>
+                  </div>
+                  {property.deposit_amount && (
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Deposit: {property.currency} {Number(property.deposit_amount).toLocaleString()}
+                    </p>
+                  )}
+                </div>
+                <Separator />
+                <div className="space-y-3">
+                  <Button className="w-full" size="lg">
+                    Reserve now
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    Request tour
+                  </Button>
+                </div>
+                <div className="space-y-2 pt-2">
+                  <div className="flex items-start gap-2 text-xs text-muted-foreground">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span>No charges until your reservation begins</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-xs text-muted-foreground">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span>Cancel for free up to 2 hours before</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Landlord Information */}
+            {property.landlord && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <User className="h-5 w-5" />
+                    Landlord
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Name</p>
+                    <p className="mt-1 text-sm font-medium text-foreground">{property.landlord.name || "N/A"}</p>
+                  </div>
+                  {property.landlord.company_name && (
                     <div>
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Name</p>
-                      <p className="mt-1 text-sm font-medium text-foreground">{property.user.name}</p>
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Company</p>
+                      <p className="mt-1 text-sm font-medium text-foreground">{property.landlord.company_name}</p>
                     </div>
+                  )}
+                  {property.landlord.email && (
                     <div>
                       <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email</p>
                       <div className="mt-1 flex items-center gap-2">
                         <Mail className="h-4 w-4 text-muted-foreground" />
                         <a
-                          href={`mailto:${property.user.email}`}
+                          href={`mailto:${property.landlord.email}`}
                           className="text-sm font-medium text-primary hover:underline"
                         >
-                          {property.user.email}
+                          {property.landlord.email}
                         </a>
                       </div>
                     </div>
-                    {property.user.role && (
-                      <div>
-                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Role</p>
-                        <Badge variant="outline" className="mt-1">
-                          {property.user.role}
-                        </Badge>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Property Actions & Details */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Building2 className="h-5 w-5" />
-                    Property Actions
-                  </CardTitle>
-                  <CardDescription>Publication status and timestamps</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Publication Status</p>
-                    <div className="mt-1">
-                      {property.is_published ? (
-                        <Badge className="bg-green-50 text-green-700 border border-green-100 dark:bg-green-950 dark:text-green-300">
-                          <Globe className="mr-1 h-3 w-3" />
-                          Published
-                        </Badge>
-                      ) : (
-                        <Badge variant="secondary">
-                          <EyeOff className="mr-1 h-3 w-3" />
-                          Unpublished
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                  {property.createdAt && (
+                  )}
+                  {property.landlord.phone && (
                     <div>
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Created</p>
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Phone</p>
                       <div className="mt-1 flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <p className="text-sm font-medium text-foreground">
-                          {new Date(property.createdAt).toLocaleDateString("en-US", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </p>
+                        <Phone className="h-4 w-4 text-muted-foreground" />
+                        <a
+                          href={`tel:${property.landlord.phone}`}
+                          className="text-sm font-medium text-primary hover:underline"
+                        >
+                          {property.landlord.phone}
+                        </a>
                       </div>
                     </div>
                   )}
-                  {property.updatedAt && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => router.push(`/landlords/${property.landlord?.id}`)}
+                  >
+                    View Landlord Details
+                    <ExternalLink className="ml-2 h-3 w-3" />
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Property Creator */}
+            {property.user && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <User className="h-5 w-5" />
+                    Created By
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Name</p>
+                    <p className="mt-1 text-sm font-medium text-foreground">{property.user.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email</p>
+                    <div className="mt-1 flex items-center gap-2">
+                      <Mail className="h-4 w-4 text-muted-foreground" />
+                      <a
+                        href={`mailto:${property.user.email}`}
+                        className="text-sm font-medium text-primary hover:underline"
+                      >
+                        {property.user.email}
+                      </a>
+                    </div>
+                  </div>
+                  {property.user.role && (
                     <div>
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Last Updated</p>
-                      <div className="mt-1 flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <p className="text-sm font-medium text-foreground">
-                          {new Date(property.updatedAt).toLocaleDateString("en-US", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </p>
-                      </div>
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Role</p>
+                      <Badge variant="outline" className="mt-1">
+                        {property.user.role}
+                      </Badge>
                     </div>
                   )}
                 </CardContent>
               </Card>
+            )}
 
-              {/* Contact Information */}
-              {property.landlord && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <User className="h-5 w-5" />
-                      Landlord Information
-                    </CardTitle>
-                    <CardDescription>Property landlord details</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {property.landlord.name && (
-                      <div>
-                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Name</p>
-                        <p className="mt-1 text-sm font-medium text-foreground">{property.landlord.name}</p>
-                      </div>
+            {/* Property Status */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Status</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Publication</p>
+                  <div className="mt-1">
+                    {property.is_published ? (
+                      <Badge className="bg-green-50 text-green-700 border border-green-100 dark:bg-green-950 dark:text-green-300">
+                        <Globe className="mr-1 h-3 w-3" />
+                        Published
+                      </Badge>
+                    ) : (
+                      <Badge variant="secondary">
+                        <EyeOff className="mr-1 h-3 w-3" />
+                        Unpublished
+                      </Badge>
                     )}
-                    {property.landlord.company_name && (
-                      <div>
-                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Company</p>
-                        <p className="mt-1 text-sm font-medium text-foreground">{property.landlord.company_name}</p>
-                      </div>
-                    )}
-                    {property.landlord.email && (
-                      <div>
-                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email</p>
-                        <div className="mt-1 flex items-center gap-2">
-                          <Mail className="h-4 w-4 text-muted-foreground" />
-                          <a
-                            href={`mailto:${property.landlord.email}`}
-                            className="text-sm font-medium text-primary hover:underline"
-                          >
-                            {property.landlord.email}
-                          </a>
-                        </div>
-                      </div>
-                    )}
-                    {property.landlord.phone && (
-                      <div>
-                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Phone</p>
-                        <div className="mt-1 flex items-center gap-2">
-                          <Phone className="h-4 w-4 text-muted-foreground" />
-                          <a
-                            href={`tel:${property.landlord.phone}`}
-                            className="text-sm font-medium text-primary hover:underline"
-                          >
-                            {property.landlord.phone}
-                          </a>
-                        </div>
-                      </div>
-                    )}
-                    {property.landlord.address && (
-                      <div>
-                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Address</p>
-                        <p className="mt-1 text-sm font-medium text-foreground">{property.landlord.address}</p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              )}
-            </div>
+                  </div>
+                </div>
+                {property.createdAt && (
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Created</p>
+                    <div className="mt-1 flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-muted-foreground" />
+                      <p className="text-sm font-medium text-foreground">
+                        {new Date(property.createdAt).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                {property.updatedAt && (
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Last Updated</p>
+                    <div className="mt-1 flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-muted-foreground" />
+                      <p className="text-sm font-medium text-foreground">
+                        {new Date(property.updatedAt).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { getPropertyById, registerProperty, updateProperty } from "@/services/properties.service"
 import { getLandlords } from "@/services/landlords.service"
+import { Separator } from "@/components/ui/separator"
 
 type PropertyFormState = {
   title: string
@@ -266,7 +267,7 @@ export function PropertyCreatePage({ propertyId }: PropertyCreatePageProps) {
               <span className="h-1 w-1 rounded-full bg-border" />
               <span>{isEdit ? "Edit property" : "Add property"}</span>
             </div>
-            <h1 className="text-3xl font-semibold text-foreground">{isEdit ? "Edit property" : "New property"}</h1>
+            <h1 className="text-3xl font-semibold text-foreground">{isEdit ? "Edit property" : "Register new property"}</h1>
             <p className="text-sm text-muted-foreground">
               {isEdit ? "Update the property details." : "Complete the details below. Background stays transparent for focus."}
             </p>
@@ -276,10 +277,10 @@ export function PropertyCreatePage({ propertyId }: PropertyCreatePageProps) {
           </Button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-10">
-          <section className="space-y-4 rounded-3xl border border-border/80 bg-transparent p-4 shadow-none backdrop-blur-none">
+        <form onSubmit={handleSubmit} className="space-y-10 border p-5 rounded-lg">
+          <section className="space-y-4  border-none bg-transparent  shadow-none backdrop-blur-none">
             <div>
-              <h2 className="text-lg font-semibold text-foreground">Overview</h2>
+              <h2 className="text-lg font-bold text-foreground">Overview</h2>
               <p className="text-sm text-muted-foreground">
                 {isEdit ? "Adjust the core listing information." : "Basic details about the listing."}
               </p>
@@ -420,9 +421,11 @@ export function PropertyCreatePage({ propertyId }: PropertyCreatePageProps) {
             </div>
           </section>
 
-          <section className="space-y-6 rounded-3xl border border-border/80 bg-transparent p-6">
+          <Separator className="my-4 border-1" />
+
+          <section className="space-y-6 rounded-3xl border-none bg-transparent ">
             <div>
-              <h2 className="text-lg font-semibold text-foreground">Location</h2>
+              <h2 className="text-lg font-bold text-foreground">Location</h2>
               <p className="text-sm text-muted-foreground">Exact address and coordinates.</p>
             </div>
             <div className="grid gap-3 md:grid-cols-2">
@@ -496,10 +499,11 @@ export function PropertyCreatePage({ propertyId }: PropertyCreatePageProps) {
               </div>
             </div>
           </section>
+          <Separator className="my-4 border-1" />
 
-          <section className="space-y-6 rounded-3xl border border-border/80 bg-transparent p-6">
+          <section className="space-y-6 rounded-3xl border-none bg-transparent ">
             <div>
-              <h2 className="text-lg font-semibold text-foreground">Features</h2>
+              <h2 className="text-lg font-bold text-foreground">Features</h2>
               <p className="text-sm text-muted-foreground">Dimensions and amenities.</p>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
@@ -606,10 +610,11 @@ export function PropertyCreatePage({ propertyId }: PropertyCreatePageProps) {
               )}
             </div>
           </section>
+          <Separator className="my-4 border-1" />
 
-          <section className="space-y-6 rounded-3xl border border-border/80 bg-transparent p-6">
+          <section className="space-y-6 rounded-3xl border-none bg-transparent ">
             <div>
-              <h2 className="text-lg font-semibold text-foreground">Landlord</h2>
+              <h2 className="text-lg font-bold text-foreground">Landlord</h2>
               <p className="text-sm text-muted-foreground">Select the landlord for this property. Contact information will be fetched from the landlord's details.</p>
             </div>
             <div className="grid gap-3 md:grid-cols-1">
@@ -645,8 +650,9 @@ export function PropertyCreatePage({ propertyId }: PropertyCreatePageProps) {
             </div>
           </section>
 
+          <Separator className="my-4 border-1" />
           {!isEdit && (
-            <section className="space-y-6 rounded-3xl border border-border/80 bg-transparent p-6">
+            <section className="space-y-6 rounded-3xl border-none bg-transparent p-6">
               <div className="flex items-start gap-3">
                 <ImageIcon className="mt-1 h-5 w-5 text-muted-foreground" />
                 <div>
@@ -675,7 +681,7 @@ export function PropertyCreatePage({ propertyId }: PropertyCreatePageProps) {
             <Button type="button" variant="outline" className="border-border text-foreground" onClick={() => router.push("/properties")}>
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting || isLoadingProperty}>
+            <Button type="submit" disabled={isSubmitting || isLoadingProperty} className="px-5">
               {isSubmitting ? (isEdit ? "Saving..." : "Submitting...") : isEdit ? "Save changes" : "Add property"}
             </Button>
           </div>

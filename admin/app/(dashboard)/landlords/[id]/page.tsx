@@ -285,12 +285,10 @@ export default function LandlordDetailsPage() {
                     <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Name</p>
                     <p className="mt-1 text-sm font-medium text-foreground">{landlord.name}</p>
                   </div>
-                  {landlord.company_name && (
-                    <div>
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Company</p>
-                      <p className="mt-1 text-sm font-medium text-foreground">{landlord.company_name}</p>
-                    </div>
-                  )}
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Company</p>
+                    <p className="mt-1 text-sm font-medium text-foreground">{landlord.company_name || "N/A"}</p>
+                  </div>
                   <div>
                     <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email</p>
                     <div className="mt-1 flex items-center gap-2">
@@ -303,85 +301,83 @@ export default function LandlordDetailsPage() {
                       </a>
                     </div>
                   </div>
-                  {landlord.phone && (
-                    <div>
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Phone</p>
-                      <div className="mt-1 flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-muted-foreground" />
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Phone</p>
+                    <div className="mt-1 flex items-center gap-2">
+                      <Phone className="h-4 w-4 text-muted-foreground" />
+                      {landlord.phone ? (
                         <a
                           href={`tel:${landlord.phone}`}
                           className="text-sm font-medium text-primary hover:underline"
                         >
                           {landlord.phone}
                         </a>
-                      </div>
+                      ) : (
+                        <p className="text-sm font-medium text-muted-foreground">N/A</p>
+                      )}
                     </div>
-                  )}
-                  {landlord.address && (
-                    <div className="sm:col-span-2">
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Address</p>
-                      <div className="mt-1 flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-muted-foreground" />
-                        <p className="text-sm font-medium text-foreground">{landlord.address}</p>
-                      </div>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Address</p>
+                    <div className="mt-1 flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-muted-foreground" />
+                      <p className="text-sm font-medium text-foreground">{landlord.address || "N/A"}</p>
                     </div>
-                  )}
-                  {landlord.nationality && (
-                    <div>
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Nationality</p>
-                      <p className="mt-1 text-sm font-medium text-foreground">{landlord.nationality}</p>
-                    </div>
-                  )}
-                  {landlord.remarks && (
-                    <div className="sm:col-span-2">
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Remarks</p>
-                      <p className="mt-1 text-sm font-medium text-foreground">{landlord.remarks}</p>
-                    </div>
-                  )}
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Nationality</p>
+                    <p className="mt-1 text-sm font-medium text-foreground">{landlord.nationality || "N/A"}</p>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Remarks</p>
+                    <p className="mt-1 text-sm font-medium text-foreground">{landlord.remarks || "N/A"}</p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
- {/* Landlord Creator Information */}
- {landlord.creator && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <User className="h-5 w-5" />
-                    Landlord Creator
-                  </CardTitle>
-                  <CardDescription>User who created this landlord</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Name</p>
-                    <p className="mt-1 text-sm font-medium text-foreground">{landlord.creator.name}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email</p>
-                    <div className="mt-1 flex items-center gap-2">
-                      <Mail className="h-4 w-4 text-muted-foreground" />
-                      <a
-                        href={`mailto:${landlord.creator.email}`}
-                        className="text-sm font-medium text-primary hover:underline"
-                      >
-                        {landlord.creator.email}
-                      </a>
+            {/* Landlord Creator Information */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <User className="h-5 w-5" />
+                  Landlord Creator
+                </CardTitle>
+                <CardDescription>User who created this landlord</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {landlord.creator ? (
+                  <>
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Name</p>
+                      <p className="mt-1 text-sm font-medium text-foreground">{landlord.creator.name}</p>
                     </div>
-                  </div>
-                  {landlord.creator.role && (
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email</p>
+                      <div className="mt-1 flex items-center gap-2">
+                        <Mail className="h-4 w-4 text-muted-foreground" />
+                        <a
+                          href={`mailto:${landlord.creator.email}`}
+                          className="text-sm font-medium text-primary hover:underline"
+                        >
+                          {landlord.creator.email}
+                        </a>
+                      </div>
+                    </div>
                     <div>
                       <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Role</p>
                       <Badge variant="outline" className="mt-1">
-                        {landlord.creator.role}
+                        {landlord.creator.role || "N/A"}
                       </Badge>
                     </div>
-                  )}
-                </CardContent>
-              </Card>
-            )}
-                 {/* Landlord Actions & Details */}
-                 <Card>
+                  </>
+                ) : (
+                  <p className="text-sm text-muted-foreground text-center py-4">N/A</p>
+                )}
+              </CardContent>
+            </Card>
+            {/* Landlord Actions & Details */}
+            <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Calendar className="h-5 w-5" />
@@ -390,57 +386,63 @@ export default function LandlordDetailsPage() {
                 <CardDescription>Timestamps and activity history</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {landlord.createdAt && (
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Created</p>
-                    <div className="mt-1 flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <p className="text-sm font-medium text-foreground">
-                        {new Date(landlord.createdAt).toLocaleDateString("en-US", {
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Created</p>
+                  <div className="mt-1 flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                    <p className="text-sm font-medium text-foreground">
+                      {landlord.createdAt ? (
+                        new Date(landlord.createdAt).toLocaleDateString("en-US", {
                           month: "long",
                           day: "numeric",
                           year: "numeric",
                           hour: "2-digit",
                           minute: "2-digit",
-                        })}
-                      </p>
-                    </div>
+                        })
+                      ) : (
+                        "N/A"
+                      )}
+                    </p>
                   </div>
-                )}
-                {landlord.updatedAt && (
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Last Updated</p>
-                    <div className="mt-1 flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <p className="text-sm font-medium text-foreground">
-                        {new Date(landlord.updatedAt).toLocaleDateString("en-US", {
+                </div>
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Last Updated</p>
+                  <div className="mt-1 flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                    <p className="text-sm font-medium text-foreground">
+                      {landlord.updatedAt ? (
+                        new Date(landlord.updatedAt).toLocaleDateString("en-US", {
                           month: "long",
                           day: "numeric",
                           year: "numeric",
                           hour: "2-digit",
                           minute: "2-digit",
-                        })}
-                      </p>
-                    </div>
+                        })
+                      ) : (
+                        "N/A"
+                      )}
+                    </p>
                   </div>
-                )}
-                {landlord.is_sent_email && landlord.is_sent_at && (
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email Sent</p>
-                    <div className="mt-1 flex items-center gap-2">
-                      <Send className="h-4 w-4 text-muted-foreground" />
-                      <p className="text-sm font-medium text-foreground">
-                        {new Date(landlord.is_sent_at).toLocaleDateString("en-US", {
+                </div>
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email Sent</p>
+                  <div className="mt-1 flex items-center gap-2">
+                    <Send className="h-4 w-4 text-muted-foreground" />
+                    <p className="text-sm font-medium text-foreground">
+                      {landlord.is_sent_email && landlord.is_sent_at ? (
+                        new Date(landlord.is_sent_at).toLocaleDateString("en-US", {
                           month: "long",
                           day: "numeric",
                           year: "numeric",
                           hour: "2-digit",
                           minute: "2-digit",
-                        })}
-                      </p>
-                    </div>
+                        })
+                      ) : (
+                        "N/A"
+                      )}
+                    </p>
                   </div>
-                )}
+                </div>
                 <Separator />
                 <div>
                   <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Properties Count</p>
@@ -476,13 +478,13 @@ export default function LandlordDetailsPage() {
           {/* Right Column */}
           <div className="space-y-6">
             {/* Properties Card */}
-            {landlord.properties && landlord.properties.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Properties</CardTitle>
-                  <CardDescription>Properties managed by this landlord</CardDescription>
-                </CardHeader>
-                <CardContent>
+            <Card>
+              <CardHeader>
+                <CardTitle>Properties</CardTitle>
+                <CardDescription>Properties managed by this landlord</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {landlord.properties && landlord.properties.length > 0 ? (
                   <div className="space-y-3">
                     {landlord.properties.map((property) => (
                       <div
@@ -515,18 +517,20 @@ export default function LandlordDetailsPage() {
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                ) : (
+                  <p className="text-sm text-muted-foreground text-center py-4">N/A</p>
+                )}
+              </CardContent>
+            </Card>
 
             {/* Documents Card */}
-            {landlord.documents && landlord.documents.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Documents</CardTitle>
-                  <CardDescription>Uploaded landlord documents</CardDescription>
-                </CardHeader>
-                <CardContent>
+            <Card>
+              <CardHeader>
+                <CardTitle>Documents</CardTitle>
+                <CardDescription>Uploaded landlord documents</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {landlord.documents && landlord.documents.length > 0 ? (
                   <div className="space-y-3">
                     {landlord.documents.map((doc) => (
                       <div
@@ -572,9 +576,11 @@ export default function LandlordDetailsPage() {
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                ) : (
+                  <p className="text-sm text-muted-foreground text-center py-4">N/A</p>
+                )}
+              </CardContent>
+            </Card>
 
        
 
