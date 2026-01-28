@@ -39,6 +39,8 @@ type Landlord = {
   phone?: string
   company_name?: string
   address?: string
+  nationality?: string | null
+  remarks?: string | null
   isVerified?: boolean
   status?: "ACTIVE" | "INACTIVE"
   rejectionReason?: string | null
@@ -210,12 +212,13 @@ export default function LandlordDetailsPage() {
       <main className="flex-1 p-3 sm:p-4 lg:p-5">
         <div className="mx-auto flex max-w-7xl flex-col gap-6">
           <Skeleton className="h-10 w-32" />
-          <div className="grid gap-6 lg:grid-cols-3">
-            <div className="lg:col-span-2 space-y-6">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="space-y-6">
               <Skeleton className="h-64 w-full" />
               <Skeleton className="h-64 w-full" />
             </div>
             <div className="space-y-6">
+              <Skeleton className="h-64 w-full" />
               <Skeleton className="h-64 w-full" />
             </div>
           </div>
@@ -264,9 +267,9 @@ export default function LandlordDetailsPage() {
           </div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-3">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+        <div className="grid gap-6 lg:grid-cols-2">
+          {/* Left Column */}
+          <div className="space-y-6">
             {/* Contact Information */}
             <Card>
               <CardHeader>
@@ -323,10 +326,155 @@ export default function LandlordDetailsPage() {
                       </div>
                     </div>
                   )}
+                  {landlord.nationality && (
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Nationality</p>
+                      <p className="mt-1 text-sm font-medium text-foreground">{landlord.nationality}</p>
+                    </div>
+                  )}
+                  {landlord.remarks && (
+                    <div className="sm:col-span-2">
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Remarks</p>
+                      <p className="mt-1 text-sm font-medium text-foreground">{landlord.remarks}</p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
 
+ {/* Landlord Creator Information */}
+ {landlord.creator && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <User className="h-5 w-5" />
+                    Landlord Creator
+                  </CardTitle>
+                  <CardDescription>User who created this landlord</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Name</p>
+                    <p className="mt-1 text-sm font-medium text-foreground">{landlord.creator.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email</p>
+                    <div className="mt-1 flex items-center gap-2">
+                      <Mail className="h-4 w-4 text-muted-foreground" />
+                      <a
+                        href={`mailto:${landlord.creator.email}`}
+                        className="text-sm font-medium text-primary hover:underline"
+                      >
+                        {landlord.creator.email}
+                      </a>
+                    </div>
+                  </div>
+                  {landlord.creator.role && (
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Role</p>
+                      <Badge variant="outline" className="mt-1">
+                        {landlord.creator.role}
+                      </Badge>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+                 {/* Landlord Actions & Details */}
+                 <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5" />
+                  Activity & Timeline
+                </CardTitle>
+                <CardDescription>Timestamps and activity history</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {landlord.createdAt && (
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Created</p>
+                    <div className="mt-1 flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-muted-foreground" />
+                      <p className="text-sm font-medium text-foreground">
+                        {new Date(landlord.createdAt).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                {landlord.updatedAt && (
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Last Updated</p>
+                    <div className="mt-1 flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-muted-foreground" />
+                      <p className="text-sm font-medium text-foreground">
+                        {new Date(landlord.updatedAt).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                {landlord.is_sent_email && landlord.is_sent_at && (
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email Sent</p>
+                    <div className="mt-1 flex items-center gap-2">
+                      <Send className="h-4 w-4 text-muted-foreground" />
+                      <p className="text-sm font-medium text-foreground">
+                        {new Date(landlord.is_sent_at).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                <Separator />
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Properties Count</p>
+                  <div className="mt-1 flex items-center gap-2">
+                    <Building2 className="h-4 w-4 text-muted-foreground" />
+                    <p className="text-sm font-medium text-foreground">
+                      {landlord.properties?.length || 0} properties
+                    </p>
+                  </div>
+                </div>
+                {landlordId && (
+                  <div className="pt-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => router.push(`/email-logs?landlordId=${landlordId}`)}
+                      className="gap-2 w-full text-xs"
+                    >
+                      <Mail className="h-3 w-3" />
+                      View Email Logs
+                      <ExternalLink className="h-3 w-3" />
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+           
+
+           
+          </div>
+
+          {/* Right Column */}
+          <div className="space-y-6">
             {/* Properties Card */}
             {landlord.properties && landlord.properties.length > 0 && (
               <Card>
@@ -427,10 +575,9 @@ export default function LandlordDetailsPage() {
                 </CardContent>
               </Card>
             )}
-          </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
+       
+
             {/* Status & Actions */}
             <Card>
               <CardHeader>
@@ -565,138 +712,11 @@ export default function LandlordDetailsPage() {
               </CardContent>
             </Card>
 
-            {/* Landlord Creator Information */}
-            {landlord.creator && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <User className="h-5 w-5" />
-                    Landlord Creator
-                  </CardTitle>
-                  <CardDescription>User who created this landlord</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Name</p>
-                    <p className="mt-1 text-sm font-medium text-foreground">{landlord.creator.name}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email</p>
-                    <div className="mt-1 flex items-center gap-2">
-                      <Mail className="h-4 w-4 text-muted-foreground" />
-                      <a
-                        href={`mailto:${landlord.creator.email}`}
-                        className="text-sm font-medium text-primary hover:underline"
-                      >
-                        {landlord.creator.email}
-                      </a>
-                    </div>
-                  </div>
-                  {landlord.creator.role && (
-                    <div>
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Role</p>
-                      <Badge variant="outline" className="mt-1">
-                        {landlord.creator.role}
-                      </Badge>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Landlord Actions & Details */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Building2 className="h-5 w-5" />
-                  Landlord Actions
-                </CardTitle>
-                <CardDescription>Timestamps and activity history</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {landlord.createdAt && (
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Created</p>
-                    <div className="mt-1 flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <p className="text-sm font-medium text-foreground">
-                        {new Date(landlord.createdAt).toLocaleDateString("en-US", {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                )}
-                {landlord.updatedAt && (
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Last Updated</p>
-                    <div className="mt-1 flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <p className="text-sm font-medium text-foreground">
-                        {new Date(landlord.updatedAt).toLocaleDateString("en-US", {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                )}
-                {landlord.is_sent_email && landlord.is_sent_at && (
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email Sent</p>
-                    <div className="mt-1 flex items-center gap-2">
-                      <Send className="h-4 w-4 text-muted-foreground" />
-                      <p className="text-sm font-medium text-foreground">
-                        {new Date(landlord.is_sent_at).toLocaleDateString("en-US", {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                )}
-                <Separator />
-                <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Properties Count</p>
-                  <div className="mt-1 flex items-center gap-2">
-                    <Building2 className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm font-medium text-foreground">
-                      {landlord.properties?.length || 0} properties
-                    </p>
-                  </div>
-                </div>
-                {landlordId && (
-                  <div className="pt-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => router.push(`/email-logs?landlordId=${landlordId}`)}
-                      className="gap-2 w-full text-xs"
-                    >
-                      <Mail className="h-3 w-3" />
-                      View Email Logs
-                      <ExternalLink className="h-3 w-3" />
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
             {/* Quick Info */}
             <Card>
               <CardHeader>
                 <CardTitle>Quick Info</CardTitle>
+                <CardDescription>Summary information</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
